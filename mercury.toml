@@ -1,0 +1,17 @@
+name = "My Planet!"
+url = "http://localhost/"
+owner = "Chidi Anagonye"
+email = "chidi@example.com"
+cache = "./cache"
+timeout = "20s"
+theme = "./theme"
+output = "./output"
+items = 60
+
+[[feed]]
+name = "Keith Gaughan"
+feed = "https://keith.gaughan.ie/feeds/all.xml"
+
+[[feed]]
+name = "Inklings"
+feed = "https://talideon.com/inklings/feed"
