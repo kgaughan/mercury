@@ -59,10 +59,10 @@ type cacheItem struct {
 type manifest map[string]*cacheItem
 
 func (m *manifest) Load(path string) error {
-	if file, err := ioutil.ReadFile(path); err != nil {
-		return err
-	} else if err := json.Unmarshal(file, m); err != nil {
-		return err
+	if file, err := ioutil.ReadFile(path); err == nil {
+		if err := json.Unmarshal(file, m); err != nil {
+			return err
+		}
 	}
 	return nil
 }
