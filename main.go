@@ -32,15 +32,17 @@ type feed struct {
 }
 
 type Config struct {
-	Name    string
-	URL     string `toml:url`
-	Owner   string
-	Email   string
-	Cache   string
-	Timeout duration
-	Theme   string
-	Output  string
-	Feed    []feed
+	Name         string
+	URL          string `toml:url`
+	Owner        string
+	Email        string
+	Cache        string
+	Timeout      duration
+	Theme        string
+	Output       string
+	Feed         []feed
+	ItemsPerPage uint `toml:items`
+	MaxPages     uint `toml:max_pages`
 }
 
 func (c *Config) Load(path string) error {
