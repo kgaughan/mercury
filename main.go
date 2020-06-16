@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"time"
 
 	"github.com/BurntSushi/toml"
@@ -46,8 +47,19 @@ type Config struct {
 }
 
 func (c *Config) Load(path string) error {
-	_, err := toml.DecodeFile(path, c)
-	return err
+	if _, err := toml.DecodeFile(path, c); err != nil {
+		return err
+	}
+
+	if configDir, err := filepath.Abs(filepath.Dir(path)); err != nil {
+		return err
+	} else {
+		c.Cache = filepath.Join(configDir, c.Cache)
+		c.Theme = filepath.Join(configDir, c.Theme)
+		c.Output = filepath.Join(configDir, c.Output)
+	}
+
+	return nil
 }
 
 type cacheItem struct {
@@ -87,8 +99,14 @@ func main() {
 		log.Fatal(err)
 	}
 
+	if _, err := os.Stat(config.Theme); os.IsNotExist(err) {
+		log.Fatalf("Theme directory '%v' not found", config.Theme)
+	}
+
 	if fileInfo, err := os.Stat(config.Cache); os.IsNotExist(err) {
-		log.Fatal(err)
+		if err := os.MkdirAll(config.Cache, 0700); err != nil {
+			log.Fatal(err)
+		}
 	} else if !fileInfo.IsDir() {
 		log.Fatalf("%s must be a directory\n")
 	}
