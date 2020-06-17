@@ -204,6 +204,15 @@ func main() {
 		}
 	}
 
+	for feedURL, cacheItem := range manifest {
+		if err := cacheItem.Fetch(feedURL, config.Cache, config.Timeout.Duration); err != nil {
+			log.Fatal(err)
+		}
+		if _, err := cacheItem.Load(config.Cache); err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	if err := manifest.Save(manifestPath); err != nil {
 		log.Fatal(err)
 	}
