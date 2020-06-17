@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"github.com/BurntSushi/toml"
+	"github.com/SlyMarbo/rss"
 	"github.com/google/uuid"
-	"github.com/mmcdole/gofeed"
 )
 
 type duration struct {
@@ -109,16 +109,14 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 		ci.ETag = resp.Header.Get("ETag")
 		ci.LastModified = resp.Header.Get("Last-Modified")
 
-		parser := gofeed.NewParser()
-		if feed, err := parser.Parse(resp.Body); err != nil {
+		if body, err := ioutil.ReadAll(resp.Body); err != nil {
+			return err
+		} else if feed, err := rss.Parse(body); err != nil {
+			return err
+		} else if file, err := json.Marshal(feed); err != nil {
 			return err
 		} else {
-			// Save to the cache
-			if file, err := json.Marshal(feed); err == nil {
-				return ioutil.WriteFile(cacheFile, file, 0600)
-			} else {
-				return err
-			}
+			return ioutil.WriteFile(cacheFile, file, 0600)
 		}
 	}
 
@@ -127,12 +125,12 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 	return nil
 }
 
-func (ci *cacheItem) Load(cacheDir string) (*gofeed.Feed, error) {
+func (ci *cacheItem) Load(cacheDir string) (*rss.Feed, error) {
 	cacheFile := filepath.Join(cacheDir, ci.UUID+".json")
 	if file, err := ioutil.ReadFile(cacheFile); err != nil {
 		return nil, err
 	} else {
-		feed := &gofeed.Feed{}
+		feed := &rss.Feed{}
 		if err := json.Unmarshal(file, feed); err != nil {
 			return nil, err
 		} else {
