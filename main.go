@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"path"
 	"path/filepath"
@@ -13,6 +15,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/google/uuid"
+	"github.com/mmcdole/gofeed"
 )
 
 type duration struct {
@@ -66,6 +69,62 @@ type cacheItem struct {
 	UUID         string // Used to identify the cached feed
 	LastModified string // Used for conditional GET
 	ETag         string // Also used for conditional GET
+}
+
+func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duration) error {
+	req, err := http.NewRequest("GET", feedURL, nil)
+	if err != nil {
+		return err
+	}
+
+	cacheFile := filepath.Join(cacheDir, ci.UUID+".json")
+	// Blank headers if the cached feed doesn't exist
+	if _, err := os.Stat(cacheFile); os.IsNotExist(err) {
+		ci.LastModified = ""
+		ci.ETag = ""
+	}
+
+	req = req.WithContext(context.Background())
+	req.Header.Set("User-Agent", "planet-mercury/1.0")
+	if ci.LastModified != "" {
+		req.Header.Set("If-Modified-Since", ci.LastModified)
+	}
+	if ci.ETag != "" {
+		req.Header.Set("If-None-Match", ci.ETag)
+	}
+
+	client := &http.Client{Timeout: timeout}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 304 {
+		return nil
+	}
+
+	if resp.StatusCode == 200 {
+		// Save for next time
+		ci.ETag = resp.Header.Get("ETag")
+		ci.LastModified = resp.Header.Get("Last-Modified")
+
+		parser := gofeed.NewParser()
+		if feed, err := parser.Parse(resp.Body); err != nil {
+			return err
+		} else {
+			// Save to the cache
+			if file, err := json.Marshal(feed); err == nil {
+				return ioutil.WriteFile(cacheFile, file, 0600)
+			} else {
+				return err
+			}
+		}
+	}
+
+	// Not sure yet: do later...
+	log.Fatal(resp)
+	return nil
 }
 
 type manifest map[string]*cacheItem
