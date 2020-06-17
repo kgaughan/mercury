@@ -127,6 +127,20 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 	return nil
 }
 
+func (ci *cacheItem) Load(cacheDir string) (*gofeed.Feed, error) {
+	cacheFile := filepath.Join(cacheDir, ci.UUID+".json")
+	if file, err := ioutil.ReadFile(cacheFile); err != nil {
+		return nil, err
+	} else {
+		feed := &gofeed.Feed{}
+		if err := json.Unmarshal(file, feed); err != nil {
+			return nil, err
+		} else {
+			return feed, nil
+		}
+	}
+}
+
 type manifest map[string]*cacheItem
 
 func (m *manifest) Load(path string) error {
