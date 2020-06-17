@@ -1,5 +1,5 @@
 build:
-	go build -ldflags '-s -w' -v
+	CGO_ENABLED=0 go build -ldflags '-s -w' -v
 
 tidy:
 	go mod tidy

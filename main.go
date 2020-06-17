@@ -181,7 +181,7 @@ func main() {
 			log.Fatal(err)
 		}
 	} else if !fileInfo.IsDir() {
-		log.Fatalf("%s must be a directory\n")
+		log.Fatalf("%s must be a directory\n", config.Cache)
 	}
 
 	manifestPath := path.Join(config.Cache, "manifest.json")
