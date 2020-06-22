@@ -57,6 +57,9 @@ func main() {
 	if err := manifest.Prime(config.Cache, config.Timeout.Duration); err != nil {
 		log.Fatal(err)
 	}
+	if err := manifest.Save(manifestPath); err != nil {
+		log.Fatal(err)
+	}
 
 	// Load everything from the cache
 	var fq feedQueue
@@ -78,9 +81,5 @@ PageLoop:
 			}
 			fmt.Println(item.Entry)
 		}
-	}
-
-	if err := manifest.Save(manifestPath); err != nil {
-		log.Fatal(err)
 	}
 }
