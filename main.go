@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"time"
 )
 
 var configPath = flag.String("config", "./mercury.toml", "Path to configuration")
@@ -37,7 +38,15 @@ func main() {
 	if _, err := os.Stat(config.Theme); os.IsNotExist(err) {
 		log.Fatalf("Theme directory '%v' not found", config.Theme)
 	}
-	tmpl, err := template.ParseFiles(path.Join(config.Theme, "index.html"))
+
+	tmpl, err := template.New("").Funcs(template.FuncMap{
+		"isodatefmt": func(t time.Time) string {
+			return t.Format(time.RFC3339)
+		},
+		"datefmt": func(fmt string, t time.Time) string {
+			return t.Format(fmt)
+		},
+	}).ParseFiles(path.Join(config.Theme, "index.html"))
 	if err != nil {
 		log.Fatal(err)
 	}
