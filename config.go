@@ -21,8 +21,8 @@ type Config struct {
 	Theme        string
 	Output       string
 	Feed         []feed
-	ItemsPerPage uint `toml:items`
-	MaxPages     uint `toml:max_pages`
+	ItemsPerPage int `toml:items`
+	MaxPages     int `toml:max_pages`
 }
 
 func (c *Config) Load(path string) error {

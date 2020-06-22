@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/heap"
 	"flag"
 	"fmt"
 	"log"
@@ -48,9 +49,24 @@ func main() {
 	}
 
 	// Load everything from the cache
+	var fq feedQueue
 	for _, item := range manifest {
-		if _, err := item.Load(config.Cache); err != nil {
+		if feed, err := item.Load(config.Cache); err != nil {
 			log.Fatal(err)
+		} else {
+			fq.AppendFeed(feed)
+		}
+	}
+
+	heap.Init(&fq)
+PageLoop:
+	for iPage := 0; iPage < config.MaxPages; iPage++ {
+		for iEntry := 0; iEntry < config.ItemsPerPage; iEntry++ {
+			item := heap.Pop(&fq).(*feedAndEntry)
+			if item == nil {
+				break PageLoop
+			}
+			fmt.Println(item.Entry)
 		}
 	}
 
