@@ -4,12 +4,23 @@ import (
 	"container/heap"
 	"flag"
 	"fmt"
+	"html/template"
 	"log"
 	"os"
 	"path"
 )
 
 var configPath = flag.String("config", "./mercury.toml", "Path to configuration")
+
+func ensureDir(path string) {
+	if fileInfo, err := os.Stat(path); os.IsNotExist(err) {
+		if err := os.MkdirAll(path, 0755); err != nil {
+			log.Fatal(err)
+		}
+	} else if !fileInfo.IsDir() {
+		log.Fatalf("%s must be a directory\n", path)
+	}
+}
 
 func main() {
 	var config Config
@@ -26,14 +37,13 @@ func main() {
 	if _, err := os.Stat(config.Theme); os.IsNotExist(err) {
 		log.Fatalf("Theme directory '%v' not found", config.Theme)
 	}
-
-	if fileInfo, err := os.Stat(config.Cache); os.IsNotExist(err) {
-		if err := os.MkdirAll(config.Cache, 0700); err != nil {
-			log.Fatal(err)
-		}
-	} else if !fileInfo.IsDir() {
-		log.Fatalf("%s must be a directory\n", config.Cache)
+	tmpl, err := template.ParseFiles(path.Join(config.Theme, "index.html"))
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	ensureDir(config.Cache)
+	ensureDir(config.Output)
 
 	manifestPath := path.Join(config.Cache, "manifest.json")
 	cachedManifest := make(manifest)
