@@ -6,8 +6,6 @@ import (
 	"log"
 	"os"
 	"path"
-
-	"github.com/google/uuid"
 )
 
 var configPath = flag.String("config", "./mercury.toml", "Path to configuration")
@@ -44,22 +42,13 @@ func main() {
 
 	// Populate the manifest with the contents of the config file
 	manifest := make(manifest)
-	for _, feed := range config.Feed {
-		if item, ok := cachedManifest[feed.Feed]; ok {
-			// Copy over the extant cache entry
-			manifest[feed.Feed] = item
-		} else {
-			// New feed: create a new record
-			manifest[feed.Feed] = &cacheItem{
-				UUID: uuid.New().String(),
-			}
-		}
+	manifest.Populate(cachedManifest, config.Feed)
+	if err := manifest.Prime(config.Cache, config.Timeout.Duration); err != nil {
+		log.Fatal(err)
 	}
 
-	for feedURL, item := range manifest {
-		if err := item.Fetch(feedURL, config.Cache, config.Timeout.Duration); err != nil {
-			log.Fatal(err)
-		}
+	// Load everything from the cache
+	for _, item := range manifest {
 		if _, err := item.Load(config.Cache); err != nil {
 			log.Fatal(err)
 		}
