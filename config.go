@@ -13,7 +13,7 @@ type feed struct {
 
 type Config struct {
 	Name         string
-	URL          string `toml:url`
+	URL          string `toml:"url"`
 	Owner        string
 	Email        string
 	Cache        string
@@ -21,8 +21,8 @@ type Config struct {
 	Theme        string
 	Output       string
 	Feed         []feed
-	ItemsPerPage int `toml:items`
-	MaxPages     int `toml:max_pages`
+	ItemsPerPage int `toml:"items"`
+	MaxPages     int `toml:"max_pages"`
 }
 
 func (c *Config) Load(path string) error {
