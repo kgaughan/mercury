@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>{{.Name}}</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="generator" content="Planet Mercury 0.1.0">
+		<link rel="stylesheet" href="planet.css" type="text/css">
+	</head>
+	<body>
+		<h1><a href="{{.URL}}">{{ .Name }}</h1>
+		{{range .Items}}
+		<article>
+			<header>
+				<h1><a href="{{.Link}}">{{.Title}}</a></h1>
+				<div>by <span class="author">{{.Author}}</span> in <a class="site-link" href="{{.SiteLink}}">{{.FeedName}}</a></a></div>
+				<div>Posted {{.Published}}</div>
+			</header>
+			<div class="article-body">
+			{{if .Summary}}
+				{{.Summary}}
+			{{else}}
+				{{.Content}}
+			{{end}}
+			</div>
+		</article>
+		{{end}}
+	</body>
+</html>

@@ -72,14 +72,51 @@ func main() {
 	}
 
 	heap.Init(&fq)
-PageLoop:
 	for iPage := 0; iPage < config.MaxPages; iPage++ {
+		var pageName string
+		if iPage == 0 {
+			pageName = "index.html"
+		} else {
+			pageName = fmt.Sprintf("index%d.html", iPage)
+		}
+
+		lastPage := false
+		var items []*feedEntry
 		for iEntry := 0; iEntry < config.ItemsPerPage; iEntry++ {
-			item := heap.Pop(&fq).(*feedAndEntry)
+			item := heap.Pop(&fq)
 			if item == nil {
-				break PageLoop
+				lastPage = true
+				break
 			}
-			fmt.Println(item.Entry)
+			items = append(items, item.(*feedEntry))
+		}
+
+		f, err := os.OpenFile(path.Join(config.Output, pageName), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+
+		vars := struct {
+			Name   string
+			URL    template.URL
+			Owner  string
+			Email  string
+			PageNo int
+			Items  []*feedEntry
+		}{
+			Name:   config.Name,
+			URL:    template.URL(config.URL),
+			Owner:  config.Owner,
+			Email:  config.Email,
+			PageNo: iPage + 1,
+			Items:  items,
+		}
+		if err := tmpl.ExecuteTemplate(f, "index.html", vars); err != nil {
+			log.Fatal(err)
+		}
+		if lastPage {
+			break
 		}
 	}
 }

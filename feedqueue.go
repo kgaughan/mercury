@@ -11,11 +11,6 @@ type feedQueue struct {
 	indices []int
 }
 
-type feedAndEntry struct {
-	Feed  *gofeed.Feed
-	Entry *gofeed.Item
-}
-
 func (fq feedQueue) Len() int {
 	return len(fq.feeds)
 }
@@ -55,10 +50,7 @@ func (fq *feedQueue) Pop() interface{} {
 		return nil
 	}
 	fq.indices[0]++
-	return &feedAndEntry{
-		Feed:  fq.feeds[0],
-		Entry: fq.feeds[0].Items[i],
-	}
+	return NewEntry(fq.feeds[0], fq.feeds[0].Items[i])
 }
 
 func (fq *feedQueue) AppendFeed(feed *gofeed.Feed) {
