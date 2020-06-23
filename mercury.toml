@@ -6,8 +6,8 @@ cache = "./cache"
 timeout = "20s"
 theme = "./theme"
 output = "./output"
-items = 60
-max_pages = 10
+items = 10
+max_pages = 2
 
 [[feed]]
 name = "Keith Gaughan"

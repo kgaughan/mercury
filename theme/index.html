@@ -1,13 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<meta charset="utf-8">
 		<title>{{.Name}}</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta name="generator" content="Planet Mercury 0.1.0">
+		<link rel="stylesheet" href="https://unpkg.com/purecss@2.0.3/build/pure-min.css" integrity="sha384-cg6SkqEOCV1NbJoCu11+bm0NvBRc8IYLRGXkmNrqUBfTjmMYwNKPWBTIKyw9mHNJ" crossorigin="anonymous">
 		<link rel="stylesheet" href="planet.css" type="text/css">
+		<style type="text/css">
+body {
+  color: #777;
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 2rem;
+  position: relative;
+}
+
+body > header {
+  margin: 0;
+  color: #333;
+  text-align: center;
+  padding: 2.5rem 2rem;
+  border-bottom: 1px solid #eee;
+}
+body > header h1 {
+  margin: 0.2rem 0;
+  font-size: 3rem;
+  font-weight: 300;
+}
+
+article {
+  margin: 2rem 0 4rem 0;
+}
+article h1,
+article h2,
+article h3 {
+  font-weight: 300;
+  color: #888;
+  margin: 0.2rem 0 0 0;
+  line-height: 1.2;
+}
+article h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+article header div {
+  font-size: 80%;
+}
+article header .author, article header .site-link {
+  font-weight: 600;
+}
+pre {
+  border: 1px solid #eee;
+  padding: 0.5rem;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  font-size: 80%;
+}
+blockquote {
+  font-style: italic;
+}
+blockquote em {
+  font-style: normal;
+}
+
+@media (min-width: 48rem) {
+  body {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	</head>
 	<body>
-		<h1><a href="{{.URL}}">{{ .Name }}</h1>
+		<header class="header">
+		<h1 class="title">{{.Name}}</h1>
+		</header>
 		{{range .Items}}
 		<article>
 			<header>
