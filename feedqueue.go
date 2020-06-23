@@ -40,10 +40,15 @@ func (fq feedQueue) Swap(i, j int) {
 	fq.indices[i], fq.indices[j] = fq.indices[j], fq.indices[i]
 }
 
-// Does nothing: we only ever pop items off
+// Does nothing
 func (fq *feedQueue) Push(x interface{}) {}
 
+// Does nothing
 func (fq *feedQueue) Pop() interface{} {
+	return nil
+}
+
+func (fq *feedQueue) Top() interface{} {
 	i := fq.indices[0]
 	// If there's nothing more to process, we return nil
 	if i == len(fq.feeds[0].Items) {

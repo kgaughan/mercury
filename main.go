@@ -92,12 +92,13 @@ func main() {
 		lastPage := false
 		var items []*feedEntry
 		for iEntry := 0; iEntry < config.ItemsPerPage; iEntry++ {
-			item := heap.Pop(&fq)
+			item := fq.Top()
 			if item == nil {
 				lastPage = true
 				break
 			}
 			items = append(items, item.(*feedEntry))
+			heap.Fix(&fq, 0)
 		}
 
 		f, err := os.OpenFile(path.Join(config.Output, pageName), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
