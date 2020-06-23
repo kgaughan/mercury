@@ -63,6 +63,11 @@ blockquote em {
   font-style: normal;
 }
 
+address {
+  font-size: 80%;
+  margin-bottom: 2rem;
+}
+
 @media (min-width: 48rem) {
   body {
     padding-left: 2rem;
@@ -92,5 +97,6 @@ blockquote em {
 			</div>
 		</article>
 		{{end}}
+		<address>Generated: {{.Generated | isodatefmt }}</address>
 	</body>
 </html>

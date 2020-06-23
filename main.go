@@ -84,6 +84,8 @@ func main() {
 		}
 	}
 
+	now := time.Now()
+
 	heap.Init(&fq)
 	for iPage := 0; iPage < config.MaxPages; iPage++ {
 		var pageName string
@@ -119,6 +121,7 @@ func main() {
 			Email     string
 			PageNo    int
 			Items     []*feedEntry
+			Generated time.Time
 		}{
 			Generator: fmt.Sprintf("Planet Mercury %v (%v)", Version, REPO),
 			Name:      config.Name,
@@ -127,6 +130,7 @@ func main() {
 			Email:     config.Email,
 			PageNo:    iPage + 1,
 			Items:     items,
+			Generated: now,
 		}
 		if err := tmpl.ExecuteTemplate(f, "index.html", vars); err != nil {
 			log.Fatal(err)
