@@ -3,6 +3,9 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
+	"runtime"
+	"sync"
 	"time"
 
 	"github.com/google/uuid"
@@ -41,12 +44,35 @@ func (m manifest) Populate(cache manifest, feeds []feed) {
 	}
 }
 
-func (m manifest) Prime(cache string, timeout time.Duration) error {
+type fetchJob struct {
+	URL  string
+	Item *cacheItem
+}
+
+func (m manifest) Prime(cache string, timeout time.Duration) {
+	var wg sync.WaitGroup
+
+	// The channel depth is kind of arbitrary.
+	jobs := make(chan *fetchJob, 2*runtime.NumCPU())
+
+	for i := 0; i < runtime.NumCPU(); i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for job := range jobs {
+				if err := job.Item.Fetch(job.URL, cache, timeout); err != nil {
+					log.Print(err)
+				}
+			}
+		}()
+	}
+
 	for feedURL, item := range m {
-		// TODO these can be fetched in parallel
-		if err := item.Fetch(feedURL, cache, timeout); err != nil {
-			return err
+		jobs <- &fetchJob{
+			URL:  feedURL,
+			Item: item,
 		}
 	}
-	return nil
+	close(jobs)
+	wg.Wait()
 }
