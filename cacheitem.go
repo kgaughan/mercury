@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -33,7 +34,7 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 	}
 
 	req = req.WithContext(context.Background())
-	req.Header.Set("User-Agent", "planet-mercury/1.0")
+	req.Header.Set("User-Agent", fmt.Sprintf("planet-mercury/%v (%v)", Version, REPO))
 	if ci.LastModified != "" {
 		req.Header.Set("If-Modified-Since", ci.LastModified)
 	}

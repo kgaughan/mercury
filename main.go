@@ -11,6 +11,10 @@ import (
 	"time"
 )
 
+const REPO = "https://github.com/kgaughan/mercury/"
+
+var Version string
+
 var configPath = flag.String("config", "./mercury.toml", "Path to configuration")
 
 func ensureDir(path string) {
@@ -108,19 +112,21 @@ func main() {
 		defer f.Close()
 
 		vars := struct {
-			Name   string
-			URL    template.URL
-			Owner  string
-			Email  string
-			PageNo int
-			Items  []*feedEntry
+			Generator string
+			Name      string
+			URL       template.URL
+			Owner     string
+			Email     string
+			PageNo    int
+			Items     []*feedEntry
 		}{
-			Name:   config.Name,
-			URL:    template.URL(config.URL),
-			Owner:  config.Owner,
-			Email:  config.Email,
-			PageNo: iPage + 1,
-			Items:  items,
+			Generator: fmt.Sprintf("Planet Mercury %v (%v)", Version, REPO),
+			Name:      config.Name,
+			URL:       template.URL(config.URL),
+			Owner:     config.Owner,
+			Email:     config.Email,
+			PageNo:    iPage + 1,
+			Items:     items,
 		}
 		if err := tmpl.ExecuteTemplate(f, "index.html", vars); err != nil {
 			log.Fatal(err)
