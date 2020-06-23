@@ -81,7 +81,7 @@ blockquote em {
 			<header>
 				<h1><a href="{{.Link}}">{{.Title}}</a></h1>
 				<div>by <span class="author">{{.Author}}</span> in <a class="site-link" href="{{.SiteLink}}">{{.FeedName}}</a></a></div>
-				<div>Posted <time datetime="{{.Published | isodatefmt}}">{{.Published | datefmt "January 2, 2006"}}</time></div>
+				<div>Posted <time datetime="{{.Published | isodatefmt}}">{{.Published | datefmt "January 2, 2006 at 15:04:05 MST"}}</time></div>
 			</header>
 			<div class="article-body">
 			{{if .Summary}}
