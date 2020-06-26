@@ -7,7 +7,7 @@ build: go.mod mercury
 tidy: go.mod
 
 mercury: $(SOURCE)
-	CGO_ENABLED=0 go build -ldflags '-s -w -X main.Version=$(VERSION)' -v
+	CGO_ENABLED=0 go build -trimpath -ldflags '-s -w -X main.Version=$(VERSION)'
 
 go.mod: $(SOURCE)
 	go mod tidy
