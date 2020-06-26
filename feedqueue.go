@@ -20,7 +20,12 @@ func (fq feedQueue) remaining(i int) int {
 }
 
 func (fq feedQueue) getPublished(i int) *time.Time {
-	return fq.feeds[i].Items[fq.indices[i]].PublishedParsed
+	entry := fq.feeds[i].Items[fq.indices[i]]
+	// This is ridiculous.
+	if entry.PublishedParsed != nil {
+		return entry.PublishedParsed
+	}
+	return entry.UpdatedParsed
 }
 
 func (fq feedQueue) Less(i, j int) bool {

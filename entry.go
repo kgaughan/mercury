@@ -29,7 +29,11 @@ func (e feedEntry) FeedLink() template.URL {
 }
 
 func (e feedEntry) FeedPublished() *time.Time {
-	return e.feed.PublishedParsed
+	if e.feed.PublishedParsed != nil {
+		return e.feed.PublishedParsed
+	}
+	// Fallback
+	return e.feed.UpdatedParsed
 }
 
 func (e feedEntry) FeedUpdated() *time.Time {
@@ -64,7 +68,11 @@ func (e feedEntry) Author() string {
 }
 
 func (e feedEntry) Published() *time.Time {
-	return e.entry.PublishedParsed
+	if e.entry.PublishedParsed != nil {
+		return e.entry.PublishedParsed
+	}
+	// Fallback
+	return e.entry.UpdatedParsed
 }
 
 func (e feedEntry) Updated() *time.Time {
