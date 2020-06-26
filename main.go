@@ -9,6 +9,8 @@ import (
 	"os"
 	"path"
 	"time"
+
+	"github.com/microcosm-cc/bluemonday"
 )
 
 const REPO = "https://github.com/kgaughan/mercury/"
@@ -43,12 +45,18 @@ func main() {
 		log.Fatalf("Theme directory '%v' not found", config.Theme)
 	}
 
+	// This is just a starting point so there's a reasonable policy
+	p := bluemonday.UGCPolicy()
+
 	tmpl, err := template.New("").Funcs(template.FuncMap{
 		"isodatefmt": func(t time.Time) string {
 			return t.Format(time.RFC3339)
 		},
 		"datefmt": func(fmt string, t time.Time) string {
 			return t.Format(fmt)
+		},
+		"sanitize": func(text string) string {
+			return p.Sanitize(text)
 		},
 	}).ParseFiles(path.Join(config.Theme, "index.html"))
 	if err != nil {

@@ -90,9 +90,9 @@ address {
 			</header>
 			<div class="article-body">
 			{{if .Summary}}
-				{{.Summary}}
+				{{.Summary | sanitize}}
 			{{else}}
-				{{.Content}}
+				{{.Content | sanitize}}
 			{{end}}
 			</div>
 		</article>

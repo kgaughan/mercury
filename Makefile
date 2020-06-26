@@ -6,6 +6,9 @@ build: go.mod mercury
 
 tidy: go.mod
 
+clean:
+	rm -f mercury
+
 mercury: $(SOURCE)
 	CGO_ENABLED=0 go build -trimpath -ldflags '-s -w -X main.Version=$(VERSION)'
 
@@ -14,4 +17,4 @@ go.mod: $(SOURCE)
 
 .DEFAULT: build
 
-.PHONY: build tidy
+.PHONY: build clean tidy
