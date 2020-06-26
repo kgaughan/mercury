@@ -105,7 +105,7 @@ func main() {
 			heap.Fix(&fq, 0)
 		}
 
-		f, err := os.OpenFile(path.Join(config.Output, pageName), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+		f, err := os.Create(path.Join(config.Output, pageName))
 		if err != nil {
 			log.Fatal(err)
 		}
