@@ -18,6 +18,7 @@ const REPO = "https://github.com/kgaughan/mercury/"
 var Version string
 
 var configPath = flag.String("config", "./mercury.toml", "Path to configuration")
+var noFetch = flag.Bool("no-fetch", false, "Don't fetch, just use what's in the cache")
 
 func ensureDir(path string) {
 	if fileInfo, err := os.Stat(path); os.IsNotExist(err) {
@@ -75,7 +76,9 @@ func main() {
 	// Populate the manifest with the contents of the config file
 	manifest := make(manifest)
 	manifest.Populate(cachedManifest, config.Feed)
-	manifest.Prime(config.Cache, config.Timeout.Duration)
+	if !*noFetch {
+		manifest.Prime(config.Cache, config.Timeout.Duration)
+	}
 	if err := manifest.Save(manifestPath); err != nil {
 		log.Fatal(err)
 	}
