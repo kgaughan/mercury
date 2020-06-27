@@ -6,13 +6,349 @@ cache = "./cache"
 timeout = "20s"
 theme = "./theme"
 output = "./output"
-items = 10
-max_pages = 2
+items = 60
+max_pages = 1
+
+[[feed]]
+name = "Abstruse Goose"
+feed = "http://abstrusegoose.com/atomfeed.xml"
+
+[[feed]]
+name = "Alice Grove"
+feed = "http://www.alicegrove.com/rss"
+
+[[feed]]
+name = "Dresden Codak"
+feed = "http://feeds2.feedburner.com/rsspect/fJur"
+
+[[feed]]
+name = "Oglaf! -- Comics. Often dirty."
+feed = "http://oglaf.com/feeds/rss/"
+
+[[feed]]
+name = "Questionable Content"
+feed = "http://www.questionablecontent.net/QCRSS.xml"
+
+[[feed]]
+name = "Saturday Morning Breakfast Cereal"
+feed = "http://www.smbc-comics.com/rss.php"
+
+[[feed]]
+name = "SPACE AVALANCHE"
+feed = "http://www.spaceavalanche.com/feed/"
+
+[[feed]]
+name = "xkcd.com"
+feed = "http://xkcd.com/atom.xml"
+
+[[feed]]
+name = "Lambda the Ultimate - Programming Languages Weblog"
+feed = "http://lambda-the-ultimate.org/rss.xml"
+
+[[feed]]
+name = "OSNews"
+feed = "http://www.osnews.com/files/recent.xml"
+
+[[feed]]
+name = "TheStory.ie"
+feed = "https://thestory.ie/feed/"
+
+[[feed]]
+name = "Language Log"
+feed = "http://languagelog.ldc.upenn.edu/nll/?feed=atom"
+
+[[feed]]
+name = "McAWilliams Photoblog Ireland"
+feed = "http://www.mcawilliams.com/feed"
+
+[[feed]]
+name = "Music For Programming"
+feed = "http://musicforprogramming.net/rss.php"
+
+[[feed]]
+name = "Nick Geoghegan"
+feed = "http://nickgeoghegan.net/feed"
+
+[[feed]]
+name = "No Moods, Ads or Cutesy Fucking Icons"
+feed = "http://www.rifters.com/crawl/?feed=atom"
+
+[[feed]]
+name = "Phil O'Kane"
+feed = "http://feeds2.feedburner.com/IcedCoffeeWords"
+
+[[feed]]
+name = "Rands in Repose"
+feed = "http://randsinrepose.com/feed/"
+
+[[feed]]
+name = "What If?"
+feed = "http://what-if.xkcd.com/feed.atom"
+
+[[feed]]
+name = "Zompist’s E-Z rant page"
+feed = "https://zompist.wordpress.com/feed/"
+
+[[feed]]
+name = "Inklings"
+feed = "https://talideon.com/inklings/feed"
 
 [[feed]]
 name = "Keith Gaughan"
 feed = "https://keith.gaughan.ie/feeds/all.xml"
 
 [[feed]]
-name = "Inklings"
-feed = "https://talideon.com/inklings/feed"
+name = "Alexia Golez"
+feed = "http://golez.net/feed/"
+
+[[feed]]
+name = "Arabesque"
+feed = "http://blog.sanctum.geek.nz/feed/"
+
+[[feed]]
+name = "Bill de hOra"
+feed = "http://dehora.net/journal/atom.xml"
+
+[[feed]]
+name = "BitWorking"
+feed = "http://bitworking.org/news/feed/"
+
+[[feed]]
+name = "blog.lmorchard.com"
+feed = "http://blog.lmorchard.com/index.rss"
+
+[[feed]]
+name = "Brain Phrye"
+feed = "https://phrye.com/index.xml"
+
+[[feed]]
+name = "Brian's Waste of Time"
+feed = "http://skife.org/index.atom"
+
+[[feed]]
+name = "Cat's Eye Technologies: New Developments"
+feed = "http://catseye.tc/feeds/atom_15_news.xml"
+
+[[feed]]
+name = "Coding Horror"
+feed = "http://feeds.feedburner.com/codinghorror"
+
+[[feed]]
+name = "cortesi"
+feed = "http://corte.si/rss.xml"
+
+[[feed]]
+name = "Daemonic Dispatches"
+feed = "http://www.daemonology.net/blog/index.rss"
+
+[[feed]]
+name = "Damien Katz"
+feed = "http://damienkatz.net/atom.xml"
+
+[[feed]]
+name = "Damien Mulley"
+feed = "http://www.mulley.net/feed/atom/"
+
+[[feed]]
+name = "Exploring Agile Solutions"
+feed = "http://agilesolutionspace.blogspot.com/feeds/posts/default"
+
+[[feed]]
+name = "Fetchez le Python"
+feed = "http://blog.ziade.org/./feeds/all.atom.xml"
+
+[[feed]]
+name = "Forbairt"
+feed = "https://forbairt.com/feed/"
+
+[[feed]]
+name = "good coders code, great reuse"
+feed = "http://www.catonmat.net/feed/"
+
+[[feed]]
+name = "Good Math/Bad Math"
+feed = "http://www.goodmath.org/blog/feed/"
+
+[[feed]]
+name = "Holy Shmoly!"
+feed = "http://z9.io/feed/"
+
+[[feed]]
+name = "Ian Bicking: a blog"
+feed = "http://www.ianbicking.org/feeds/atom.xml"
+
+[[feed]]
+name = "igvita.com"
+feed = "https://www.igvita.com/feed/"
+
+[[feed]]
+name = "ImperialViolet"
+feed = "http://www.imperialviolet.org/iv-rss.xml"
+
+[[feed]]
+name = "Jeremy Zawodny's blog"
+feed = "http://blog.zawodny.com/feed/"
+
+[[feed]]
+name = "Jeremy Zawodny's linkblog"
+feed = "http://jeremy.zawodny.com/linkblog/index.xml"
+
+[[feed]]
+name = "Joel on Software"
+feed = "http://www.joelonsoftware.com/rss.xml"
+
+[[feed]]
+name = "John D. Cook"
+feed = "http://www.johndcook.com/blog/feed/"
+
+[[feed]]
+name = "Labnotes"
+feed = "https://labnotes.org/rss/"
+
+[[feed]]
+name = "Laura's Blog"
+feed = "http://www.laura.community/feed/"
+
+[[feed]]
+name = "Les Orchard is typing..."
+feed = "https://typing.lmorchard.com/feed/index.xml"
+
+[[feed]]
+name = "Making it stick."
+feed = "http://patricklogan.blogspot.com/feeds/posts/default"
+
+[[feed]]
+name = "Martin Fowler"
+feed = "http://www.martinfowler.com/feed.atom"
+
+[[feed]]
+name = "Matt Might's blog"
+feed = "http://matt.might.net/articles/feed.rss"
+
+[[feed]]
+name = "Michele Neylon :: Pensieri"
+feed = "http://feedpress.me/michele"
+
+[[feed]]
+name = "Ned Batchelder's blog"
+feed = "https://nedbatchelder.com/blog/rss.xml"
+
+[[feed]]
+name = "ongoing by Tim Bray"
+feed = "https://www.tbray.org/ongoing/ongoing.atom"
+
+[[feed]]
+name = "Otaku, Cedric's blog"
+feed = "http://beust.com/weblog/feed/atom/"
+
+[[feed]]
+name = "Patterns in Functional Programming"
+feed = "https://patternsinfp.wordpress.com/feed/"
+
+[[feed]]
+name = "plasmasturm.org"
+feed = "http://plasmasturm.org/feeds/plasmasturm/"
+
+[[feed]]
+name = "Prince of Persia C64 - Development Blog"
+feed = "http://popc64.blogspot.com/feeds/posts/default"
+
+[[feed]]
+name = "programming is terrible"
+feed = "http://programmingisterrible.com/rss"
+
+[[feed]]
+name = "raganwald.com"
+feed = "http://raganwald.com/atom.xml"
+
+[[feed]]
+name = "rc3.org"
+feed = "http://feeds.rc3.org/rc3dotorg"
+
+[[feed]]
+name = "Recent Articles at 20bits"
+feed = "http://20bits.com/feed/"
+
+[[feed]]
+name = "Recycled Knowledge"
+feed = "http://recycledknowledge.blogspot.com/feeds/posts/default"
+
+[[feed]]
+name = "Russell Beattie"
+feed = "http://feeds.russellbeattie.com/russellbeattieweblog"
+
+[[feed]]
+name = "Sam Ruby"
+feed = "http://intertwingly.net/blog/index.atom"
+
+[[feed]]
+name = "Scott Berkun"
+feed = "http://scottberkun.com/feed/"
+
+[[feed]]
+name = "Something Odd!"
+feed = "https://odd.blog/feed/"
+
+[[feed]]
+name = "Steve Vinoski’s Blog"
+feed = "http://steve.vinoski.net/blog/feed/atom/"
+
+[[feed]]
+name = "Stevey's Blog Rants"
+feed = "http://steve-yegge.blogspot.com/feeds/posts/default"
+
+[[feed]]
+name = "Stories by Steve Yegge on Medium"
+feed = "https://medium.com/feed/@steve.yegge"
+
+[[feed]]
+name = "Subbu Allamaraju"
+feed = "https://m.subbu.org/feed"
+
+[[feed]]
+name = "taint.org: Justin Mason's Weblog"
+feed = "http://taint.org/feed"
+
+[[feed]]
+name = "Teaching, Playing, and Programming"
+feed = "http://okasaki.blogspot.com/feeds/posts/default"
+
+[[feed]]
+name = "The Conlanging Librarian"
+feed = "http://library.conlang.org/blog/?feed=rss2"
+
+[[feed]]
+name = "The Fishbowl"
+feed = "http://fishbowl.pastiche.org/atom.xml"
+
+[[feed]]
+name = "The History of Python"
+feed = "http://python-history.blogspot.com/feeds/posts/default"
+
+[[feed]]
+name = "The Universe of Discourse"
+feed = "http://blog.plover.com/index.atom"
+
+[[feed]]
+name = "Unhandled expression"
+feed = "http://unhandledexpression.com/feed/"
+
+[[feed]]
+name = "Untangled"
+feed = "http://roy.gbiv.com/untangled/feed/atom"
+
+[[feed]]
+name = "Waxy.org Links"
+feed = "http://www.waxy.org/links/index.xml"
+
+[[feed]]
+name = "Web Things, by Mark Baker"
+feed = "http://www.markbaker.ca/blog/feed/"
+
+[[feed]]
+name = "Wide Awake Developers"
+feed = "http://www.michaelnygard.com/atom.xml"
+
+[[feed]]
+name = "Xaprb"
+feed = "http://www.xaprb.com/index.xml"
