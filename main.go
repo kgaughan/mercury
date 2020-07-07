@@ -56,8 +56,8 @@ func main() {
 		"datefmt": func(fmt string, t time.Time) string {
 			return t.Format(fmt)
 		},
-		"sanitize": func(text string) string {
-			return p.Sanitize(text)
+		"sanitize": func(text template.HTML) template.HTML {
+			return template.HTML(p.Sanitize(string(text)))
 		},
 	}).ParseFiles(path.Join(config.Theme, "index.html"))
 	if err != nil {
