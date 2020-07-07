@@ -12,12 +12,15 @@ import (
 	"time"
 
 	"github.com/mmcdole/gofeed"
+	"github.com/pquerna/cachecontrol/cacheobject"
 )
 
+// TODO if a feed is fetched, it shouldn't need to be loaded
 type cacheItem struct {
-	UUID         string // Used to identify the cached feed
-	LastModified string // Used for conditional GET
-	ETag         string // Also used for conditional GET
+	UUID         string    // Used to identify the cached feed
+	LastModified string    // Used for conditional GET
+	ETag         string    // Also used for conditional GET
+	Expires      time.Time // Date after which we should ignore the cache
 }
 
 func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duration) error {
@@ -31,6 +34,13 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 	if _, err := os.Stat(cacheFile); os.IsNotExist(err) {
 		ci.LastModified = ""
 		ci.ETag = ""
+		ci.Expires = time.Now()
+	}
+
+	// Avoid fetching stuff in the cache.
+	if ci.Expires.After(time.Now()) {
+		log.Printf("Using cache for %s", feedURL)
+		return nil
 	}
 
 	req = req.WithContext(context.Background())
@@ -57,6 +67,12 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 		// Save for next time
 		ci.ETag = resp.Header.Get("ETag")
 		ci.LastModified = resp.Header.Get("Last-Modified")
+
+		if resDir, err := cacheobject.ParseResponseCacheControl(resp.Header.Get("Cache-Control")); err != nil {
+			log.Printf("Issue with %s (%v): ignoring Cache-Control", feedURL, err)
+		} else if resDir.MaxAge > 0 {
+			ci.Expires = time.Now().Add(time.Second * time.Duration(resDir.MaxAge))
+		}
 
 		parser := gofeed.NewParser()
 		if feed, err := parser.Parse(resp.Body); err != nil {
