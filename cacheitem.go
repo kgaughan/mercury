@@ -34,12 +34,12 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 	if _, err := os.Stat(cacheFile); os.IsNotExist(err) {
 		ci.LastModified = ""
 		ci.ETag = ""
-		ci.Expires = time.Now()
+		ci.Expires = time.Time{}
 	}
 
 	// Avoid fetching stuff in the cache.
 	if ci.Expires.After(time.Now()) {
-		log.Printf("Using cache for %s", feedURL)
+		log.Printf("%s: cache not expired", feedURL)
 		return nil
 	}
 
@@ -60,6 +60,7 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 	defer resp.Body.Close()
 
 	if resp.StatusCode == 304 {
+		log.Printf("%s: conditional GET", feedURL)
 		return nil
 	}
 
@@ -71,7 +72,7 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 		if resDir, err := cacheobject.ParseResponseCacheControl(resp.Header.Get("Cache-Control")); err != nil {
 			log.Printf("Issue with %s (%v): ignoring Cache-Control", feedURL, err)
 		} else if resDir.MaxAge > 0 {
-			ci.Expires = time.Now().Add(time.Second * time.Duration(resDir.MaxAge))
+			ci.Expires = time.Now().UTC().Add(time.Second * time.Duration(resDir.MaxAge))
 		}
 
 		parser := gofeed.NewParser()
