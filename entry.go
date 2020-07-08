@@ -61,10 +61,13 @@ func (e feedEntry) Link() template.URL {
 }
 
 func (e feedEntry) Author() string {
-	if e.entry.Author == nil {
+	if e.entry.Author != nil {
+		return e.entry.Author.Name
+	}
+	if e.feed.Author != nil {
 		return e.feed.Author.Name
 	}
-	return e.entry.Author.Name
+	return ""
 }
 
 func (e feedEntry) Published() *time.Time {
