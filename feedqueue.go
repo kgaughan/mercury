@@ -29,15 +29,12 @@ func (fq feedQueue) getPublished(i int) *time.Time {
 }
 
 func (fq feedQueue) Less(i, j int) bool {
-	// Exhausted feeds are considered 'greater'
-	if fq.remaining(j) == 0 {
-		return false
+	i_remaining := fq.remaining(i)
+	j_remaining := fq.remaining(j)
+	if i_remaining > 0 && j_remaining > 0 {
+		return fq.getPublished(i).After(*fq.getPublished(j))
 	}
-	if fq.remaining(i) == 0 {
-		return true
-	}
-	// Otherwise, it's considered 'less' if it's more recent
-	return fq.getPublished(i).After(*fq.getPublished(j))
+	return i_remaining > j_remaining
 }
 
 func (fq feedQueue) Swap(i, j int) {
