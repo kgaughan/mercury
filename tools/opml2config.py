@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+from os import path
 from xml.dom import minidom
 
 ESCAPES = {
@@ -15,11 +16,18 @@ ESCAPES = {
 
 
 def main():
+    if len(sys.argv) == 2 and sys.argv[1] == "-h":
+        print("usage:", path.basename(sys.argv[0]), "<opml>", file=sys.stderr)
+        sys.exit(0)
+
     escapes = str.maketrans(ESCAPES)
 
     first = True
-    for path in sys.argv[1:]:
-        doc = minidom.parse(path)
+    for filename in sys.argv[1:]:
+        if not path.exists(filename):
+            print("error: no such file:", filename, file=sys.stderr)
+            sys.exit(1)
+        doc = minidom.parse(filename)
         for node in doc.getElementsByTagName("outline"):
             node_type = node.getAttribute("type")
             if node_type != "rss":
