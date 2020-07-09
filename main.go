@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/microcosm-cc/bluemonday"
+	"github.com/mmcdole/gofeed"
 )
 
 const REPO = "https://github.com/kgaughan/mercury/"
@@ -56,6 +57,9 @@ func main() {
 		"datefmt": func(fmt string, t time.Time) string {
 			return t.Format(fmt)
 		},
+		"safe": func(text string) template.HTML {
+			return template.HTML(text)
+		},
 		"sanitize": func(text template.HTML) template.HTML {
 			return template.HTML(p.Sanitize(string(text)))
 		},
@@ -85,11 +89,13 @@ func main() {
 
 	// Load everything from the cache
 	var fq feedQueue
+	var feeds []*gofeed.Feed
 	for _, item := range manifest {
 		if feed, err := item.Load(config.Cache); err != nil {
 			log.Fatal(err)
 		} else {
 			fq.AppendFeed(feed)
+			feeds = append(feeds, feed)
 		}
 	}
 
@@ -131,6 +137,7 @@ func main() {
 			PageNo    int
 			Items     []*feedEntry
 			Generated time.Time
+			Feeds     []*gofeed.Feed
 		}{
 			Generator: fmt.Sprintf("Planet Mercury %v (%v)", Version, REPO),
 			Name:      config.Name,
@@ -140,6 +147,7 @@ func main() {
 			PageNo:    iPage + 1,
 			Items:     items,
 			Generated: now,
+			Feeds:     feeds,
 		}
 		if err := tmpl.ExecuteTemplate(f, "index.html", vars); err != nil {
 			log.Fatal(err)

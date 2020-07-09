@@ -33,6 +33,7 @@ article {
   margin: 2rem 0 4rem 0;
 }
 article h1,
+footer h1,
 article h2,
 article h3 {
   font-weight: 300;
@@ -63,9 +64,24 @@ blockquote em {
   font-style: normal;
 }
 
+/* An SVG of the feed icon. This way, we can display it just by applying a class. */
+.feed {
+	display: inline-block;
+	background: center no-repeat url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgd2lkdGg9IjEyOHB4IiBoZWlnaHQ9IjEyOHB4IiBpZD0iUlNTaWNvbiIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCB4MT0iMC4wODUiIHkxPSIwLjA4NSIgeDI9IjAuOTE1IiB5Mj0iMC45MTUiIGlkPSJSU1NnIj48c3RvcCBvZmZzZXQ9IjAuMCIgc3RvcC1jb2xvcj0iI0UzNzAyRCIvPjxzdG9wIG9mZnNldD0iMC4xMDcxIiBzdG9wLWNvbG9yPSIjRUE3RDMxIi8+PHN0b3Agb2Zmc2V0PSIwLjM1MDMiIHN0b3AtY29sb3I9IiNGNjk1MzciLz48c3RvcCBvZmZzZXQ9IjAuNSIgc3RvcC1jb2xvcj0iI0ZCOUUzQSIvPjxzdG9wIG9mZnNldD0iMC43MDE2IiBzdG9wLWNvbG9yPSIjRUE3QzMxIi8+PHN0b3Agb2Zmc2V0PSIwLjg4NjYiIHN0b3AtY29sb3I9IiNERTY0MkIiLz48c3RvcCBvZmZzZXQ9IjEuMCIgc3RvcC1jb2xvcj0iI0Q5NUIyOSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiByeD0iNTUiIHJ5PSI1NSIgeD0iMCIgeT0iMCIgZmlsbD0iI0NDNUQxNSIvPjxyZWN0IHdpZHRoPSIyNDYiIGhlaWdodD0iMjQ2IiByeD0iNTAiIHJ5PSI1MCIgeD0iNSIgeT0iNSIgZmlsbD0iI0Y0OUM1MiIvPjxyZWN0IHdpZHRoPSIyMzYiIGhlaWdodD0iMjM2IiByeD0iNDciIHJ5PSI0NyIgeD0iMTAiIHk9IjEwIiBmaWxsPSJ1cmwoI1JTU2cpIi8+PGNpcmNsZSBjeD0iNjgiIGN5PSIxODkiIHI9IjI0IiBmaWxsPSIjRkZGIi8+PHBhdGggZD0iTTE2MCAyMTNoLTM0YTgyIDgyIDAgMCAwIC04MiAtODJ2LTM0YTExNiAxMTYgMCAwIDEgMTE2IDExNnoiIGZpbGw9IiNGRkYiLz48cGF0aCBkPSJNMTg0IDIxM0ExNDAgMTQwIDAgMCAwIDQ0IDczIFYgMzhhMTc1IDE3NSAwIDAgMSAxNzUgMTc1eiIgZmlsbD0iI0ZGRiIvPjwvc3ZnPgo=);
+	background-size: 1rem 1rem;
+	line-height: 1;
+	width: 1rem;
+	white-space: nowrap;
+	text-decoration: none;
+}
+.feed::before {
+	content: "\00a0";
+}
+
 address {
   font-size: 80%;
   margin-bottom: 2rem;
+  text-align: right;
 }
 
 @media (min-width: 48rem) {
@@ -97,6 +113,14 @@ address {
 			</div>
 		</article>
 		{{end}}
+		<footer>
+			<h1>Feeds</h1>
+			<ul>
+			{{range .Feeds}}
+			<li><a href="{{.FeedLink}}" class="feed" aria-hidden="true" title="Feed"></a> <a href="{{.Link}}">{{.Title}}</a></li>
+			{{end}}
+			</ul>
+		</footer>
 		<address>Generated: {{.Generated | isodatefmt }}</address>
 	</body>
 </html>
