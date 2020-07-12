@@ -156,4 +156,13 @@ func main() {
 			break
 		}
 	}
+
+	// Generate OPML
+	opml := NewOpml(len(feeds))
+	for _, feed := range feeds {
+		opml.Append(feed.Title, feed.FeedLink)
+	}
+	if err := opml.MarshalToFile(path.Join(config.Output, "opml.xml")); err != nil {
+		log.Fatal(err)
+	}
 }
