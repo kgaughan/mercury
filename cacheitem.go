@@ -17,6 +17,7 @@ import (
 
 // TODO if a feed is fetched, it shouldn't need to be loaded
 type cacheItem struct {
+	Name         string
 	UUID         string    // Used to identify the cached feed
 	LastModified string    // Used for conditional GET
 	ETag         string    // Also used for conditional GET

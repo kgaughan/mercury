@@ -41,6 +41,7 @@ func (m manifest) Populate(cache manifest, feeds []feed) {
 				UUID: uuid.New().String(),
 			}
 		}
+		m[feed.Feed].Name = feed.Name
 	}
 }
 

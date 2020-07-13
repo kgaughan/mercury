@@ -159,8 +159,8 @@ func main() {
 
 	// Generate OPML
 	opml := NewOpml(len(feeds))
-	for _, feed := range feeds {
-		opml.Append(feed.Title, feed.FeedLink)
+	for url, item := range manifest {
+		opml.Append(item.Name, url)
 	}
 	if err := opml.MarshalToFile(path.Join(config.Output, "opml.xml")); err != nil {
 		log.Fatal(err)

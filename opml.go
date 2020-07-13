@@ -35,7 +35,9 @@ func (o *Opml) Append(text, xmlUrl string) {
 
 func (o *Opml) Marshal(w io.Writer) error {
 	w.Write([]byte(xml.Header))
-	return xml.NewEncoder(w).Encode(o)
+	encoder := xml.NewEncoder(w)
+	encoder.Indent("", "\t")
+	return encoder.Encode(o)
 }
 
 func (o *Opml) MarshalToFile(filename string) error {
