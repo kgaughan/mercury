@@ -63,6 +63,9 @@ func main() {
 		"sanitize": func(text template.HTML) template.HTML {
 			return template.HTML(p.Sanitize(string(text)))
 		},
+		"excerpt": func(max int, text template.HTML) template.HTML {
+			return template.HTML(excerpt(string(text), max))
+		},
 	}).ParseFiles(path.Join(config.Theme, "index.html"))
 	if err != nil {
 		log.Fatal(err)
