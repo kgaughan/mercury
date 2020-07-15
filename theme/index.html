@@ -106,11 +106,11 @@ address {
 				<div>Posted <time datetime="{{.Published | isodatefmt}}">{{.Published | datefmt "January 2, 2006 at 15:04:05 MST"}}</time></div>
 			</header>
 			<div class="article-body">
-			{{if .Summary}}
+			{{- if .Summary -}}
 				{{.Summary | sanitize}}
-			{{else}}
-				{{.Content | excerpt 500 | sanitize }}
-			{{end}}
+			{{- else if .Content -}}
+				{{.Content | excerpt 500 | sanitize}}
+			{{- end -}}
 			</div>
 		</article>
 		{{end}}
