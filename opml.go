@@ -21,7 +21,7 @@ type Outline struct {
 func NewOpml(size int) *Opml {
 	return &Opml{
 		Version:  "2.0",
-		Outlines: make([]*Outline, size),
+		Outlines: make([]*Outline, 0, size),
 	}
 }
 
