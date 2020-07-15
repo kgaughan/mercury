@@ -109,7 +109,7 @@ address {
 			{{if .Summary}}
 				{{.Summary | sanitize}}
 			{{else}}
-				{{.Content | sanitize}}
+				{{.Content | excerpt 500 | sanitize }}
 			{{end}}
 			</div>
 		</article>

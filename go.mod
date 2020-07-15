@@ -8,4 +8,5 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.3
 	github.com/mmcdole/gofeed v1.0.0
 	github.com/pquerna/cachecontrol v0.0.0-20180517163645-1555304b9b35
+	golang.org/x/net v0.0.0-20181220203305-927f97764cc3
 )
