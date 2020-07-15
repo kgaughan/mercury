@@ -54,7 +54,7 @@ Loop:
 		}
 	}
 
-	for i := len(tagStack) - 1; i > 0; i-- {
+	for i := len(tagStack) - 1; i >= 0; i-- {
 		b.WriteString("</")
 		b.WriteString(tagStack[i])
 		b.WriteByte('>')
