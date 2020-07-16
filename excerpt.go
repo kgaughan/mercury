@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"strings"
+	"unicode"
 
 	"golang.org/x/net/html"
 )
@@ -29,18 +30,27 @@ Loop:
 			break Loop
 
 		case html.TextToken:
-			rs := []rune(token.Data)
-			nr := len(rs)
-			var toAppend string
-			if nr <= remaining {
-				toAppend = token.Data
-				remaining -= nr
-			} else {
-				toAppend = string(rs[:remaining]) + "\u2026" // ellipsis
-				remaining = 0
+			toAppend := token.Data
+			lastSpace := -1
+			for n, r := range toAppend {
+				if unicode.IsSpace(r) {
+					lastSpace = n
+				}
+				remaining -= 1
+				if remaining == 0 {
+					// Get the biggest slice we can if no space was found up
+					// to the truncation point.
+					if lastSpace == -1 {
+						lastSpace = n
+					}
+					toAppend = toAppend[:lastSpace]
+					break
+				}
 			}
+
 			b.WriteString(html.EscapeString(toAppend))
 			if remaining == 0 {
+				b.WriteRune('\u2026') // ellipsis
 				break Loop
 			}
 
