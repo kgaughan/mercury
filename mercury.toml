@@ -43,6 +43,10 @@ name = "xkcd.com"
 feed = "http://xkcd.com/atom.xml"
 
 [[feed]]
+name = "Portscout Port Updates"
+feed = "http://portscout.freebsd.org/rss/rss.cgi?m=k@stereochro.me"
+
+[[feed]]
 name = "Lambda the Ultimate - Programming Languages Weblog"
 feed = "http://lambda-the-ultimate.org/rss.xml"
 
@@ -156,7 +160,7 @@ feed = "http://agilesolutionspace.blogspot.com/feeds/posts/default"
 
 [[feed]]
 name = "Fetchez le Python"
-feed = "http://blog.ziade.org/./feeds/all.atom.xml"
+feed = "https://ziade.org/feeds/all.atom.xml"
 
 [[feed]]
 name = "Forbairt"
@@ -251,10 +255,6 @@ name = "plasmasturm.org"
 feed = "http://plasmasturm.org/feeds/plasmasturm/"
 
 [[feed]]
-name = "Prince of Persia C64 - Development Blog"
-feed = "http://popc64.blogspot.com/feeds/posts/default"
-
-[[feed]]
 name = "programming is terrible"
 feed = "http://programmingisterrible.com/rss"
 
@@ -262,9 +262,9 @@ feed = "http://programmingisterrible.com/rss"
 name = "raganwald.com"
 feed = "http://raganwald.com/atom.xml"
 
-[[feed]]
-name = "rc3.org"
-feed = "http://feeds.rc3.org/rc3dotorg"
+#[[feed]]
+#name = "rc3.org"
+#feed = "http://rc3.org/feed/"
 
 [[feed]]
 name = "Recent Articles at 20bits"
