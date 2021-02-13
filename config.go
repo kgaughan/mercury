@@ -11,6 +11,7 @@ type feed struct {
 	Feed string
 }
 
+// Config describes our configuration
 type Config struct {
 	Name         string
 	URL          string `toml:"url"`
@@ -25,18 +26,18 @@ type Config struct {
 	MaxPages     int `toml:"max_pages"`
 }
 
+// Load loads our configuration file
 func (c *Config) Load(path string) error {
 	if _, err := toml.DecodeFile(path, c); err != nil {
 		return err
 	}
-
-	if configDir, err := filepath.Abs(filepath.Dir(path)); err != nil {
+	configDir, err := filepath.Abs(filepath.Dir(path))
+	if err != nil {
 		return err
-	} else {
-		c.Cache = filepath.Join(configDir, c.Cache)
-		c.Theme = filepath.Join(configDir, c.Theme)
-		c.Output = filepath.Join(configDir, c.Output)
 	}
+	c.Cache = filepath.Join(configDir, c.Cache)
+	c.Theme = filepath.Join(configDir, c.Theme)
+	c.Output = filepath.Join(configDir, c.Output)
 
 	return nil
 }

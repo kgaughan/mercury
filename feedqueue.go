@@ -29,12 +29,12 @@ func (fq feedQueue) getPublished(i int) *time.Time {
 }
 
 func (fq feedQueue) Less(i, j int) bool {
-	i_remaining := fq.remaining(i)
-	j_remaining := fq.remaining(j)
-	if i_remaining > 0 && j_remaining > 0 {
+	iRemaining := fq.remaining(i)
+	jRemaining := fq.remaining(j)
+	if iRemaining > 0 && jRemaining > 0 {
 		return fq.getPublished(i).After(*fq.getPublished(j))
 	}
-	return i_remaining > j_remaining
+	return iRemaining > jRemaining
 }
 
 func (fq feedQueue) Swap(i, j int) {

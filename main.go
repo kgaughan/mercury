@@ -14,8 +14,9 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-const REPO = "https://github.com/kgaughan/mercury/"
+const repo = "https://github.com/kgaughan/mercury/"
 
+// Version contains the version (set during build)
 var Version string
 
 var configPath = flag.String("config", "./mercury.toml", "Path to configuration")
@@ -114,14 +115,14 @@ func main() {
 		}
 
 		lastPage := false
-		var items []*feedEntry
+		var items []*FeedEntry
 		for iEntry := 0; iEntry < config.ItemsPerPage; iEntry++ {
 			item := fq.Top()
 			if item == nil {
 				lastPage = true
 				break
 			}
-			items = append(items, item.(*feedEntry))
+			items = append(items, item.(*FeedEntry))
 			heap.Fix(&fq, 0)
 		}
 
@@ -138,11 +139,11 @@ func main() {
 			Owner     string
 			Email     string
 			PageNo    int
-			Items     []*feedEntry
+			Items     []*FeedEntry
 			Generated time.Time
 			Feeds     []*gofeed.Feed
 		}{
-			Generator: fmt.Sprintf("Planet Mercury %v (%v)", Version, REPO),
+			Generator: fmt.Sprintf("Planet Mercury %v (%v)", Version, repo),
 			Name:      config.Name,
 			URL:       template.URL(config.URL),
 			Owner:     config.Owner,
@@ -161,7 +162,7 @@ func main() {
 	}
 
 	// Generate OPML
-	opml := NewOpml(len(feeds))
+	opml := NewOPML(len(feeds))
 	for url, item := range manifest {
 		opml.Append(item.Name, url)
 	}

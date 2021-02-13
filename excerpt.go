@@ -36,7 +36,7 @@ Loop:
 				if unicode.IsSpace(r) {
 					lastSpace = n
 				}
-				remaining -= 1
+				remaining--
 				if remaining == 0 {
 					// Get the biggest slice we can if no space was found up
 					// to the truncation point.

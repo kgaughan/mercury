@@ -45,7 +45,7 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 	}
 
 	req = req.WithContext(context.Background())
-	req.Header.Set("User-Agent", fmt.Sprintf("planet-mercury/%v (%v)", Version, REPO))
+	req.Header.Set("User-Agent", fmt.Sprintf("planet-mercury/%v (%v)", Version, repo))
 	if ci.LastModified != "" {
 		req.Header.Set("If-Modified-Since", ci.LastModified)
 	}
@@ -94,14 +94,13 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 
 func (ci *cacheItem) Load(cacheDir string) (*gofeed.Feed, error) {
 	cacheFile := filepath.Join(cacheDir, ci.UUID+".json")
-	if file, err := ioutil.ReadFile(cacheFile); err != nil {
+	file, err := ioutil.ReadFile(cacheFile)
+	if err != nil {
 		return nil, err
-	} else {
-		feed := &gofeed.Feed{}
-		if err := json.Unmarshal(file, feed); err != nil {
-			return nil, err
-		} else {
-			return feed, nil
-		}
 	}
+	feed := &gofeed.Feed{}
+	if err := json.Unmarshal(file, feed); err != nil {
+		return nil, err
+	}
+	return feed, nil
 }

@@ -6,48 +6,54 @@ import (
 	"os"
 )
 
-type Opml struct {
+// OPML represents an OPML document
+type OPML struct {
 	XMLName  xml.Name   `xml:"opml"`
 	Version  string     `xml:"version,attr"`
 	Outlines []*Outline `xml:"body>outline"`
 }
 
+// Outline represents an outline within an OPML document
 type Outline struct {
 	Text   string `xml:"text,attr"`
 	Type   string `xml:"type,attr"`
-	XmlUrl string `xml:"xmlUrl,attr"`
+	XMLURL string `xml:"xmlUrl,attr"`
 }
 
-func NewOpml(size int) *Opml {
-	return &Opml{
+// NewOPML creates a new, empty OPML document
+func NewOPML(size int) *OPML {
+	return &OPML{
 		Version:  "2.0",
 		Outlines: make([]*Outline, 0, size),
 	}
 }
 
-func (o *Opml) Append(text, xmlUrl string) {
+// Append appends a feed entry to the OPML document
+func (o *OPML) Append(text, xmlURL string) {
 	o.Outlines = append(o.Outlines, &Outline{
 		Text:   text,
 		Type:   "rss",
-		XmlUrl: xmlUrl,
+		XMLURL: xmlURL,
 	})
 }
 
-func (o *Opml) Marshal(w io.Writer) error {
+// Marshal serialises the OPML document to w
+func (o *OPML) Marshal(w io.Writer) error {
 	w.Write([]byte(xml.Header))
 	encoder := xml.NewEncoder(w)
 	encoder.Indent("", "\t")
 	return encoder.Encode(o)
 }
 
-func (o *Opml) MarshalToFile(filename string) error {
-	if f, err := os.Create(filename); err != nil {
+// MarshalToFile serialises the OPML document to a file
+func (o *OPML) MarshalToFile(filename string) error {
+	f, err := os.Create(filename)
+	if err != nil {
 		return err
-	} else {
-		defer f.Close()
-		if err := o.Marshal(f); err != nil {
-			return err
-		}
+	}
+	defer f.Close()
+	if err := o.Marshal(f); err != nil {
+		return err
 	}
 	return nil
 }

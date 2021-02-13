@@ -23,11 +23,11 @@ func (m *manifest) Load(path string) error {
 }
 
 func (m *manifest) Save(path string) error {
-	if file, err := json.Marshal(m); err == nil {
+	file, err := json.Marshal(m)
+	if err == nil {
 		return ioutil.WriteFile(path, file, 0600)
-	} else {
-		return err
 	}
+	return err
 }
 
 func (m manifest) Populate(cache manifest, feeds []feed) {
