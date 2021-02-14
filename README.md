@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/kgaughan/mercury.svg?style=svg)](https://circleci.com/gh/kgaughan/mercury)
+
 # Planet Mercury
 
 <img src="assets/mercury.png" align="right">_Mercury_ is intended a replacement for Sam Ruby's [Planet Venus](https://github.com/rubys/venus/).
