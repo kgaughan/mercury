@@ -9,7 +9,7 @@ tidy: go.mod
 clean:
 	rm -f mercury
 
-mercury: $(SOURCE)
+mercury: $(SOURCE) go.sum
 	CGO_ENABLED=0 go build -trimpath -ldflags '-s -w -X main.Version=$(VERSION)'
 
 go.mod: $(SOURCE)
