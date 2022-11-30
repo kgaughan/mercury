@@ -1,4 +1,4 @@
-VERSION:=0.1.0
+VERSION:=$(shell git describe --tags | cut -c2-)
 
 SOURCE:=$(wildcard *.go)
 
