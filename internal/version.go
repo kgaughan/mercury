@@ -1,6 +1,16 @@
 package internal
 
+import "fmt"
+
 // Version contains the version (set during build)
 var Version string
 
-const Repo = "https://github.com/kgaughan/mercury/"
+const repo = "https://github.com/kgaughan/mercury/"
+
+func UserAgent() string {
+	return fmt.Sprintf("planet-mercury/%v (%v)", Version, repo)
+}
+
+func Generator() string {
+	return fmt.Sprintf("Planet Mercury %v (%v)", Version, repo)
+}

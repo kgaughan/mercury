@@ -112,7 +112,7 @@ func main() {
 			Generated time.Time
 			Feeds     []*gofeed.Feed
 		}{
-			Generator: fmt.Sprintf("Planet Mercury %v (%v)", internal.Version, internal.Repo),
+			Generator: internal.Generator(),
 			Name:      config.Name,
 			URL:       template.URL(config.URL),
 			Owner:     config.Owner,
