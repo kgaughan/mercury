@@ -15,8 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
-    - run: git fetch --tags
+      with:
+        # Essentially a hack: I want the tags. This feels a bit overkill though.
+        fetch-depth: 0
 
     - name: Set up Go
       uses: actions/setup-go@v3
