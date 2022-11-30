@@ -19,6 +19,7 @@ const repo = "https://github.com/kgaughan/mercury/"
 // Version contains the version (set during build)
 var Version string
 
+var printVersion = flag.Bool("version", false, "Print version and exit")
 var configPath = flag.String("config", "./mercury.toml", "Path to configuration")
 var noFetch = flag.Bool("no-fetch", false, "Don't fetch, just use what's in the cache")
 
@@ -35,10 +36,18 @@ func ensureDir(path string) {
 func main() {
 	var config Config
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", path.Base(os.Args[0]))
+		out := flag.CommandLine.Output()
+		name := path.Base(os.Args[0])
+		fmt.Fprintf(out, "%s - Generates an aggregated site from a set of feeds.\n\n", name)
+		fmt.Fprintln(out, "Usage:\n")
 		flag.PrintDefaults()
 	}
 	flag.Parse()
+
+	if *printVersion {
+		fmt.Println(Version)
+		return
+	}
 
 	if err := config.Load(*configPath); err != nil {
 		log.Fatal(err)
