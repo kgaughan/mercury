@@ -17,3 +17,11 @@ feed = "https://keith.gaughan.ie/feeds/all.xml"
 [[feed]]
 name = "Inklings"
 feed = "https://talideon.com/inklings/feed"
+
+[[plugin]]
+name = "howIShouldBeReferredTo"
+path = "path/to/plugin.so"
+
+[[plugin]]
+name = "thisIsSomethingExternal"
+path = "path/to/plugin.py"

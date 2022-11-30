@@ -25,6 +25,7 @@ type Config struct {
 	Theme        fs.FS           `toml:"-"`
 	Output       string          `toml:"output"`
 	Feeds        []manifest.Feed `toml:"feed"`
+	Plugins      []plugin        `toml:"plugin"`
 	ItemsPerPage int             `toml:"items"`
 	MaxPages     int             `toml:"max_pages"`
 }
