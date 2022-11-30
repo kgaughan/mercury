@@ -106,6 +106,8 @@ func main() {
 	for _, item := range manifest {
 		if feed, err := item.Load(config.Cache); err != nil {
 			log.Fatal(err)
+		} else if feed == nil {
+			log.Printf("Could not load cache for %q; skipping", item.Name)
 		} else {
 			fq.AppendFeed(feed)
 			feeds = append(feeds, feed)
