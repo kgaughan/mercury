@@ -39,7 +39,9 @@ func (o *OPML) Append(text, xmlURL string) {
 
 // Marshal serialises the OPML document to w
 func (o *OPML) Marshal(w io.Writer) error {
-	w.Write([]byte(xml.Header))
+	if _, err := w.Write([]byte(xml.Header)); err != nil {
+		return err
+	}
 	encoder := xml.NewEncoder(w)
 	encoder.Indent("", "\t")
 	return encoder.Encode(o)
