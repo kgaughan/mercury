@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"encoding/json"
@@ -11,9 +11,9 @@ import (
 	"github.com/google/uuid"
 )
 
-type manifest map[string]*cacheItem
+type Manifest map[string]*cacheItem
 
-func (m *manifest) Load(path string) error {
+func (m *Manifest) Load(path string) error {
 	if file, err := ioutil.ReadFile(path); err == nil {
 		if err := json.Unmarshal(file, m); err != nil {
 			return err
@@ -22,7 +22,7 @@ func (m *manifest) Load(path string) error {
 	return nil
 }
 
-func (m *manifest) Save(path string) error {
+func (m *Manifest) Save(path string) error {
 	file, err := json.Marshal(m)
 	if err == nil {
 		return ioutil.WriteFile(path, file, 0600)
@@ -30,7 +30,7 @@ func (m *manifest) Save(path string) error {
 	return err
 }
 
-func (m manifest) Populate(cache manifest, feeds []feed) {
+func (m Manifest) Populate(cache Manifest, feeds []feed) {
 	for _, feed := range feeds {
 		if item, ok := cache[feed.Feed]; ok {
 			// Copy over the extant cache entry
@@ -50,7 +50,7 @@ type fetchJob struct {
 	Item *cacheItem
 }
 
-func (m manifest) Prime(cache string, timeout time.Duration) {
+func (m Manifest) Prime(cache string, timeout time.Duration) {
 	var wg sync.WaitGroup
 
 	// The channel depth is kind of arbitrary.

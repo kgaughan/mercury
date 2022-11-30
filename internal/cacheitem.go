@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"context"
@@ -45,7 +45,7 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 	}
 
 	req = req.WithContext(context.Background())
-	req.Header.Set("User-Agent", fmt.Sprintf("planet-mercury/%v (%v)", Version, repo))
+	req.Header.Set("User-Agent", fmt.Sprintf("planet-mercury/%v (%v)", Version, Repo))
 	if ci.LastModified != "" {
 		req.Header.Set("If-Modified-Since", ci.LastModified)
 	}

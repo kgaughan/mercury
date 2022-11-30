@@ -10,46 +10,23 @@ import (
 	"path"
 	"time"
 
-	"github.com/microcosm-cc/bluemonday"
+	"github.com/kgaughan/mercury/internal"
+	"github.com/kgaughan/mercury/internal/flags"
+	"github.com/kgaughan/mercury/internal/templates"
+	"github.com/kgaughan/mercury/internal/utils"
 	"github.com/mmcdole/gofeed"
 )
 
-const repo = "https://github.com/kgaughan/mercury/"
-
-// Version contains the version (set during build)
-var Version string
-
-var printVersion = flag.Bool("version", false, "Print version and exit")
-var configPath = flag.String("config", "./mercury.toml", "Path to configuration")
-var noFetch = flag.Bool("no-fetch", false, "Don't fetch, just use what's in the cache")
-
-func ensureDir(path string) {
-	if fileInfo, err := os.Stat(path); os.IsNotExist(err) {
-		if err := os.MkdirAll(path, 0755); err != nil {
-			log.Fatal(err)
-		}
-	} else if !fileInfo.IsDir() {
-		log.Fatalf("%s must be a directory\n", path)
-	}
-}
-
 func main() {
-	var config Config
-	flag.Usage = func() {
-		out := flag.CommandLine.Output()
-		name := path.Base(os.Args[0])
-		fmt.Fprintf(out, "%s - Generates an aggregated site from a set of feeds.\n\n", name)
-		fmt.Fprintln(out, "Usage:\n")
-		flag.PrintDefaults()
-	}
+	var config internal.Config
 	flag.Parse()
 
-	if *printVersion {
-		fmt.Println(Version)
+	if *flags.PrintVersion {
+		fmt.Println(internal.Version)
 		return
 	}
 
-	if err := config.Load(*configPath); err != nil {
+	if err := config.Load(*flags.ConfigPath); err != nil {
 		log.Fatal(err)
 	}
 
@@ -57,43 +34,24 @@ func main() {
 		log.Fatalf("Theme directory '%v' not found", config.Theme)
 	}
 
-	// This is just a starting point so there's a reasonable policy
-	p := bluemonday.UGCPolicy()
-
-	tmpl, err := template.New("").Funcs(template.FuncMap{
-		"isodatefmt": func(t time.Time) string {
-			return t.Format(time.RFC3339)
-		},
-		"datefmt": func(fmt string, t time.Time) string {
-			return t.Format(fmt)
-		},
-		"safe": func(text string) template.HTML {
-			return template.HTML(text)
-		},
-		"sanitize": func(text template.HTML) template.HTML {
-			return template.HTML(p.Sanitize(string(text)))
-		},
-		"excerpt": func(max int, text template.HTML) template.HTML {
-			return template.HTML(excerpt(string(text), max))
-		},
-	}).ParseFiles(path.Join(config.Theme, "index.html"))
+	tmpl, err := templates.Configure(config.Theme)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	ensureDir(config.Cache)
-	ensureDir(config.Output)
+	utils.EnsureDir(config.Cache)
+	utils.EnsureDir(config.Output)
 
 	manifestPath := path.Join(config.Cache, "manifest.json")
-	cachedManifest := make(manifest)
+	cachedManifest := make(internal.Manifest)
 	if err := cachedManifest.Load(manifestPath); err != nil {
 		log.Fatal(err)
 	}
 
 	// Populate the manifest with the contents of the config file
-	manifest := make(manifest)
+	manifest := make(internal.Manifest)
 	manifest.Populate(cachedManifest, config.Feed)
-	if !*noFetch {
+	if !*flags.NoFetch {
 		manifest.Prime(config.Cache, config.Timeout.Duration)
 	}
 	if err := manifest.Save(manifestPath); err != nil {
@@ -101,7 +59,7 @@ func main() {
 	}
 
 	// Load everything from the cache
-	var fq feedQueue
+	var fq internal.FeedQueue
 	var feeds []*gofeed.Feed
 	for _, item := range manifest {
 		if feed, err := item.Load(config.Cache); err != nil {
@@ -126,14 +84,14 @@ func main() {
 		}
 
 		lastPage := false
-		var items []*FeedEntry
+		var items []*internal.FeedEntry
 		for iEntry := 0; iEntry < config.ItemsPerPage; iEntry++ {
 			item := fq.Top()
 			if item == nil {
 				lastPage = true
 				break
 			}
-			items = append(items, item.(*FeedEntry))
+			items = append(items, item.(*internal.FeedEntry))
 			heap.Fix(&fq, 0)
 		}
 
@@ -150,11 +108,11 @@ func main() {
 			Owner     string
 			Email     string
 			PageNo    int
-			Items     []*FeedEntry
+			Items     []*internal.FeedEntry
 			Generated time.Time
 			Feeds     []*gofeed.Feed
 		}{
-			Generator: fmt.Sprintf("Planet Mercury %v (%v)", Version, repo),
+			Generator: fmt.Sprintf("Planet Mercury %v (%v)", internal.Version, internal.Repo),
 			Name:      config.Name,
 			URL:       template.URL(config.URL),
 			Owner:     config.Owner,
@@ -173,7 +131,7 @@ func main() {
 	}
 
 	// Generate OPML
-	opml := NewOPML(len(feeds))
+	opml := internal.NewOPML(len(feeds))
 	for url, item := range manifest {
 		opml.Append(item.Name, url)
 	}
