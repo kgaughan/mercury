@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import sys
 from os import path
+import sys
+from typing import Iterator, Tuple
 from xml.dom import minidom
 
 ESCAPES = {
@@ -15,7 +16,7 @@ ESCAPES = {
 }
 
 
-def extract_feeds(doc):
+def extract_feeds(doc: minidom.Document) -> Iterator[Tuple[str, str]]:
     for node in doc.getElementsByTagName("outline"):
         if node.getAttribute("type") == "rss":
             if feed := node.getAttribute("xmlUrl"):
