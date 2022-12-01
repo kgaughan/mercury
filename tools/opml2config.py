@@ -17,7 +17,7 @@ ESCAPES = {
 
 def main():
     if len(sys.argv) == 2 and sys.argv[1] == "-h":
-        print("usage:", path.basename(sys.argv[0]), "<opml>", file=sys.stderr)
+        print("usage:", path.basename(sys.argv[0]), "<opml>*", file=sys.stderr)
         sys.exit(0)
 
     escapes = str.maketrans(ESCAPES)
@@ -36,9 +36,8 @@ def main():
                 first = False
             else:
                 print()
-            name = node.getAttribute("text").translate(escapes)
-            feed = node.getAttribute("xmlUrl").translate(escapes)
-            if feed:
+            if feed := node.getAttribute("xmlUrl").translate(escapes):
+                name = node.getAttribute("text").translate(escapes)
                 print("[[feed]]")
                 print(f'name = "{name}"')
                 print(f'feed = "{feed}"')
