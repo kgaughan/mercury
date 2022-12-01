@@ -1,4 +1,4 @@
-package internal
+package feed
 
 import (
 	"time"
@@ -6,20 +6,20 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-type FeedQueue struct {
+type Queue struct {
 	feeds   []*gofeed.Feed
 	indices []int
 }
 
-func (fq FeedQueue) Len() int {
+func (fq Queue) Len() int {
 	return len(fq.feeds)
 }
 
-func (fq FeedQueue) remaining(i int) int {
+func (fq Queue) remaining(i int) int {
 	return len(fq.feeds[i].Items) - fq.indices[i]
 }
 
-func (fq FeedQueue) getPublished(i int) *time.Time {
+func (fq Queue) getPublished(i int) *time.Time {
 	entry := fq.feeds[i].Items[fq.indices[i]]
 	// This is ridiculous.
 	if entry.PublishedParsed != nil {
@@ -28,7 +28,7 @@ func (fq FeedQueue) getPublished(i int) *time.Time {
 	return entry.UpdatedParsed
 }
 
-func (fq FeedQueue) Less(i, j int) bool {
+func (fq Queue) Less(i, j int) bool {
 	iRemaining := fq.remaining(i)
 	jRemaining := fq.remaining(j)
 	if iRemaining > 0 && jRemaining > 0 {
@@ -37,20 +37,20 @@ func (fq FeedQueue) Less(i, j int) bool {
 	return iRemaining > jRemaining
 }
 
-func (fq FeedQueue) Swap(i, j int) {
+func (fq Queue) Swap(i, j int) {
 	fq.feeds[i], fq.feeds[j] = fq.feeds[j], fq.feeds[i]
 	fq.indices[i], fq.indices[j] = fq.indices[j], fq.indices[i]
 }
 
 // Does nothing
-func (fq *FeedQueue) Push(x interface{}) {}
+func (fq *Queue) Push(x interface{}) {}
 
 // Does nothing
-func (fq *FeedQueue) Pop() interface{} {
+func (fq *Queue) Pop() interface{} {
 	return nil
 }
 
-func (fq *FeedQueue) Top() interface{} {
+func (fq *Queue) Top() interface{} {
 	i := fq.indices[0]
 	// If there's nothing more to process, we return nil
 	if i == len(fq.feeds[0].Items) {
@@ -60,7 +60,7 @@ func (fq *FeedQueue) Top() interface{} {
 	return NewEntry(fq.feeds[0], fq.feeds[0].Items[i])
 }
 
-func (fq *FeedQueue) AppendFeed(feed *gofeed.Feed) {
+func (fq *Queue) Append(feed *gofeed.Feed) {
 	(*fq).feeds = append((*fq).feeds, feed)
 	(*fq).indices = append((*fq).indices, 0)
 }

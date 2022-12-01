@@ -11,9 +11,13 @@ import (
 	"time"
 
 	"github.com/kgaughan/mercury/internal"
+	"github.com/kgaughan/mercury/internal/feed"
 	"github.com/kgaughan/mercury/internal/flags"
+	"github.com/kgaughan/mercury/internal/manifest"
+	"github.com/kgaughan/mercury/internal/opml"
 	"github.com/kgaughan/mercury/internal/templates"
 	"github.com/kgaughan/mercury/internal/utils"
+	"github.com/kgaughan/mercury/internal/version"
 	"github.com/mmcdole/gofeed"
 )
 
@@ -22,7 +26,7 @@ func main() {
 	flag.Parse()
 
 	if *flags.PrintVersion {
-		fmt.Println(internal.Version)
+		fmt.Println(version.Version)
 		return
 	}
 
@@ -43,14 +47,13 @@ func main() {
 	utils.EnsureDir(config.Output)
 
 	manifestPath := path.Join(config.Cache, "manifest.json")
-	cachedManifest := make(internal.Manifest)
-	if err := cachedManifest.Load(manifestPath); err != nil {
+	manifest, err := manifest.LoadManifest(manifestPath)
+	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Populate the manifest with the contents of the config file
-	manifest := make(internal.Manifest)
-	manifest.Populate(cachedManifest, config.Feed)
+	manifest.Populate(config.Feeds)
 	if !*flags.NoFetch {
 		manifest.Prime(config.Cache, config.Timeout.Duration)
 	}
@@ -58,23 +61,40 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Load everything from the cache
-	var fq internal.FeedQueue
+	fq, feeds, err := populate(manifest, config.Cache)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := writePages(fq, feeds, config, tmpl); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := writeOPML(manifest, path.Join(config.Output, "opml.xml")); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func populate(manifest *manifest.Manifest, cache string) (*feed.Queue, []*gofeed.Feed, error) {
+	fq := &feed.Queue{}
 	var feeds []*gofeed.Feed
-	for _, item := range manifest {
-		if feed, err := item.Load(config.Cache); err != nil {
-			log.Fatal(err)
+	for _, item := range *manifest {
+		if feed, err := item.Load(cache); err != nil {
+			return nil, nil, err
 		} else if feed == nil {
 			log.Printf("Could not load cache for %q; skipping", item.Name)
 		} else {
-			fq.AppendFeed(feed)
+			fq.Append(feed)
 			feeds = append(feeds, feed)
 		}
 	}
+	return fq, feeds, nil
+}
 
+func writePages(fq *feed.Queue, feeds []*gofeed.Feed, config internal.Config, tmpl *template.Template) error {
 	now := time.Now()
 
-	heap.Init(&fq)
+	heap.Init(fq)
 	for iPage := 0; iPage < config.MaxPages; iPage++ {
 		var pageName string
 		if iPage == 0 {
@@ -84,20 +104,20 @@ func main() {
 		}
 
 		lastPage := false
-		var items []*internal.FeedEntry
+		var items []*feed.Entry
 		for iEntry := 0; iEntry < config.ItemsPerPage; iEntry++ {
 			item := fq.Top()
 			if item == nil {
 				lastPage = true
 				break
 			}
-			items = append(items, item.(*internal.FeedEntry))
-			heap.Fix(&fq, 0)
+			items = append(items, item.(*feed.Entry))
+			heap.Fix(fq, 0)
 		}
 
 		f, err := os.Create(path.Join(config.Output, pageName))
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		defer f.Close()
 
@@ -108,11 +128,11 @@ func main() {
 			Owner     string
 			Email     string
 			PageNo    int
-			Items     []*internal.FeedEntry
+			Items     []*feed.Entry
 			Generated time.Time
 			Feeds     []*gofeed.Feed
 		}{
-			Generator: internal.Generator(),
+			Generator: version.Generator(),
 			Name:      config.Name,
 			URL:       template.URL(config.URL),
 			Owner:     config.Owner,
@@ -123,19 +143,19 @@ func main() {
 			Feeds:     feeds,
 		}
 		if err := tmpl.ExecuteTemplate(f, "index.html", vars); err != nil {
-			log.Fatal(err)
+			return err
 		}
 		if lastPage {
 			break
 		}
 	}
+	return nil
+}
 
-	// Generate OPML
-	opml := internal.NewOPML(len(feeds))
-	for url, item := range manifest {
+func writeOPML(manifest *manifest.Manifest, path string) error {
+	opml := opml.New(manifest.Len())
+	for url, item := range *manifest {
 		opml.Append(item.Name, url)
 	}
-	if err := opml.MarshalToFile(path.Join(config.Output, "opml.xml")); err != nil {
-		log.Fatal(err)
-	}
+	return opml.MarshalToFile(path)
 }

@@ -1,4 +1,4 @@
-package internal
+package opml
 
 import (
 	"encoding/xml"
@@ -21,7 +21,7 @@ type Outline struct {
 }
 
 // NewOPML creates a new, empty OPML document
-func NewOPML(size int) *OPML {
+func New(size int) *OPML {
 	return &OPML{
 		Version:  "2.0",
 		Outlines: make([]*Outline, 0, size),

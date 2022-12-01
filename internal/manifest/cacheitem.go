@@ -1,4 +1,4 @@
-package internal
+package manifest
 
 import (
 	"context"
@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/kgaughan/mercury/internal/version"
 	"github.com/mmcdole/gofeed"
 	"github.com/pquerna/cachecontrol/cacheobject"
 )
@@ -45,7 +46,7 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 	}
 
 	req = req.WithContext(context.Background())
-	req.Header.Set("User-Agent", UserAgent())
+	req.Header.Set("User-Agent", version.UserAgent())
 	if ci.LastModified != "" {
 		req.Header.Set("If-Modified-Since", ci.LastModified)
 	}

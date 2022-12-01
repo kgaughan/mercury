@@ -1,6 +1,6 @@
 VERSION:=$(shell git describe --tags | cut -c2-)
 
-SOURCE:=$(wildcard pkg/*.go cmd/mercury/*.go)
+SOURCE:=$(wildcard pkg/*.go pkg/*/*.go cmd/mercury/*.go)
 
 build: go.mod mercury
 
@@ -10,7 +10,7 @@ clean:
 	rm -f mercury
 
 mercury: $(SOURCE) go.sum
-	CGO_ENABLED=0 go build -trimpath -ldflags '-s -w -X internal.Version=$(VERSION)' -o mercury ./cmd/mercury
+	CGO_ENABLED=0 go build -trimpath -ldflags '-s -w -X internal.version.Version=$(VERSION)' -o mercury ./cmd/mercury
 
 update:
 	go get -u ./...
