@@ -1,4 +1,4 @@
-module mercury
+module github.com/kgaughan/mercury
 
 go 1.13
 

@@ -1,15 +1,12 @@
-package main
+package internal
 
 import (
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
+	"github.com/kgaughan/mercury/internal/manifest"
+	"github.com/kgaughan/mercury/internal/utils"
 )
-
-type feed struct {
-	Name string
-	Feed string
-}
 
 // Config describes our configuration
 type Config struct {
@@ -18,12 +15,12 @@ type Config struct {
 	Owner        string
 	Email        string
 	Cache        string
-	Timeout      duration
+	Timeout      utils.Duration
 	Theme        string
 	Output       string
-	Feed         []feed
-	ItemsPerPage int `toml:"items"`
-	MaxPages     int `toml:"max_pages"`
+	Feeds        []manifest.Feed `toml:"feed"`
+	ItemsPerPage int             `toml:"items"`
+	MaxPages     int             `toml:"max_pages"`
 }
 
 // Load loads our configuration file
