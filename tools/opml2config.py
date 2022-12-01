@@ -31,7 +31,7 @@ def main():
     for filename in sys.argv[1:]:
         if not path.exists(filename):
             sys.exit(f"error: no such file: {filename}")
-        for name, feed in extract_feeds(minidom.parse(filename)):
+        for feed, name in extract_feeds(minidom.parse(filename)):
             print("[[feed]]")
             print(f'name = "{name.translate(escapes)}"')
             print(f'feed = "{feed.translate(escapes)}"')
