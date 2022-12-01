@@ -10,7 +10,7 @@ clean:
 	rm -f mercury
 
 mercury: $(SOURCE) go.sum
-	CGO_ENABLED=0 go build -trimpath -ldflags '-s -w -X internal.version.Version=$(VERSION)' -o mercury ./cmd/mercury
+	CGO_ENABLED=0 go build -trimpath -ldflags '-s -w -X github.com/kgaughan/mercury/internal/version.Version=$(VERSION)' -o mercury ./cmd/mercury
 
 update:
 	go get -u ./...
