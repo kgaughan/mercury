@@ -15,20 +15,8 @@ name = "Abstruse Goose"
 feed = "https://abstrusegoose.com/atomfeed.xml"
 
 [[feed]]
-name = "Alice Grove"
-feed = "https://www.alicegrove.com/rss"
-
-[[feed]]
-name = "Dresden Codak"
-feed = "https://dresdencodak.com/feed/"
-
-[[feed]]
 name = "Oglaf! -- Comics. Often dirty."
 feed = "https://oglaf.com/feeds/rss/"
-
-[[feed]]
-name = "Questionable Content"
-feed = "https://www.questionablecontent.net/QCRSS.xml"
 
 [[feed]]
 name = "Saturday Morning Breakfast Cereal"
@@ -120,15 +108,19 @@ feed = "https://skife.org/index.atom"
 
 [[feed]]
 name = "Cat's Eye Technologies: New Developments"
-feed = "https://catseye.tc/feeds/atom_15_news.xml"
+feed = "https://catseye.tc/feeds/atom_30_news.xml"
 
 [[feed]]
 name = "Coding Horror"
 feed = "https://feeds.feedburner.com/codinghorror"
 
 [[feed]]
-name = "cortesi"
-feed = "https://corte.si/rss.xml"
+name = "CommitStrip"
+feed = "https://www.commitstrip.com/feed/"
+
+[[feed]]
+name = "corte.si"
+feed = "https://corte.si/atom.xml"
 
 [[feed]]
 name = "Daemonic Dispatches"
@@ -136,7 +128,7 @@ feed = "https://www.daemonology.net/blog/index.rss"
 
 [[feed]]
 name = "Damien Mulley"
-feed = "http://www.mulley.net/feed/atom/"
+feed = "http://www.mulley.net/feed/"
 
 [[feed]]
 name = "Exploring Agile Solutions"
@@ -147,8 +139,8 @@ name = "Fetchez le Python"
 feed = "https://ziade.org/feeds/all.atom.xml"
 
 [[feed]]
-name = "good coders code, great reuse"
-feed = "https://www.catonmat.net/feed/"
+name = "catonmat.net – less is more"
+feed = "https://www.catonmat.net/feed"
 
 [[feed]]
 name = "Good Math/Bad Math"
@@ -180,7 +172,7 @@ feed = "https://jeremy.zawodny.com/linkblog/index.xml"
 
 [[feed]]
 name = "Joel on Software"
-feed = "https://www.joelonsoftware.com/rss.xml"
+feed = "https://www.joelonsoftware.com/feed/"
 
 [[feed]]
 name = "John D. Cook"
@@ -204,7 +196,7 @@ feed = "https://patricklogan.blogspot.com/feeds/posts/default"
 
 [[feed]]
 name = "Martin Fowler"
-feed = "https://www.martinfowler.com/feed.atom"
+feed = "https://martinfowler.com/feed.atom"
 
 [[feed]]
 name = "Matt Might's blog"
@@ -242,9 +234,9 @@ feed = "https://programmingisterrible.com/rss"
 name = "raganwald.com"
 feed = "https://raganwald.com/atom.xml"
 
-#[[feed]]
-#name = "rc3.org"
-#feed = "https://rc3.org/feed/"
+[[feed]]
+name = "rc3.org"
+feed = "https://rc3.org/feed/"
 
 [[feed]]
 name = "Recent Articles at 20bits"
@@ -256,7 +248,7 @@ feed = "https://recycledknowledge.blogspot.com/feeds/posts/default"
 
 [[feed]]
 name = "Russell Beattie"
-feed = "https://feeds.russellbeattie.com/russellbeattieweblog"
+feed = "https://www.russellbeattie.com/blog/feed"
 
 [[feed]]
 name = "Sam Ruby"
@@ -319,8 +311,8 @@ name = "Untangled"
 feed = "https://roy.gbiv.com/untangled/feed/atom"
 
 [[feed]]
-name = "Waxy.org Links"
-feed = "https://www.waxy.org/links/index.xml"
+name = "Waxy.org"
+feed = "https://waxy.org/feed/"
 
 [[feed]]
 name = "Web Things, by Mark Baker"
