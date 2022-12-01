@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/kgaughan/mercury.svg?style=svg)](https://circleci.com/gh/kgaughan/mercury)
+![Build status](https://github.com/kgaughan/mercury/actions/workflows/go.yml/badge.svg)
 
 # Planet Mercury
 
