@@ -18,8 +18,5 @@ func MarshalToFile(filename string, o interface{}) error {
 	}
 	encoder := xml.NewEncoder(f)
 	encoder.Indent("", "\t")
-	if err := encoder.Encode(o); err != nil {
-		return err
-	}
-	return nil
+	return encoder.Encode(o)
 }
