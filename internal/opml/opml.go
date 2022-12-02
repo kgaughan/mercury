@@ -2,8 +2,6 @@ package opml
 
 import (
 	"encoding/xml"
-	"io"
-	"os"
 )
 
 // OPML represents an OPML document
@@ -35,27 +33,4 @@ func (o *OPML) Append(text, xmlURL string) {
 		Type:   "rss",
 		XMLURL: xmlURL,
 	})
-}
-
-// Marshal serialises the OPML document to w
-func (o *OPML) Marshal(w io.Writer) error {
-	if _, err := w.Write([]byte(xml.Header)); err != nil {
-		return err
-	}
-	encoder := xml.NewEncoder(w)
-	encoder.Indent("", "\t")
-	return encoder.Encode(o)
-}
-
-// MarshalToFile serialises the OPML document to a file
-func (o *OPML) MarshalToFile(filename string) error {
-	f, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	if err := o.Marshal(f); err != nil {
-		return err
-	}
-	return nil
 }
