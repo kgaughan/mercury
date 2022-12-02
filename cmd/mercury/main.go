@@ -157,5 +157,5 @@ func writeOPML(manifest *manifest.Manifest, path string) error {
 	for url, item := range *manifest {
 		opml.Append(item.Name, url)
 	}
-	return opml.MarshalToFile(path)
+	return utils.MarshalToFile(path, opml)
 }
