@@ -12,5 +12,5 @@ require (
 	github.com/mmcdole/goxpp v0.0.0-20200921145534-2f3784f67354 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/pquerna/cachecontrol v0.1.0
-	golang.org/x/net v0.2.0
+	golang.org/x/net v0.7.0
 )
