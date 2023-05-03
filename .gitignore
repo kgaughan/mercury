@@ -4,3 +4,4 @@
 .*.sw?
 *~
 /.vscode/
+*.code-workspace
