@@ -2,6 +2,7 @@ package manifest
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"runtime"
@@ -22,7 +23,7 @@ func LoadManifest(path string) (*Manifest, error) {
 	manifest := &Manifest{}
 	if file, err := ioutil.ReadFile(path); err == nil {
 		if err := json.Unmarshal(file, manifest); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("could not load manifest: %w", err)
 		}
 	}
 	return manifest, nil
@@ -47,9 +48,9 @@ func (m *Manifest) Len() int {
 func (m *Manifest) Save(path string) error {
 	file, err := json.Marshal(m)
 	if err == nil {
-		return ioutil.WriteFile(path, file, 0600)
+		return ioutil.WriteFile(path, file, 0o600)
 	}
-	return err
+	return fmt.Errorf("could not save manifest: %w", err)
 }
 
 func (m *Manifest) Prime(cache string, timeout time.Duration) {

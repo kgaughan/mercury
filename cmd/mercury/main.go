@@ -80,7 +80,7 @@ func populate(manifest *manifest.Manifest, cache string) (*feed.Queue, []*gofeed
 	var feeds []*gofeed.Feed
 	for _, item := range *manifest {
 		if feed, err := item.Load(cache); err != nil {
-			return nil, nil, err
+			return nil, nil, fmt.Errorf("could not load feed from cache: %w", err)
 		} else if feed == nil {
 			log.Printf("Could not load cache for %q; skipping", item.Name)
 		} else {
@@ -117,7 +117,7 @@ func writePages(fq *feed.Queue, feeds []*gofeed.Feed, config internal.Config, tm
 
 		f, err := os.Create(path.Join(config.Output, pageName))
 		if err != nil {
-			return err
+			return fmt.Errorf("could not create page: %w", err)
 		}
 		defer f.Close()
 
@@ -143,7 +143,7 @@ func writePages(fq *feed.Queue, feeds []*gofeed.Feed, config internal.Config, tm
 			Feeds:     feeds,
 		}
 		if err := tmpl.ExecuteTemplate(f, "index.html", vars); err != nil {
-			return err
+			return fmt.Errorf("could not render template: %w", err)
 		}
 		if lastPage {
 			break

@@ -1,6 +1,7 @@
 package templates
 
 import (
+	"errors"
 	"io"
 	"log"
 	"strings"
@@ -24,7 +25,7 @@ Loop:
 
 		switch tt {
 		case html.ErrorToken:
-			if t.Err() != io.EOF {
+			if !errors.Is(t.Err(), io.EOF) {
 				log.Println(t.Err())
 			}
 			break Loop
@@ -61,6 +62,11 @@ Loop:
 		case html.EndTagToken:
 			b.WriteString(token.String())
 			tagStack = tagStack[:len(tagStack)-1]
+
+		case html.CommentToken:
+		case html.SelfClosingTagToken:
+		case html.DoctypeToken:
+			// Ignore
 		}
 	}
 

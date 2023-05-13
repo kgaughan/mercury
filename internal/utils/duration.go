@@ -1,6 +1,9 @@
 package utils
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type Duration struct {
 	time.Duration
@@ -9,5 +12,5 @@ type Duration struct {
 func (d *Duration) UnmarshalText(text []byte) error {
 	var err error
 	d.Duration, err = time.ParseDuration(string(text))
-	return err
+	return fmt.Errorf("could not unmartial duration: %w", err)
 }

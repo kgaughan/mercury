@@ -8,7 +8,7 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 )
 
-func Configure(theme string) (*template.Template, error) {
+func configureFunctions() *template.Template {
 	// This is just a starting point so there's a reasonable policy
 	p := bluemonday.UGCPolicy()
 
@@ -28,5 +28,9 @@ func Configure(theme string) (*template.Template, error) {
 		"excerpt": func(max int, text template.HTML) template.HTML {
 			return template.HTML(excerpt(string(text), max))
 		},
-	}).ParseFiles(path.Join(theme, "index.html"))
+	})
+}
+
+func Configure(theme string) (*template.Template, error) {
+	return configureFunctions().ParseFiles(path.Join(theme, "index.html"))
 }
