@@ -7,7 +7,7 @@ import (
 
 func EnsureDir(path string) {
 	if fileInfo, err := os.Stat(path); os.IsNotExist(err) {
-		if err := os.MkdirAll(path, 0755); err != nil {
+		if err := os.MkdirAll(path, 0o755); err != nil {
 			log.Fatal(err)
 		}
 	} else if !fileInfo.IsDir() {

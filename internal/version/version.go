@@ -2,7 +2,7 @@ package version
 
 import "fmt"
 
-// Version contains the version (set during build)
+// Version contains the version (set during build).
 var Version string
 
 const repo = "https://github.com/kgaughan/mercury/"

@@ -25,10 +25,10 @@ type cacheItem struct {
 	Expires      time.Time // Date after which we should ignore the cache
 }
 
-func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duration) error {
+func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) error {
 	req, err := http.NewRequest("GET", feedURL, nil)
 	if err != nil {
-		return err
+		return fmt.Errorf("could not construct request: %w", err)
 	}
 
 	cacheFile := filepath.Join(cacheDir, ci.UUID+".json")
@@ -57,7 +57,7 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 	client := &http.Client{Timeout: timeout}
 	resp, err := client.Do(req)
 	if err != nil {
-		return err
+		return fmt.Errorf("could not fetch feed: %w", err)
 	}
 	defer resp.Body.Close()
 
@@ -84,12 +84,12 @@ func (ci *cacheItem) Fetch(feedURL string, cacheDir string, timeout time.Duratio
 
 		parser := gofeed.NewParser()
 		if feed, err := parser.Parse(resp.Body); err != nil {
-			return fmt.Errorf("Can't parse %s: %w", feedURL, err)
+			return fmt.Errorf("can't parse %s: %w", feedURL, err)
 		} else if file, err := json.Marshal(feed); err != nil {
-			return fmt.Errorf("Can't marshal %s: %w", feedURL, err)
+			return fmt.Errorf("can't marshal %s: %w", feedURL, err)
 		} else {
 			// Save to the cache
-			return ioutil.WriteFile(cacheFile, file, 0600)
+			return ioutil.WriteFile(cacheFile, file, 0o600)
 		}
 	}
 
@@ -106,7 +106,7 @@ func (ci *cacheItem) Load(cacheDir string) (*gofeed.Feed, error) {
 	}
 	feed := &gofeed.Feed{}
 	if err := json.Unmarshal(file, feed); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("could not read cached feed: %w", err)
 	}
 	return feed, nil
 }

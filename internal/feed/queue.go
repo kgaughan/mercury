@@ -43,7 +43,7 @@ func (fq Queue) Swap(i, j int) {
 }
 
 // Does nothing
-func (fq *Queue) Push(x interface{}) {}
+func (fq *Queue) Push(_ interface{}) {}
 
 // Does nothing
 func (fq *Queue) Pop() interface{} {
@@ -61,6 +61,6 @@ func (fq *Queue) Top() interface{} {
 }
 
 func (fq *Queue) Append(feed *gofeed.Feed) {
-	(*fq).feeds = append((*fq).feeds, feed)
-	(*fq).indices = append((*fq).indices, 0)
+	fq.feeds = append(fq.feeds, feed)
+	fq.indices = append(fq.indices, 0)
 }
