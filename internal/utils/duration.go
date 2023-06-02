@@ -11,6 +11,8 @@ type Duration struct {
 
 func (d *Duration) UnmarshalText(text []byte) error {
 	var err error
-	d.Duration, err = time.ParseDuration(string(text))
-	return fmt.Errorf("could not unmartial duration: %w", err)
+	if d.Duration, err = time.ParseDuration(string(text)); err != nil {
+		return fmt.Errorf("could not unmartial duration: %w", err)
+	}
+	return nil
 }
