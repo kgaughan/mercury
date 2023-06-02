@@ -86,16 +86,16 @@ You can use [text/template][]'s `{{range}}` action to iterate over the values in
 </ul>
 ```
 
-_Mercury_ provides a number of utility filter functions you can use for formatting dates. `isodatefmt` formats the date in [ISO 8601][]/[RFC 3339][] format, which is machine readable and useful for the `<time>` tag's `datetime` attribute. `datefmt` takes a single argument, a format specification for Go's [time/Time.Format][] function and renders it accordingly.
+_Mercury_ provides a number of utility filter functions you can use for formatting dates. `isodate` formats the date in [ISO 8601][]/[RFC 3339][] format, which is machine readable and useful for the `<time>` tag's `datetime` attribute. It also includes the [Sprig][] template function library.
 
 [ISO 8601]: https://en.wikipedia.org/wiki/ISO_8601
 [RFC 3339]: https://www.ietf.org/rfc/rfc3339.txt
-[time/Time.Format]: https://golang.org/pkg/time/#Time.Format
+[Sprig]: https://masterminds.github.io/sprig/
 
 Here's an example of both being used:
 
 ```
-<time datetime="{{.Published | isodatefmt}}">{{.Published | datefmt "January 2, 2006 at 15:04:05 MST"}}</time>
+<time datetime="{{.Published | isodate}}">{{.Published | date "January 2, 2006 at 15:04:05 MST"}}</time>
 ```
 
 ## Architecture

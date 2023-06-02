@@ -5,6 +5,7 @@ import (
 	"path"
 	"time"
 
+	"github.com/Masterminds/sprig/v3"
 	"github.com/microcosm-cc/bluemonday"
 )
 
@@ -13,11 +14,8 @@ func configureFunctions() *template.Template {
 	p := bluemonday.UGCPolicy()
 
 	return template.New("").Funcs(template.FuncMap{
-		"isodatefmt": func(t time.Time) string {
+		"isodate": func(t time.Time) string {
 			return t.Format(time.RFC3339)
-		},
-		"datefmt": func(fmt string, t time.Time) string {
-			return t.Format(fmt)
 		},
 		"safe": func(text string) template.HTML {
 			return template.HTML(text)
@@ -28,7 +26,7 @@ func configureFunctions() *template.Template {
 		"excerpt": func(max int, text template.HTML) template.HTML {
 			return template.HTML(excerpt(string(text), max))
 		},
-	})
+	}).Funcs(sprig.FuncMap())
 }
 
 func Configure(theme string) (*template.Template, error) {
