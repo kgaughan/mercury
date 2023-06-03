@@ -36,6 +36,5 @@ func (c *Config) Load(path string) error {
 	c.Cache = filepath.Join(configDir, c.Cache)
 	c.Theme = filepath.Join(configDir, c.Theme)
 	c.Output = filepath.Join(configDir, c.Output)
-
 	return nil
 }

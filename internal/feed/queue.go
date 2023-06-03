@@ -32,7 +32,17 @@ func (fq Queue) Less(i, j int) bool {
 	iRemaining := fq.remaining(i)
 	jRemaining := fq.remaining(j)
 	if iRemaining > 0 && jRemaining > 0 {
-		return fq.getPublished(i).After(*fq.getPublished(j))
+		this := fq.getPublished(i)
+		that := fq.getPublished(j)
+		// The dates can potentially be non-existent, so we treat nil as
+		// infinitely old.
+		if this == nil && that != nil {
+			return true
+		}
+		if that == nil {
+			return false
+		}
+		return this.After(*that)
 	}
 	return iRemaining > jRemaining
 }
