@@ -16,7 +16,7 @@ import (
 	"github.com/pquerna/cachecontrol/cacheobject"
 )
 
-// TODO if a feed is fetched, it shouldn't need to be loaded
+// TODO if a feed is fetched, it shouldn't need to be loaded.
 type cacheItem struct {
 	Name         string
 	UUID         string    // Used to identify the cached feed

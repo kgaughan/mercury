@@ -7,33 +7,33 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-// Entry describes an entry in a feed in a form suitable for templating
+// Entry describes an entry in a feed in a form suitable for templating.
 type Entry struct {
 	feed  *gofeed.Feed
 	entry *gofeed.Item
 }
 
-// NewEntry creates a new feed entry object
+// NewEntry creates a new feed entry object.
 func NewEntry(feed *gofeed.Feed, entry *gofeed.Item) *Entry {
 	return &Entry{feed: feed, entry: entry}
 }
 
-// FeedName returns the name of the feed
+// FeedName returns the name of the feed.
 func (e Entry) FeedName() string {
 	return e.feed.Title
 }
 
-// SiteLink returns the site URL in a form usable in a template
+// SiteLink returns the site URL in a form usable in a template.
 func (e Entry) SiteLink() template.URL {
 	return template.URL(e.feed.Link)
 }
 
-// FeedLink returns the feed URL in a form usable in a template
+// FeedLink returns the feed URL in a form usable in a template.
 func (e Entry) FeedLink() template.URL {
 	return template.URL(e.feed.FeedLink)
 }
 
-// FeedPublished returns a best guess at the correct feed publication date
+// FeedPublished returns a best guess at the correct feed publication date.
 func (e Entry) FeedPublished() *time.Time {
 	if e.feed.PublishedParsed != nil {
 		return e.feed.PublishedParsed
@@ -42,37 +42,37 @@ func (e Entry) FeedPublished() *time.Time {
 	return e.feed.UpdatedParsed
 }
 
-// FeedUpdated returns when the feed was updated
+// FeedUpdated returns when the feed was updated.
 func (e Entry) FeedUpdated() *time.Time {
 	return e.feed.UpdatedParsed
 }
 
-// FeedDescription returns the description of the feed, if any
+// FeedDescription returns the description of the feed, if any.
 func (e Entry) FeedDescription() string {
 	return e.feed.Description
 }
 
-// Title returns the entry title
+// Title returns the entry title.
 func (e Entry) Title() string {
 	return e.entry.Title
 }
 
-// Summary returns the entry summary
+// Summary returns the entry summary.
 func (e Entry) Summary() template.HTML {
 	return template.HTML(e.entry.Description)
 }
 
-// Content returns the full content of the entry
+// Content returns the full content of the entry.
 func (e Entry) Content() template.HTML {
 	return template.HTML(e.entry.Content)
 }
 
-// Link returns a link to the entry
+// Link returns a link to the entry.
 func (e Entry) Link() template.URL {
 	return template.URL(e.entry.Link)
 }
 
-// Author returns the entry's author, and if none, returns the feed's author
+// Author returns the entry's author, and if none, returns the feed's author.
 func (e Entry) Author() string {
 	if e.entry.Author != nil {
 		return e.entry.Author.Name
@@ -83,7 +83,7 @@ func (e Entry) Author() string {
 	return ""
 }
 
-// Published returns a best guess at the entry's publication date
+// Published returns a best guess at the entry's publication date.
 func (e Entry) Published() *time.Time {
 	if e.entry.PublishedParsed != nil {
 		return e.entry.PublishedParsed
@@ -92,12 +92,12 @@ func (e Entry) Published() *time.Time {
 	return e.entry.UpdatedParsed
 }
 
-// Updated returns the update date of the entry
+// Updated returns the update date of the entry.
 func (e Entry) Updated() *time.Time {
 	return e.entry.UpdatedParsed
 }
 
-// Categories returns the entry's categories
+// Categories returns the entry's categories.
 func (e Entry) Categories() []string {
 	return e.entry.Categories
 }
