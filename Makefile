@@ -1,6 +1,6 @@
 VERSION:=$(shell git describe --tags | cut -c2-)
 
-SOURCE:=$(wildcard pkg/*.go pkg/*/*.go cmd/mercury/*.go)
+SOURCE:=$(wildcard internal/*.go internal/*/*.go cmd/mercury/*.go)
 
 build: go.mod mercury
 
