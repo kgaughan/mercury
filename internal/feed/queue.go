@@ -52,10 +52,10 @@ func (fq Queue) Swap(i, j int) {
 	fq.indices[i], fq.indices[j] = fq.indices[j], fq.indices[i]
 }
 
-// Does nothing
+// Does nothing.
 func (fq *Queue) Push(_ interface{}) {}
 
-// Does nothing
+// Does nothing.
 func (fq *Queue) Pop() interface{} {
 	return nil
 }

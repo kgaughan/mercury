@@ -9,7 +9,7 @@ import (
 	"github.com/kgaughan/mercury/internal/utils"
 )
 
-// Config describes our configuration
+// Config describes our configuration.
 type Config struct {
 	Name         string
 	URL          string `toml:"url"`
@@ -24,7 +24,7 @@ type Config struct {
 	MaxPages     int             `toml:"max_pages"`
 }
 
-// Load loads our configuration file
+// Load loads our configuration file.
 func (c *Config) Load(path string) error {
 	if _, err := toml.DecodeFile(path, c); err != nil {
 		return fmt.Errorf("could not load configuration: %w", err)
