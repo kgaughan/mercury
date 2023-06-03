@@ -36,11 +36,11 @@ func (fq Queue) Less(i, j int) bool {
 		that := fq.getPublished(j)
 		// The dates can potentially be non-existent, so we treat nil as
 		// infinitely old.
-		if this == nil && that != nil {
-			return true
+		if this == nil {
+			return false
 		}
 		if that == nil {
-			return false
+			return true
 		}
 		return this.After(*that)
 	}
