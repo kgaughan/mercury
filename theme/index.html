@@ -103,7 +103,9 @@ address {
 			<header>
 				<h1><a href="{{.Link}}">{{.Title}}</a></h1>
 				<div>{{if .Author}}by <span class="author">{{.Author}}</span> {{end}}in <a class="site-link" href="{{.SiteLink}}">{{.FeedName}}</a></a></div>
+				{{ if .Published -}}
 				<div>Posted <time datetime="{{.Published | isodate}}">{{.Published | date "January 2, 2006 at 15:04:05 MST"}}</time></div>
+				{{- end }}
 			</header>
 			<div class="article-body">
 			{{- if .Summary -}}
