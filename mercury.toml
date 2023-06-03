@@ -248,7 +248,7 @@ feed = "https://recycledknowledge.blogspot.com/feeds/posts/default"
 
 [[feed]]
 name = "Russell Beattie"
-feed = "https://www.russellbeattie.com/blog/feed"
+feed = "https://www.russellbeattie.com/notes/rss.xml"
 
 [[feed]]
 name = "Sam Ruby"
