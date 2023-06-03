@@ -1,4 +1,4 @@
-VERSION:=$(shell git describe --tags | cut -c2-)
+VERSION:=$(shell git describe --tags --always | sed s/^v//)
 
 SOURCE:=$(wildcard internal/*.go internal/*/*.go cmd/mercury/*.go)
 
