@@ -1,5 +1,3 @@
-VERSION:=$(shell git describe --tags --always | sed s/^v//)
-
 SOURCE:=$(wildcard internal/*.go internal/*/*.go cmd/mercury/*.go)
 
 build: go.mod mercury
@@ -7,10 +5,10 @@ build: go.mod mercury
 tidy: go.mod
 
 clean:
-	rm -f mercury
+	rm -rf mercury dist
 
 mercury: $(SOURCE) go.sum
-	CGO_ENABLED=0 go build -trimpath -ldflags '-s -w -X github.com/kgaughan/mercury/internal/version.Version=$(VERSION)' -o mercury ./cmd/mercury
+	CGO_ENABLED=0 go build -tags netgo -trimpath -ldflags '-s -w' -o mercury ./cmd/mercury
 
 update:
 	go get -u ./...

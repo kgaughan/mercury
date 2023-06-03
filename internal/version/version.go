@@ -2,7 +2,7 @@ package version
 
 import "fmt"
 
-// Version contains the version (set during build).
+// nolint: gochecknoglobals
 var Version string
 
 const repo = "https://github.com/kgaughan/mercury/"
