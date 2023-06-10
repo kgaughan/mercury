@@ -3,7 +3,7 @@ module github.com/kgaughan/mercury
 go 1.18
 
 require (
-	github.com/BurntSushi/toml v1.3.0
+	github.com/BurntSushi/toml v1.3.2
 	github.com/Masterminds/sprig/v3 v3.2.3
 	github.com/google/uuid v1.3.0
 	github.com/microcosm-cc/bluemonday v1.0.24
