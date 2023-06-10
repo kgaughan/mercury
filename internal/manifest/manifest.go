@@ -3,8 +3,8 @@ package manifest
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 	"runtime"
 	"sync"
 	"time"
@@ -21,7 +21,7 @@ type fetchJob struct {
 
 func LoadManifest(path string) (*Manifest, error) {
 	manifest := &Manifest{}
-	if file, err := ioutil.ReadFile(path); err == nil {
+	if file, err := os.ReadFile(path); err == nil {
 		if err := json.Unmarshal(file, manifest); err != nil {
 			return nil, fmt.Errorf("could not load manifest: %w", err)
 		}
@@ -48,7 +48,7 @@ func (m *Manifest) Len() int {
 func (m *Manifest) Save(path string) error {
 	file, err := json.Marshal(m)
 	if err == nil {
-		return ioutil.WriteFile(path, file, 0o600)
+		return os.WriteFile(path, file, 0o600)
 	}
 	return fmt.Errorf("could not save manifest: %w", err)
 }

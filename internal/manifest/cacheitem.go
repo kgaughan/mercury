@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -61,17 +60,18 @@ func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) erro
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode == http.StatusNotModified {
+	switch resp.StatusCode {
+	case http.StatusNotModified:
 		log.Printf("%s: conditional GET", feedURL)
 		return nil
-	}
 
-	if resp.StatusCode == http.StatusNotFound || resp.StatusCode == http.StatusUnauthorized || resp.StatusCode == http.StatusForbidden {
+	case http.StatusNotFound:
+	case http.StatusUnauthorized:
+	case http.StatusForbidden:
 		log.Printf("%s: %s, so skipping", feedURL, resp.Status)
 		return nil
-	}
 
-	if resp.StatusCode == http.StatusOK {
+	case http.StatusOK:
 		// Save for next time
 		ci.ETag = resp.Header.Get("ETag")
 		ci.LastModified = resp.Header.Get("Last-Modified")
@@ -89,10 +89,9 @@ func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) erro
 			return fmt.Errorf("can't marshal %s: %w", feedURL, err)
 		} else {
 			// Save to the cache
-			return ioutil.WriteFile(cacheFile, file, 0o600)
+			return os.WriteFile(cacheFile, file, 0o600)
 		}
 	}
-
 	// Not sure yet: do later...
 	log.Fatal(resp)
 	return nil
@@ -100,7 +99,7 @@ func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) erro
 
 func (ci *cacheItem) Load(cacheDir string) (*gofeed.Feed, error) {
 	cacheFile := filepath.Join(cacheDir, ci.UUID+".json")
-	file, err := ioutil.ReadFile(cacheFile)
+	file, err := os.ReadFile(cacheFile)
 	if err != nil {
 		return nil, nil
 	}
