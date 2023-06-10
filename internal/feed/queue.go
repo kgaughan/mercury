@@ -61,6 +61,9 @@ func (fq *Queue) Pop() interface{} {
 }
 
 func (fq *Queue) Top() interface{} {
+	if len(fq.feeds) == 0 {
+		return nil
+	}
 	i := fq.indices[0]
 	// If there's nothing more to process, we return nil
 	if i == len(fq.feeds[0].Items) {
