@@ -14,7 +14,7 @@ func MarshalToFile(filename string, o interface{}) error {
 	}
 	defer f.Close()
 
-	if _, err := f.Write([]byte(xml.Header)); err != nil {
+	if _, err := f.WriteString(xml.Header); err != nil {
 		return fmt.Errorf("could not write XML header: %w", err)
 	}
 	encoder := xml.NewEncoder(f)
