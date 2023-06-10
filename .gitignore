@@ -6,4 +6,5 @@
 /.vscode/
 *.code-workspace
 
-dist/
+/dist/
+/site/

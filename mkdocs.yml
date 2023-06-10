@@ -1,0 +1,12 @@
+---
+site_name: Planet Mercury
+repo_url: https://github.com/kgaughan/mercury/
+
+markdown_extensions:
+  admonition: {}
+  attr_list: {}
+
+nav:
+  - configuration.md
+  - themes.md
+  - architecture.md

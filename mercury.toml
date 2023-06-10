@@ -1,4 +1,4 @@
-name = "My Planet!"
+#name = "My Planet!"
 url = "http://localhost/"
 owner = "Chidi Anagonye"
 email = "chidi@example.com"
