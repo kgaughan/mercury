@@ -23,7 +23,7 @@ builds:
       - netgo
 
 brews:
-  - name: mercury
+  - name: planet-mercury
     ids:
       - archives
     homepage: "https://github.com/kgaughan/mercury"
