@@ -1,4 +1,5 @@
 SOURCE:=$(wildcard internal/*.go internal/*/*.go cmd/mercury/*.go)
+DOCS:=$(wildcard docs/*.md mkdocs.yml)
 
 build: go.mod mercury
 
@@ -17,6 +18,9 @@ update:
 go.mod: $(SOURCE)
 	go mod tidy
 
+docs: $(DOCS)
+	mkdocs build
+
 .DEFAULT: build
 
-.PHONY: build clean tidy update
+.PHONY: build clean tidy update docs
