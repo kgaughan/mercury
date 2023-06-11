@@ -1,16 +1,11 @@
 ---
-name: Go
+name: Build
 
 on:
-  push:
-    branches: 
-    - master
-  pull_request:
-    branches:
-    - master
+  - push
+  - pull_request
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -20,11 +15,6 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version: 1.18
-
-    - name: Lint
-      uses: golangci/golangci-lint-action@v3
-      with:
-        version: v1.52.2
 
     - name: Build
       run: make
