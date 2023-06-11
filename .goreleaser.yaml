@@ -22,8 +22,25 @@ builds:
     tags:
       - netgo
 
+brews:
+  - name: gcredstash
+    ids:
+      - archives
+    homepage: "https://github.com/kgaughan/mercury"
+    tap:
+      owner: kgaughan
+      name: homebrew-tap
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+    commit_author:
+      name: Keith Gaughan
+      email: k@stereochro.me
+    description: "A Planet-style feed aggregator"
+    license: "MIT"
+    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
+
 archives:
-  - format: tar.xz
+  - format: tar.gz
+    id: archives
     name_template: >-
       {{ .ProjectName }}_
       {{- .Version }}_
@@ -53,5 +70,6 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
