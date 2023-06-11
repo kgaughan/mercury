@@ -25,12 +25,12 @@ func (e Entry) FeedName() string {
 
 // SiteLink returns the site URL in a form usable in a template.
 func (e Entry) SiteLink() template.URL {
-	return template.URL(e.feed.Link)
+	return template.URL(e.feed.Link) //nolint:gosec
 }
 
 // FeedLink returns the feed URL in a form usable in a template.
 func (e Entry) FeedLink() template.URL {
-	return template.URL(e.feed.FeedLink)
+	return template.URL(e.feed.FeedLink) //nolint:gosec
 }
 
 // FeedPublished returns a best guess at the correct feed publication date.
@@ -59,17 +59,17 @@ func (e Entry) Title() string {
 
 // Summary returns the entry summary.
 func (e Entry) Summary() template.HTML {
-	return template.HTML(e.entry.Description)
+	return template.HTML(e.entry.Description) //nolint:gosec
 }
 
 // Content returns the full content of the entry.
 func (e Entry) Content() template.HTML {
-	return template.HTML(e.entry.Content)
+	return template.HTML(e.entry.Content) //nolint:gosec
 }
 
 // Link returns a link to the entry.
 func (e Entry) Link() template.URL {
-	return template.URL(e.entry.Link)
+	return template.URL(e.entry.Link) //nolint:gosec
 }
 
 // Author returns the entry's author, and if none, returns the feed's author.

@@ -89,11 +89,16 @@ func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) erro
 			return fmt.Errorf("can't marshal %s: %w", feedURL, err)
 		} else {
 			// Save to the cache
-			return os.WriteFile(cacheFile, file, 0o600)
+			if err := os.WriteFile(cacheFile, file, 0o600); err != nil {
+				return fmt.Errorf("can't write to cache: %w", err)
+			}
 		}
+
+	default:
+		// Not sure yet: do later...
+		log.Fatal(resp)
 	}
-	// Not sure yet: do later...
-	log.Fatal(resp)
+
 	return nil
 }
 

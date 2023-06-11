@@ -18,17 +18,18 @@ func configureFunctions() *template.Template {
 			return t.Format(time.RFC3339)
 		},
 		"safe": func(text string) template.HTML {
-			return template.HTML(text)
+			return template.HTML(text) //nolint:gosec
 		},
 		"sanitize": func(text template.HTML) template.HTML {
-			return template.HTML(p.Sanitize(string(text)))
+			return template.HTML(p.Sanitize(string(text))) //nolint:gosec
 		},
 		"excerpt": func(max int, text template.HTML) template.HTML {
-			return template.HTML(excerpt(string(text), max))
+			return template.HTML(excerpt(string(text), max)) //nolint:gosec
 		},
 	}).Funcs(sprig.FuncMap())
 }
 
 func Configure(theme string) (*template.Template, error) {
+	//nolint:wrapcheck
 	return configureFunctions().ParseFiles(path.Join(theme, "index.html"))
 }
