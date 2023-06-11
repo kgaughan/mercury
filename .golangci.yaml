@@ -1,0 +1,39 @@
+---
+linters:
+  disable-all: true
+  enable:
+    # fast, autofix
+    - dupword
+    - godot
+    - gofumpt
+    - goimports
+    - whitespace
+
+    # fast, nofix
+    - dupl
+    - gci
+    - ineffassign
+
+    # slow, nofix
+    - errcheck
+    - errname
+    - errorlint
+    - goerr113
+    - gosimple
+    - govet
+    - nonamedreturns
+    - revive
+    - staticcheck
+    - tenv
+    - typecheck
+    - unconvert
+    - unused
+    - wrapcheck
+
+    # Undecided
+    - tparallel
+    - gosec
+
+run:
+  skip-dirs:
+    - src/mockaws

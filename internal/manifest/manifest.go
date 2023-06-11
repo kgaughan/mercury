@@ -47,10 +47,13 @@ func (m *Manifest) Len() int {
 
 func (m *Manifest) Save(path string) error {
 	file, err := json.Marshal(m)
-	if err == nil {
-		return os.WriteFile(path, file, 0o600)
+	if err != nil {
+		return fmt.Errorf("can't marshal manifest: %w", err)
 	}
-	return fmt.Errorf("could not save manifest: %w", err)
+	if err = os.WriteFile(path, file, 0o600); err != nil {
+		return fmt.Errorf("can't save manifest: %w", err)
+	}
+	return nil
 }
 
 func (m *Manifest) Prime(cache string, timeout time.Duration) {

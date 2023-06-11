@@ -10,7 +10,7 @@ import (
 func MarshalToFile(filename string, o interface{}) error {
 	f, err := os.Create(filename)
 	if err != nil {
-		return err
+		return err //nolint:wrapcheck
 	}
 	defer f.Close()
 
@@ -19,5 +19,5 @@ func MarshalToFile(filename string, o interface{}) error {
 	}
 	encoder := xml.NewEncoder(f)
 	encoder.Indent("", "\t")
-	return encoder.Encode(o)
+	return encoder.Encode(o) //nolint:wrapcheck
 }

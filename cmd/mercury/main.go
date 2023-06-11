@@ -134,7 +134,7 @@ func writePages(fq *feed.Queue, feeds []*gofeed.Feed, config internal.Config, tm
 		}{
 			Generator: version.Generator(),
 			Name:      config.Name,
-			URL:       template.URL(config.URL),
+			URL:       template.URL(config.URL), //nolint:gosec
 			Owner:     config.Owner,
 			Email:     config.Email,
 			PageNo:    iPage + 1,
@@ -157,5 +157,8 @@ func writeOPML(manifest *manifest.Manifest, path string) error {
 	for url, item := range *manifest {
 		opml.Append(item.Name, url)
 	}
-	return utils.MarshalToFile(path, opml)
+	if err := utils.MarshalToFile(path, opml); err != nil {
+		return fmt.Errorf("can't write %s: %w", path, err)
+	}
+	return nil
 }
