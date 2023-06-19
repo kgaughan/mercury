@@ -6,4 +6,6 @@
 
 A _planet_ is a kind of feed aggregator. It takes a list of newsfeeds (Atom, RSS, &c.), splices them together, and spits a set of HTML pages and/or a feed.
 
-For details, please [see the documentation](docs/index.md)
+For details, please [see the documentation](docs/index.md).
+
+If you're using Planet Mercury for any sites, I'd be happy to list them.
