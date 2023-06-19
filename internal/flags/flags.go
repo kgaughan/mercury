@@ -11,6 +11,7 @@ var (
 	PrintVersion = flag.Bool("version", false, "Print version and exit")
 	ConfigPath   = flag.String("config", "./mercury.toml", "Path to configuration")
 	NoFetch      = flag.Bool("no-fetch", false, "Don't fetch, just use what's in the cache")
+	NoBuild      = flag.Bool("no-build", false, "Don't build anything")
 )
 
 func init() {

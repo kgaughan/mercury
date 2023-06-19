@@ -50,10 +50,12 @@ func main() {
 	}
 
 	utils.EnsureDir(config.Cache)
-	utils.EnsureDir(config.Output)
 
-	if err := themeConfig.CopyTo(config.Output); err != nil {
-		log.Fatal(err)
+	if !*flags.NoBuild {
+		utils.EnsureDir(config.Output)
+		if err := themeConfig.CopyTo(config.Output); err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	manifestPath := path.Join(config.Cache, "manifest.json")
@@ -76,12 +78,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := writePages(fq, feeds, config, tmpl); err != nil {
-		log.Fatal(err)
-	}
+	if !*flags.NoBuild {
+		if err := writePages(fq, feeds, config, tmpl); err != nil {
+			log.Fatal(err)
+		}
 
-	if err := writeOPML(manifest, path.Join(config.Output, "opml.xml")); err != nil {
-		log.Fatal(err)
+		if err := writeOPML(manifest, path.Join(config.Output, "opml.xml")); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
