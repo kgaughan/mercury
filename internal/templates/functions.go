@@ -31,5 +31,5 @@ func configureFunctions() *template.Template {
 
 func Configure(theme string) (*template.Template, error) {
 	//nolint:wrapcheck
-	return configureFunctions().ParseFiles(path.Join(theme, "index.html"))
+	return configureFunctions().ParseGlob(path.Join(theme, "*.html"))
 }

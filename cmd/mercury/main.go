@@ -16,6 +16,7 @@ import (
 	"github.com/kgaughan/mercury/internal/manifest"
 	"github.com/kgaughan/mercury/internal/opml"
 	"github.com/kgaughan/mercury/internal/templates"
+	"github.com/kgaughan/mercury/internal/theme"
 	"github.com/kgaughan/mercury/internal/utils"
 	"github.com/kgaughan/mercury/internal/version"
 	"github.com/mmcdole/gofeed"
@@ -38,6 +39,11 @@ func main() {
 		log.Fatalf("Theme directory '%v' not found", config.Theme)
 	}
 
+	var themeConfig theme.Config
+	if err := themeConfig.Load(config.Theme); err != nil {
+		log.Fatal(err)
+	}
+
 	tmpl, err := templates.Configure(config.Theme)
 	if err != nil {
 		log.Fatal(err)
@@ -45,6 +51,10 @@ func main() {
 
 	utils.EnsureDir(config.Cache)
 	utils.EnsureDir(config.Output)
+
+	if err := themeConfig.CopyTo(config.Output); err != nil {
+		log.Fatal(err)
+	}
 
 	manifestPath := path.Join(config.Cache, "manifest.json")
 	manifest, err := manifest.LoadManifest(manifestPath)

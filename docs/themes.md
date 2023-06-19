@@ -55,3 +55,21 @@ Here's an example of both being used:
 ```html
 <time datetime="{{.Published | isodate}}">{{.Published | date "January 2, 2006 at 15:04:05 MST"}}</time>
 ```
+
+## Bill of Materials
+
+A theme directory must also contain a `theme.toml` file. This contains metadata about the theme (currently just its name, which is given in the `name` field) and optionally a [bill of materials] listing the files to be copied across, each entry in which is introduced with `[[bom]]`. Here's an example file:
+
+```toml
+name = "Community"
+
+[[bom]]
+path = "static/style.css"
+
+[[bom]]
+path = "static/images/banner.png"
+```
+
+This lists two files in its BOM, which are copied across when the output directory is populated.
+
+[Bill of materials]: https://en.wikipedia.org/wiki/Bill_of_materials
