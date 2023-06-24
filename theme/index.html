@@ -31,6 +31,9 @@
 			</div>
 		</article>
 		{{end}}
+		<div id="pagination">
+			<span>{{if .PrevPage}}<a href="{{.PrevPage}}">&xlarr; Previous</a>{{end}}</span><span>{{if .NextPage}}<a href="{{.NextPage}}">Next &xrarr;</a>{{end}}</span>
+		</div>
 		<footer>
 			<h1>Feeds</h1>
 			<ul>
