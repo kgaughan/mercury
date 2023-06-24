@@ -1,7 +1,6 @@
 package main
 
 import (
-	"container/heap"
 	"flag"
 	"fmt"
 	"html/template"
@@ -79,7 +78,8 @@ func main() {
 	}
 
 	if !*flags.NoBuild {
-		if err := writePages(fq, feeds, config, tmpl); err != nil {
+		entries := fq.Shuffle(config.ItemsPerPage * config.MaxPages)
+		if err := writePages(entries, feeds, config, tmpl); err != nil {
 			log.Fatal(err)
 		}
 
@@ -105,28 +105,17 @@ func populate(manifest *manifest.Manifest, cache string) (*feed.Queue, []*gofeed
 	return fq, feeds, nil
 }
 
-func writePages(fq *feed.Queue, feeds []*gofeed.Feed, config internal.Config, tmpl *template.Template) error {
+func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Config, tmpl *template.Template) error {
 	now := time.Now()
 
-	heap.Init(fq)
-	for iPage := 0; iPage < config.MaxPages; iPage++ {
+	nPages := len(entries) / config.ItemsPerPage
+	for iPage := 0; iPage < nPages; iPage++ {
+		offset := iPage * config.ItemsPerPage
 		var pageName string
 		if iPage == 0 {
 			pageName = "index.html"
 		} else {
 			pageName = fmt.Sprintf("index%d.html", iPage)
-		}
-
-		lastPage := false
-		var items []*feed.Entry
-		for iEntry := 0; iEntry < config.ItemsPerPage; iEntry++ {
-			item := fq.Top()
-			if item == nil {
-				lastPage = true
-				break
-			}
-			items = append(items, item.(*feed.Entry))
-			heap.Fix(fq, 0)
 		}
 
 		f, err := os.Create(path.Join(config.Output, pageName))
@@ -152,15 +141,12 @@ func writePages(fq *feed.Queue, feeds []*gofeed.Feed, config internal.Config, tm
 			Owner:     config.Owner,
 			Email:     config.Email,
 			PageNo:    iPage + 1,
-			Items:     items,
+			Items:     entries[offset : offset+config.ItemsPerPage],
 			Generated: now,
 			Feeds:     feeds,
 		}
 		if err := tmpl.ExecuteTemplate(f, "index.html", vars); err != nil {
 			return fmt.Errorf("could not render template: %w", err)
-		}
-		if lastPage {
-			break
 		}
 	}
 	return nil

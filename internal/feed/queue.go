@@ -1,6 +1,7 @@
 package feed
 
 import (
+	"container/heap"
 	"time"
 
 	"github.com/mmcdole/gofeed"
@@ -76,4 +77,18 @@ func (fq *Queue) Top() interface{} {
 func (fq *Queue) Append(feed *gofeed.Feed) {
 	fq.feeds = append(fq.feeds, feed)
 	fq.indices = append(fq.indices, 0)
+}
+
+func (fq *Queue) Shuffle(nEntries int) []*Entry {
+	var items []*Entry
+	heap.Init(fq)
+	for i := 0; i < nEntries; i++ {
+		item := fq.Top()
+		if item == nil {
+			break
+		}
+		items = append(items, item.(*Entry))
+		heap.Fix(fq, 0)
+	}
+	return items
 }
