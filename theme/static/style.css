@@ -8,14 +8,15 @@ body {
   position: relative;
 }
 
-body > header {
+body>header {
   margin: 0;
   color: #333;
   text-align: center;
   padding: 2.5rem 2rem;
   border-bottom: 1px solid #eee;
 }
-body > header h1 {
+
+body>header h1 {
   margin: 0.2rem 0;
   font-size: 3rem;
   font-weight: 300;
@@ -24,6 +25,7 @@ body > header h1 {
 article {
   margin: 2rem 0 4rem 0;
 }
+
 article h1,
 footer h1,
 article h2,
@@ -33,41 +35,49 @@ article h3 {
   margin: 0.2rem 0 0 0;
   line-height: 1.2;
 }
+
 article h1 a {
   color: inherit;
   text-decoration: none;
 }
+
 article header div {
   font-size: 80%;
 }
-article header .author, article header .site-link {
+
+article header .author,
+article header .site-link {
   font-weight: 600;
 }
+
 pre {
   border: 1px solid #eee;
   padding: 0.5rem;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   font-size: 80%;
 }
+
 blockquote {
   font-style: italic;
 }
+
 blockquote em {
   font-style: normal;
 }
 
 /* An SVG of the feed icon. This way, we can display it just by applying a class. */
 .feed {
-	display: inline-block;
-	background: center no-repeat url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCB4MT0iLjA4NSIgeTE9Ii4wODUiIHgyPSIuOTE1IiB5Mj0iLjkxNSIgaWQ9ImEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0UzNzAyRCIvPjxzdG9wIG9mZnNldD0iLjEwNyIgc3RvcC1jb2xvcj0iI0VBN0QzMSIvPjxzdG9wIG9mZnNldD0iLjM1IiBzdG9wLWNvbG9yPSIjRjY5NTM3Ii8+PHN0b3Agb2Zmc2V0PSIuNSIgc3RvcC1jb2xvcj0iI0ZCOUUzQSIvPjxzdG9wIG9mZnNldD0iLjcwMiIgc3RvcC1jb2xvcj0iI0VBN0MzMSIvPjxzdG9wIG9mZnNldD0iLjg4NyIgc3RvcC1jb2xvcj0iI0RFNjQyQiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0Q5NUIyOSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiByeD0iNTUiIHJ5PSI1NSIgZmlsbD0iI0NDNUQxNSIvPjxyZWN0IHdpZHRoPSIyNDYiIGhlaWdodD0iMjQ2IiByeD0iNTAiIHJ5PSI1MCIgeD0iNSIgeT0iNSIgZmlsbD0iI0Y0OUM1MiIvPjxyZWN0IHdpZHRoPSIyMzYiIGhlaWdodD0iMjM2IiByeD0iNDciIHJ5PSI0NyIgeD0iMTAiIHk9IjEwIiBmaWxsPSJ1cmwoI2EpIi8+PGNpcmNsZSBjeD0iNjgiIGN5PSIxODkiIHI9IjI0IiBmaWxsPSIjRkZGIi8+PHBhdGggZD0iTTE2MCAyMTNoLTM0YTgyIDgyIDAgMDAtODItODJWOTdhMTE2IDExNiAwIDAxMTE2IDExNnoiIGZpbGw9IiNGRkYiLz48cGF0aCBkPSJNMTg0IDIxM0ExNDAgMTQwIDAgMDA0NCA3M1YzOGExNzUgMTc1IDAgMDExNzUgMTc1eiIgZmlsbD0iI0ZGRiIvPjwvc3ZnPgo=);
-	background-size: 1rem 1rem;
-	line-height: 1;
-	width: 1rem;
-	white-space: nowrap;
-	text-decoration: none;
+  display: inline-block;
+  background: center no-repeat url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDI1NiAyNTYiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCB4MT0iLjA4NSIgeTE9Ii4wODUiIHgyPSIuOTE1IiB5Mj0iLjkxNSIgaWQ9ImEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0UzNzAyRCIvPjxzdG9wIG9mZnNldD0iLjEwNyIgc3RvcC1jb2xvcj0iI0VBN0QzMSIvPjxzdG9wIG9mZnNldD0iLjM1IiBzdG9wLWNvbG9yPSIjRjY5NTM3Ii8+PHN0b3Agb2Zmc2V0PSIuNSIgc3RvcC1jb2xvcj0iI0ZCOUUzQSIvPjxzdG9wIG9mZnNldD0iLjcwMiIgc3RvcC1jb2xvcj0iI0VBN0MzMSIvPjxzdG9wIG9mZnNldD0iLjg4NyIgc3RvcC1jb2xvcj0iI0RFNjQyQiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0Q5NUIyOSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiByeD0iNTUiIHJ5PSI1NSIgZmlsbD0iI0NDNUQxNSIvPjxyZWN0IHdpZHRoPSIyNDYiIGhlaWdodD0iMjQ2IiByeD0iNTAiIHJ5PSI1MCIgeD0iNSIgeT0iNSIgZmlsbD0iI0Y0OUM1MiIvPjxyZWN0IHdpZHRoPSIyMzYiIGhlaWdodD0iMjM2IiByeD0iNDciIHJ5PSI0NyIgeD0iMTAiIHk9IjEwIiBmaWxsPSJ1cmwoI2EpIi8+PGNpcmNsZSBjeD0iNjgiIGN5PSIxODkiIHI9IjI0IiBmaWxsPSIjRkZGIi8+PHBhdGggZD0iTTE2MCAyMTNoLTM0YTgyIDgyIDAgMDAtODItODJWOTdhMTE2IDExNiAwIDAxMTE2IDExNnoiIGZpbGw9IiNGRkYiLz48cGF0aCBkPSJNMTg0IDIxM0ExNDAgMTQwIDAgMDA0NCA3M1YzOGExNzUgMTc1IDAgMDExNzUgMTc1eiIgZmlsbD0iI0ZGRiIvPjwvc3ZnPgo=);
+  background-size: 1rem 1rem;
+  line-height: 1;
+  width: 1rem;
+  white-space: nowrap;
+  text-decoration: none;
 }
+
 .feed::before {
-	content: "\00a0";
+  content: "\00a0";
 }
 
 address {
