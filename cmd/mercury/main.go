@@ -124,6 +124,16 @@ func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Con
 		}
 		defer f.Close()
 
+		var prevPage, nextPage string
+		if iPage == 1 {
+			prevPage = "index.html"
+		} else if iPage > 1 {
+			prevPage = fmt.Sprintf("index%d.html", iPage-1)
+		}
+		if iPage < nPages-1 {
+			nextPage = fmt.Sprintf("index%d.html", iPage+1)
+		}
+
 		vars := struct {
 			Generator string
 			Name      string
@@ -134,6 +144,8 @@ func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Con
 			Items     []*feed.Entry
 			Generated time.Time
 			Feeds     []*gofeed.Feed
+			PrevPage  string
+			NextPage  string
 		}{
 			Generator: version.Generator(),
 			Name:      config.Name,
@@ -144,6 +156,8 @@ func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Con
 			Items:     entries[offset : offset+config.ItemsPerPage],
 			Generated: now,
 			Feeds:     feeds,
+			PrevPage:  prevPage,
+			NextPage:  nextPage,
 		}
 		if err := tmpl.ExecuteTemplate(f, "index.html", vars); err != nil {
 			return fmt.Errorf("could not render template: %w", err)

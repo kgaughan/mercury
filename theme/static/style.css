@@ -56,6 +56,15 @@ blockquote em {
   font-style: normal;
 }
 
+#pagination {
+  text-align: center;
+}
+
+#pagination span {
+  display: inline-block;
+  width: 25%;
+}
+
 /* An SVG of the feed icon. This way, we can display it just by applying a class. */
 .feed {
 	display: inline-block;
