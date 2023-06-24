@@ -31,7 +31,7 @@ func (c *Config) Load(themeDir string) error {
 func (c *Config) CopyTo(destDir string) error {
 	for _, entry := range c.BOM {
 		if err := utils.Copy(path.Join(c.root, entry.Path), path.Join(destDir, entry.Path)); err != nil {
-			return fmt.Errorf("Failed to copy %q into %q: %w", entry.Path, destDir)
+			return fmt.Errorf("Failed to copy %q into %q: %w", entry.Path, destDir, err)
 		}
 	}
 	return nil
