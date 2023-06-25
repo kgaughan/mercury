@@ -101,3 +101,7 @@ func (e Entry) Updated() *time.Time {
 func (e Entry) Categories() []string {
 	return e.entry.Categories
 }
+
+func (e Entry) ID() string {
+	return e.entry.GUID
+}

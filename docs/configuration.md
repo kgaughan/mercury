@@ -8,6 +8,7 @@ The top-level configuration fields are:
 | url | string | The base URL of your planet | "" |
 | owner | string | Your name | "" |
 | email | string | Your email | "" |
+| feed_id | string | Unique ID to use for the Atom feed | "" |
 | cache | string | The path, relative to _mercury.toml_ of the feed cache | "./cache" |
 | timeout | duration | How long to wait when fetching a feed | - |
 | theme | string | The path, relative to _mercury.toml_ of the theme to use | "./theme" |
@@ -16,6 +17,8 @@ The top-level configuration fields are:
 | max_pages | number | The maximum number of pages to generate | 5 |
 
 A _duration_ is a sequence of numbers followed by a unit, with 's' being 'second', 'm' being 'minute', and 'h' being 'hour'. Thus '5m30' would mean five minutes and thirty seconds.
+
+The feed ID is a URI identifying the feed. I would recommend using a [tag URI](https://en.wikipedia.org/wiki/Tag_URI_scheme), or a [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) [URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name). In the latter case, use a UUID generator such as `uuidgen` to generate a UUID, prefix it with `urn:uuid:`, and use the result as the value of `feed_id`.
 
 Each feed is introduced with `[[feed]]`, and can contain the following fields:
 

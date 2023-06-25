@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/kgaughan/mercury/internal"
+	"github.com/kgaughan/mercury/internal/atom"
 	"github.com/kgaughan/mercury/internal/feed"
 	"github.com/kgaughan/mercury/internal/flags"
 	"github.com/kgaughan/mercury/internal/manifest"
@@ -80,6 +81,10 @@ func main() {
 	if !*flags.NoBuild {
 		entries := fq.Shuffle(config.ItemsPerPage * config.MaxPages)
 		if err := writePages(entries, feeds, config, tmpl); err != nil {
+			log.Fatal(err)
+		}
+
+		if err := writeFeed(entries, config); err != nil {
 			log.Fatal(err)
 		}
 
@@ -162,6 +167,52 @@ func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Con
 		if err := tmpl.ExecuteTemplate(f, "index.html", vars); err != nil {
 			return fmt.Errorf("could not render template: %w", err)
 		}
+	}
+	return nil
+}
+
+func writeFeed(entries []*feed.Entry, config internal.Config) error {
+	feed := atom.Feed{
+		Title:   config.Name,
+		ID:      config.FeedID,
+		Updated: atom.Time(*entries[0].Updated()),
+		Links: []atom.Link{{
+			Rel:  "self",
+			Href: config.URL + "feed.atom",
+		}},
+	}
+
+	for _, entry := range entries {
+		summary := &atom.Text{
+			Type: "html",
+			Body: string(entry.Summary()),
+		}
+		if summary.Body == "" {
+			summary = nil
+		}
+		atomEntry := &atom.Entry{
+			Title: entry.Title(),
+			ID:    entry.ID(),
+			Links: []atom.Link{{
+				Rel:  "alternate",
+				Href: string(entry.Link()),
+			}},
+			Published: atom.Time(*entry.Published()),
+			Updated:   atom.Time(*entry.Updated()),
+			Author: &atom.Person{
+				Name: entry.Author(),
+			},
+			Summary: summary,
+			Content: &atom.Text{
+				Type: "html",
+				Body: string(entry.Content()),
+			},
+		}
+		feed.Entries = append(feed.Entries, atomEntry)
+	}
+
+	if err := utils.MarshalToFile(path.Join(config.Output, "atom.xml"), feed); err != nil {
+		return fmt.Errorf("could not create Atom feed: %w", err)
 	}
 	return nil
 }
