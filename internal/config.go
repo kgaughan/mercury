@@ -15,6 +15,7 @@ type Config struct {
 	URL          string          `toml:"url"`
 	Owner        string          `toml:"owner"`
 	Email        string          `toml:"email"`
+	FeedID       string          `toml:"feed_id"`
 	Cache        string          `toml:"cache"`
 	Timeout      utils.Duration  `toml:"timeout"`
 	Theme        string          `toml:"theme"`

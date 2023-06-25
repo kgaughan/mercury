@@ -1,5 +1,6 @@
 name = "My Planet!"
 url = "http://localhost/"
+feed_id = "uri:urn:5c71947a-107d-4a3d-b635-2bac0cbcd8ba"
 owner = "Chidi Anagonye"
 email = "chidi@example.com"
 cache = "./cache"
