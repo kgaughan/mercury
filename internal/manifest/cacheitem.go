@@ -27,7 +27,7 @@ type cacheItem struct {
 func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) error {
 	req, err := http.NewRequest("GET", feedURL, nil)
 	if err != nil {
-		return fmt.Errorf("could not construct request: %w", err)
+		return fmt.Errorf("cannot construct request: %w", err)
 	}
 
 	cacheFile := filepath.Join(cacheDir, ci.UUID+".json")
@@ -56,7 +56,7 @@ func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) erro
 	client := &http.Client{Timeout: timeout}
 	resp, err := client.Do(req)
 	if err != nil {
-		return fmt.Errorf("could not fetch feed: %w", err)
+		return fmt.Errorf("cannot fetch feed: %w", err)
 	}
 	defer resp.Body.Close()
 
@@ -107,7 +107,7 @@ func (ci *cacheItem) Load(cacheDir string) (*gofeed.Feed, error) {
 	}
 	feed := &gofeed.Feed{}
 	if err := json.Unmarshal(file, feed); err != nil {
-		return nil, fmt.Errorf("could not read cached feed: %w", err)
+		return nil, fmt.Errorf("cannot read cached feed: %w", err)
 	}
 	return feed, nil
 }

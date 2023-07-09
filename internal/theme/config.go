@@ -23,7 +23,7 @@ type BOMEntry struct {
 func (c *Config) Load(themeDir string) error {
 	c.root = themeDir
 	if _, err := toml.DecodeFile(path.Join(themeDir, "theme.toml"), c); err != nil {
-		return fmt.Errorf("could not load theme configuration: %w", err)
+		return fmt.Errorf("cannot load theme configuration: %w", err)
 	}
 	return nil
 }

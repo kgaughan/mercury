@@ -35,12 +35,12 @@ func (c *Config) Load(path string) error {
 	c.MaxPages = 5
 
 	if _, err := toml.DecodeFile(path, c); err != nil {
-		return fmt.Errorf("could not load configuration: %w", err)
+		return fmt.Errorf("cannot load configuration: %w", err)
 	}
 
 	configDir, err := filepath.Abs(filepath.Dir(path))
 	if err != nil {
-		return fmt.Errorf("could not normalize configuration path: %w", err)
+		return fmt.Errorf("cannot normalize configuration path: %w", err)
 	}
 
 	c.Cache = filepath.Join(configDir, c.Cache)
