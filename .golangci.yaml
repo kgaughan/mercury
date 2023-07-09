@@ -33,7 +33,3 @@ linters:
     # Undecided
     - tparallel
     - gosec
-
-run:
-  skip-dirs:
-    - src/mockaws
