@@ -18,5 +18,8 @@ jobs:
           check-latest: true
           cache: true
 
+      - name: Run tests
+        run: make tests
+
       - name: Build
         run: make
