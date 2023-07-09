@@ -10,9 +10,9 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/kgaughan/mercury/internal/utils"
 	"github.com/kgaughan/mercury/internal/version"
 	"github.com/mmcdole/gofeed"
-	"github.com/pquerna/cachecontrol/cacheobject"
 )
 
 // TODO if a feed is fetched, it shouldn't need to be loaded.
@@ -75,11 +75,8 @@ func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) erro
 		// Save for next time
 		ci.ETag = resp.Header.Get("ETag")
 		ci.LastModified = resp.Header.Get("Last-Modified")
-
-		if resDir, err := cacheobject.ParseResponseCacheControl(resp.Header.Get("Cache-Control")); err != nil {
+		if err := utils.ParseCacheControlExpiration(resp.Header.Get("Cache-Control"), &ci.Expires); err != nil {
 			log.Printf("Issue with %s (%v): ignoring Cache-Control", feedURL, err)
-		} else if resDir.MaxAge > 0 {
-			ci.Expires = time.Now().UTC().Add(time.Second * time.Duration(resDir.MaxAge))
 		}
 
 		parser := gofeed.NewParser()
