@@ -23,7 +23,7 @@ func LoadManifest(path string) (*Manifest, error) {
 	manifest := &Manifest{}
 	if file, err := os.ReadFile(path); err == nil {
 		if err := json.Unmarshal(file, manifest); err != nil {
-			return nil, fmt.Errorf("could not load manifest: %w", err)
+			return nil, fmt.Errorf("cannot load manifest: %w", err)
 		}
 	}
 	return manifest, nil

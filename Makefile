@@ -17,6 +17,7 @@ update:
 
 go.sum: go.mod
 	go mod verify
+	@touch go.sum
 
 go.mod: $(SOURCE)
 	go mod tidy

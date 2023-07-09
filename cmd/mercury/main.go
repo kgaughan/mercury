@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"html/template"
 	"log"
@@ -20,6 +19,7 @@ import (
 	"github.com/kgaughan/mercury/internal/utils"
 	"github.com/kgaughan/mercury/internal/version"
 	"github.com/mmcdole/gofeed"
+	flag "github.com/spf13/pflag"
 )
 
 func main() {
@@ -29,6 +29,10 @@ func main() {
 	if *flags.PrintVersion {
 		fmt.Println(version.Version)
 		return
+	}
+	if *flags.ShowHelp {
+		flag.Usage()
+		os.Exit(0)
 	}
 
 	if err := config.Load(*flags.ConfigPath); err != nil {
@@ -99,7 +103,7 @@ func populate(manifest *manifest.Manifest, cache string) (*feed.Queue, []*gofeed
 	var feeds []*gofeed.Feed
 	for _, item := range *manifest {
 		if feed, err := item.Load(cache); err != nil {
-			return nil, nil, fmt.Errorf("could not load feed from cache: %w", err)
+			return nil, nil, fmt.Errorf("cannot load feed from cache: %w", err)
 		} else if feed == nil {
 			log.Printf("Could not load cache for %q; skipping", item.Name)
 		} else {
@@ -125,7 +129,7 @@ func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Con
 
 		f, err := os.Create(path.Join(config.Output, pageName))
 		if err != nil {
-			return fmt.Errorf("could not create page: %w", err)
+			return fmt.Errorf("cannot create page: %w", err)
 		}
 		defer f.Close()
 
@@ -165,7 +169,7 @@ func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Con
 			NextPage:  nextPage,
 		}
 		if err := tmpl.ExecuteTemplate(f, "index.html", vars); err != nil {
-			return fmt.Errorf("could not render template: %w", err)
+			return fmt.Errorf("cannot render template: %w", err)
 		}
 	}
 	return nil
@@ -212,7 +216,7 @@ func writeFeed(entries []*feed.Entry, config internal.Config) error {
 	}
 
 	if err := utils.MarshalToFile(path.Join(config.Output, "atom.xml"), feed); err != nil {
-		return fmt.Errorf("could not create Atom feed: %w", err)
+		return fmt.Errorf("cannot create Atom feed: %w", err)
 	}
 	return nil
 }
