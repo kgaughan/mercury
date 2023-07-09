@@ -26,13 +26,11 @@ func Copy(srcPath, destPath string) error {
 	defer src.Close()
 
 	if _, err := io.Copy(dest, src); err != nil {
-		//nolint:wrapcheck
-		return err
+		return err //nolint:wrapcheck
 	}
 
 	if err := dest.Sync(); err != nil {
-		//nolint:wrapcheck
-		return err
+		return err //nolint:wrapcheck
 	}
 	return nil
 }

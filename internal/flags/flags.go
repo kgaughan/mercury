@@ -19,7 +19,7 @@ func init() {
 		out := flag.CommandLine.Output()
 		name := path.Base(os.Args[0])
 		fmt.Fprintf(out, "%s - Generates an aggregated site from a set of feeds.\n\n", name)
-		fmt.Fprintf(out, "Usage:\n\n")
+		fmt.Fprintf(out, "Flags:\n")
 		flag.PrintDefaults()
 	}
 }
