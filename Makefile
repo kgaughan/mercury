@@ -15,12 +15,18 @@ update:
 	go get -u ./...
 	go mod tidy
 
+go.sum: go.mod
+	go mod verify
+
 go.mod: $(SOURCE)
 	go mod tidy
 
 docs: $(DOCS)
 	mkdocs build
 
+tests:
+	go test -cover ./...
+
 .DEFAULT: build
 
-.PHONY: build clean tidy update docs
+.PHONY: build clean tidy update docs tests

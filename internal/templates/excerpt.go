@@ -75,7 +75,7 @@ func truncateText(text string, remaining int) (string, int) {
 			// Get the biggest slice we can if no space was found up
 			// to the truncation point.
 			if lastSpace == -1 {
-				lastSpace = n
+				lastSpace = n + 1
 			}
 			text = text[:lastSpace]
 			break
