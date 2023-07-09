@@ -10,6 +10,8 @@ import (
 	"golang.org/x/net/html"
 )
 
+const ellipsis = '\u2026'
+
 func excerpt(text string, max int) string {
 	var b strings.Builder
 
@@ -31,27 +33,10 @@ Loop:
 			break Loop
 
 		case html.TextToken:
-			toAppend := token.Data
-			lastSpace := -1
-			for n, r := range toAppend {
-				if unicode.IsSpace(r) {
-					lastSpace = n
-				}
-				remaining--
-				if remaining == 0 {
-					// Get the biggest slice we can if no space was found up
-					// to the truncation point.
-					if lastSpace == -1 {
-						lastSpace = n
-					}
-					toAppend = toAppend[:lastSpace]
-					break
-				}
-			}
-
+			toAppend, remaining := truncateText(token.Data, remaining)
 			b.WriteString(html.EscapeString(toAppend))
 			if remaining == 0 {
-				b.WriteRune('\u2026') // ellipsis
+				b.WriteRune(ellipsis)
 				break Loop
 			}
 
@@ -77,4 +62,25 @@ Loop:
 	}
 
 	return b.String()
+}
+
+func truncateText(text string, remaining int) (string, int) {
+	lastSpace := -1
+	for n, r := range text {
+		if unicode.IsSpace(r) {
+			lastSpace = n
+		}
+		remaining--
+		if remaining == 0 {
+			// Get the biggest slice we can if no space was found up
+			// to the truncation point.
+			if lastSpace == -1 {
+				lastSpace = n
+			}
+			text = text[:lastSpace]
+			break
+		}
+	}
+
+	return text, remaining
 }
