@@ -2,7 +2,7 @@ package templates
 
 import (
 	"html/template"
-	"path"
+	"io/fs"
 	"time"
 
 	"github.com/Masterminds/sprig/v3"
@@ -29,7 +29,7 @@ func configureFunctions() *template.Template {
 	}).Funcs(sprig.FuncMap())
 }
 
-func Configure(theme string) (*template.Template, error) {
+func Configure(themeFS fs.FS) (*template.Template, error) {
 	//nolint:wrapcheck
-	return configureFunctions().ParseGlob(path.Join(theme, "*.html"))
+	return configureFunctions().ParseFS(themeFS, "*.html")
 }

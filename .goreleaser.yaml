@@ -56,7 +56,6 @@ archives:
     files:
       - LICENSE
       - README.md
-      - theme/*
 
 checksum:
   name_template: "checksums.txt"

@@ -39,10 +39,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if _, err := os.Stat(config.Theme); os.IsNotExist(err) {
-		log.Fatalf("Theme directory '%v' not found", config.Theme)
-	}
-
 	var themeConfig theme.Config
 	if err := themeConfig.Load(config.Theme); err != nil {
 		log.Fatal(err)
