@@ -9,7 +9,7 @@ import (
 	"github.com/kgaughan/mercury/internal/utils"
 )
 
-// Config describes the configuration of a theme configuration.
+// Config describes a theme's configuration.
 type Config struct {
 	root fs.FS
 	Name string     `toml:"name"`
