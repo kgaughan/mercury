@@ -22,17 +22,11 @@ type Config struct {
 	Cache        string          `toml:"cache"`
 	Timeout      utils.Duration  `toml:"timeout"`
 	theme        string          `toml:"theme"`
+	Theme        fs.FS           `toml:"-"`
 	Output       string          `toml:"output"`
 	Feeds        []manifest.Feed `toml:"feed"`
 	ItemsPerPage int             `toml:"items"`
 	MaxPages     int             `toml:"max_pages"`
-}
-
-func (c Config) GetThemeFS() fs.FS {
-	if c.theme == "" {
-		return dflt.Theme
-	}
-	return os.DirFS(c.theme)
 }
 
 // Load loads our configuration file.
@@ -54,11 +48,14 @@ func (c *Config) Load(path string) error {
 	}
 
 	c.Cache = filepath.Join(configDir, c.Cache)
-	if c.theme != "" {
+	if c.theme == "" {
+		c.Theme = dflt.Theme
+	} else {
 		c.theme = filepath.Join(configDir, c.theme)
 		if _, err := os.Stat(c.theme); os.IsNotExist(err) {
 			return fmt.Errorf("theme %q not found: %w", c.theme, err)
 		}
+		c.Theme = os.DirFS(c.theme)
 	}
 	c.Output = filepath.Join(configDir, c.Output)
 	return nil

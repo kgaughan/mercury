@@ -39,13 +39,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	themeFS := config.GetThemeFS()
 	var themeConfig theme.Config
-	if err := themeConfig.Load(themeFS); err != nil {
+	if err := themeConfig.Load(config.Theme); err != nil {
 		log.Fatal(err)
 	}
 
-	tmpl, err := templates.Configure(themeFS)
+	tmpl, err := templates.Configure(config.Theme)
 	if err != nil {
 		log.Fatal(err)
 	}
