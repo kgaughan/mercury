@@ -2,10 +2,13 @@ package internal
 
 import (
 	"fmt"
+	"io/fs"
+	"os"
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
 	"github.com/kgaughan/mercury/internal/manifest"
+	dflt "github.com/kgaughan/mercury/internal/theme/default"
 	"github.com/kgaughan/mercury/internal/utils"
 )
 
@@ -18,18 +21,25 @@ type Config struct {
 	FeedID       string          `toml:"feed_id"`
 	Cache        string          `toml:"cache"`
 	Timeout      utils.Duration  `toml:"timeout"`
-	Theme        string          `toml:"theme"`
+	theme        string          `toml:"theme"`
 	Output       string          `toml:"output"`
 	Feeds        []manifest.Feed `toml:"feed"`
 	ItemsPerPage int             `toml:"items"`
 	MaxPages     int             `toml:"max_pages"`
 }
 
+func (c Config) GetThemeFS() fs.FS {
+	if c.theme == "" {
+		return dflt.Theme
+	}
+	return os.DirFS(c.theme)
+}
+
 // Load loads our configuration file.
 func (c *Config) Load(path string) error {
 	c.Name = "Planet"
 	c.Cache = "./cache"
-	c.Theme = "./theme"
+	c.theme = ""
 	c.Output = "./output"
 	c.ItemsPerPage = 10
 	c.MaxPages = 5
@@ -44,7 +54,12 @@ func (c *Config) Load(path string) error {
 	}
 
 	c.Cache = filepath.Join(configDir, c.Cache)
-	c.Theme = filepath.Join(configDir, c.Theme)
+	if c.theme != "" {
+		c.theme = filepath.Join(configDir, c.theme)
+		if _, err := os.Stat(c.theme); os.IsNotExist(err) {
+			return fmt.Errorf("theme %q not found: %w", c.theme, err)
+		}
+	}
 	c.Output = filepath.Join(configDir, c.Output)
 	return nil
 }

@@ -39,16 +39,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if _, err := os.Stat(config.Theme); os.IsNotExist(err) {
-		log.Fatalf("Theme directory '%v' not found", config.Theme)
-	}
-
+	themeFS := config.GetThemeFS()
 	var themeConfig theme.Config
-	if err := themeConfig.Load(config.Theme); err != nil {
+	if err := themeConfig.Load(themeFS); err != nil {
 		log.Fatal(err)
 	}
 
-	tmpl, err := templates.Configure(config.Theme)
+	tmpl, err := templates.Configure(themeFS)
 	if err != nil {
 		log.Fatal(err)
 	}

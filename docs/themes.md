@@ -5,7 +5,8 @@ A theme is a directory that contains the template files and assets needed to gen
 [html/template]: https://golang.org/pkg/html/template/
 [text/template]: https://golang.org/pkg/text/template/
 
-The template supplied in [theme/index.html](https://github.com/kgaughan/mercury/blob/master/theme/index.html) should be a good jumping-off point. The top-level fields available are:
+
+The template supplied in [the default built-in theme](https://github.com/kgaughan/mercury/blob/master/internal/theme/default/index.html) should be a good jumping-off point. The top-level fields available are:
 
 | Name | Description |
 | ---- | ----------- |
