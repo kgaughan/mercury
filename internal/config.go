@@ -21,7 +21,7 @@ type Config struct {
 	FeedID       string          `toml:"feed_id"`
 	Cache        string          `toml:"cache"`
 	Timeout      utils.Duration  `toml:"timeout"`
-	theme        string          `toml:"theme"`
+	themePath    string          `toml:"theme"`
 	Theme        fs.FS           `toml:"-"`
 	Output       string          `toml:"output"`
 	Feeds        []manifest.Feed `toml:"feed"`
@@ -33,7 +33,7 @@ type Config struct {
 func (c *Config) Load(path string) error {
 	c.Name = "Planet"
 	c.Cache = "./cache"
-	c.theme = ""
+	c.themePath = ""
 	c.Output = "./output"
 	c.ItemsPerPage = 10
 	c.MaxPages = 5
@@ -48,14 +48,14 @@ func (c *Config) Load(path string) error {
 	}
 
 	c.Cache = filepath.Join(configDir, c.Cache)
-	if c.theme == "" {
+	if c.themePath == "" {
 		c.Theme = dflt.Theme
 	} else {
-		c.theme = filepath.Join(configDir, c.theme)
-		if _, err := os.Stat(c.theme); os.IsNotExist(err) {
-			return fmt.Errorf("theme %q not found: %w", c.theme, err)
+		themePath := filepath.Join(configDir, c.themePath)
+		if _, err := os.Stat(themePath); os.IsNotExist(err) {
+			return fmt.Errorf("theme %q not found: %w", themePath, err)
 		}
-		c.Theme = os.DirFS(c.theme)
+		c.Theme = os.DirFS(themePath)
 	}
 	c.Output = filepath.Join(configDir, c.Output)
 	return nil
