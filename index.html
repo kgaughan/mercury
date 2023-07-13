@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>Planet Mercury</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="js/jquery-1.10.2.min.js" defer></script>
+        <script src="js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">Planet Mercury</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="configuration/" class="nav-link">Configuration</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="themes/" class="nav-link">Themes</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="architecture/" class="nav-link">Architecture</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/kgaughan/mercury/edit/master/docs/index.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#planet-mercury" class="nav-link">Planet Mercury</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#quickstart" class="nav-link">Quickstart</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#command-line" class="nav-link">Command line</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p><img align="right" alt="" height_319_="height&quot;319&quot;" src="mercury.png" style="border:0;background:transparent" width="318" /></p>
+<h1 id="planet-mercury">Planet Mercury</h1>
+<p><em>Mercury</em> is intended a replacement for Sam Ruby's <a href="https://github.com/rubys/venus/">Planet Venus</a>.</p>
+<p>A <em>planet</em> is a kind of feed aggregator. It takes a list of newsfeeds (Atom, RSS, &amp;c.), splices them together, and spits a set of HTML pages and/or a feed.</p>
+<h2 id="quickstart">Quickstart</h2>
+<p>If you have the Go toolchain already configured, you can <code>go install</code> the binary:</p>
+<pre><code class="language-console">go install github.com/kgaughan/mercury/cmd/@latest
+</code></pre>
+<p>By default, <em>mercury</em> will look for look for a file called <em>mercury.toml</em> in the current directory. This feed is in <a href="https://en.wikipedia.org/wiki/TOML">TOML</a> format, but the key thing you need to know is that keys and values are separated with an <code>=</code>, string values must be quoted, and <code>[[feed]]</code> introduces new feed configuration.</p>
+<p>If you want to use an explicitly named configuration file, you can pass this with the <code>--config</code> flag.</p>
+<p>Here is an example file:</p>
+<pre><code class="language-toml">name = &quot;My Planet!&quot;
+url = &quot;https://example.com/&quot;
+owner = &quot;Jane Doe&quot;
+email = &quot;jane.doe@example.com&quot;
+cache = &quot;./cache&quot;
+timeout = &quot;20s&quot;
+theme = &quot;./theme&quot;
+output = &quot;./output&quot;
+items = 10
+max_pages = 2
+
+[[feed]]
+name = &quot;Keith Gaughan&quot;
+feed = &quot;https://keith.gaughan.ie/feeds/all.xml&quot;
+
+[[feed]]
+name = &quot;Inklings&quot;
+feed = &quot;https://talideon.com/inklings/feed&quot;
+</code></pre>
+<p>See <a href="configuration/">the configuration details</a> for more details on the meaning of each field.</p>
+<p>Then run:</p>
+<pre><code class="language-console">mercury
+</code></pre>
+<p>This will fetch all the feeds to the cache directory and write the site to the output directory.</p>
+<h2 id="command-line">Command line</h2>
+<p>The <code>--help</code> flag will show you the help information:</p>
+<pre><code class="language-console">$ ./mercury --help
+mercury - Generates an aggregated site from a set of feeds.
+
+Flags:
+  -c, --config string   path to configuration (default &quot;./mercury.toml&quot;)
+  -h, --help            show help
+  -B, --no-build        don't build anything
+  -F, --no-fetch        don't fetch, just use what's in the cache
+  -V, --version         print version and exit
+</code></pre>
+<p>Usually, the default behaviour is what you want: mercury will try to intelligently fetch any feeds and regenerate the site. Use <code>--no-build</code> if you just want to prime the cache but don't want to generate the site. Use <code>--no-fetch</code> if you want to regenerate the site without fetching any feeds. This can be useful if you're testing out a new theme.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js" defer></script>
+        <script src="search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.4.3
+Build Date UTC : 2023-07-13 23:55:10.868879+00:00
+-->
