@@ -10,7 +10,7 @@ require (
 	github.com/mmcdole/gofeed v1.2.1
 	github.com/pquerna/cachecontrol v0.2.0
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/net v0.14.0
+	golang.org/x/net v0.16.0
 )
 
 require (
@@ -30,6 +30,6 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/spf13/cast v1.5.1 // indirect
-	golang.org/x/crypto v0.12.0 // indirect
-	golang.org/x/text v0.12.0 // indirect
+	golang.org/x/crypto v0.14.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 )
