@@ -10,7 +10,7 @@ require (
 	github.com/mmcdole/gofeed v1.2.1
 	github.com/pquerna/cachecontrol v0.2.0
 	github.com/spf13/pflag v1.0.5
-	golang.org/x/net v0.16.0
+	golang.org/x/net v0.17.0
 )
 
 require (
