@@ -6,7 +6,7 @@ require (
 	github.com/BurntSushi/toml v1.3.2
 	github.com/Masterminds/sprig/v3 v3.2.3
 	github.com/google/uuid v1.3.1
-	github.com/microcosm-cc/bluemonday v1.0.25
+	github.com/microcosm-cc/bluemonday v1.0.26
 	github.com/mmcdole/gofeed v1.2.1
 	github.com/pquerna/cachecontrol v0.2.0
 	github.com/spf13/pflag v1.0.5
