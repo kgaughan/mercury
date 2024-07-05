@@ -28,7 +28,7 @@ brews:
     ids:
       - archives
     homepage: "https://github.com/kgaughan/mercury"
-    tap:
+    repository:
       owner: kgaughan
       name: homebrew-tap
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
