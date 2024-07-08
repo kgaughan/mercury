@@ -2,8 +2,17 @@
 name: Lint
 
 on:
-  - push
-  - pull_request
+  push:
+    paths:
+      - "cmd/**"
+      - "internal/**"
+      - "go.*"
+  pull_request:
+    paths:
+      - "cmd/**"
+      - "internal/**"
+      - "go.*"
+
 
 permissions:
   contents: read
