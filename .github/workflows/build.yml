@@ -9,7 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
       - uses: dorny/paths-filter@v3
+        name: check for changes
         id: changes
         with:
           filters: |
@@ -17,9 +20,6 @@ jobs:
               - 'cmd/**'
               - 'internal/**'
               - 'go.*'
-
-      - if: steps.changes.outputs.src == 'true'
-        uses: actions/checkout@v3
 
       - if: steps.changes.outputs.src == 'true'
         name: Set up Go
