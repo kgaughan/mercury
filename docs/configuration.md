@@ -13,7 +13,7 @@ The top-level configuration fields are:
 | timeout | duration | How long to wait when fetching a feed | - |
 | theme | string | The path, relative to _mercury.toml_ of the theme to use | _use default theme_ |
 | output | string | The path, relative to _mercury.toml_ to which _mercury_ should write the files it generates | "./output" |
-| items | number | The number of items to include per page | 10
+| items | number | The number of items to include per page | 10 |
 | max_pages | number | The maximum number of pages to generate | 5 |
 
 A _duration_ is a sequence of numbers followed by a unit, with 's' being 'second', 'm' being 'minute', and 'h' being 'hour'. Thus '5m30' would mean five minutes and thirty seconds.

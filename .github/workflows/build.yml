@@ -2,16 +2,8 @@
 name: Build
 
 on:
-  push:
-    paths:
-      - "cmd/**"
-      - "internal/**"
-      - "go.*"
-  pull_request:
-    paths:
-      - "cmd/**"
-      - "internal/**"
-      - "go.*"
+  - push
+  - pull_request
 
 jobs:
   build:
@@ -19,15 +11,27 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up Go
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'cmd/**'
+              - 'internal/**'
+              - 'go.*'
+
+      - if: steps.changes.outputs.src == 'true'
+        name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version-file: go.mod
           check-latest: true
           cache: true
 
-      - name: Run tests
+      - if: steps.changes.outputs.src == 'true'
+        name: Run tests
         run: make tests
 
-      - name: Build
+      - if: steps.changes.outputs.src == 'true'
+        name: Build
         run: make
