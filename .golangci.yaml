@@ -15,10 +15,10 @@ linters:
     - ineffassign
 
     # slow, nofix
+    - err113
     - errcheck
     - errname
     - errorlint
-    - goerr113
     - gosimple
     - govet
     - nonamedreturns
