@@ -58,6 +58,13 @@ archives:
       - LICENSE
       - README.md
 
+dockers:
+  - image_templates:
+      - "{{ .Env.REGISTRY }}/{{ .Env.IMAGE }}:{{ .Tag }}"
+    skip_push: auto
+    use: buildx
+    dockerfile: Dockerfile
+
 checksum:
   name_template: "checksums.txt"
 
