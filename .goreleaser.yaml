@@ -1,8 +1,10 @@
 ---
 version: 2
+
 before:
   hooks:
     - go mod tidy
+    - go mod download
 
 builds:
   - env:
@@ -20,6 +22,7 @@ builds:
       - -trimpath
     ldflags:
       - -s -w -X github.com/kgaughan/mercury/internal/version.Version={{.Version}}
+    mod_timestamp: "{{ .CommitTimestamp }}"
     tags:
       - netgo
 
@@ -66,7 +69,8 @@ dockers:
     dockerfile: Dockerfile
 
 checksum:
-  name_template: "checksums.txt"
+  algorithm: sha256
+  name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
 
 snapshot:
   name_template: "{{ incpatch .Version }}-next"

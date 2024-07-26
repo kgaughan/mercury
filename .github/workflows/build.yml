@@ -5,11 +5,15 @@ on:
   - push
   - pull_request
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: dorny/paths-filter@v3
         name: check for changes
@@ -23,7 +27,7 @@ jobs:
 
       - if: steps.changes.outputs.src == 'true'
         name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
           check-latest: true
