@@ -17,26 +17,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.x
-
-      - name: Generate cache ID
-        run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV 
-
-      - name: Generate cache
-        uses: actions/cache@v3
-        with:
-          key: mkdocs-material-${{ env.cache_id }}
-          path: .cache
-          restore-keys: |
-            mkdocs-material-
+          cache: pip
 
       - name: Install mkdocs, theme, and plugins
-        run: pip install mkdocs-material mkdocs-awesome-pages-plugin
+        run: pip install -r requirements.txt
 
       - name: Deploy site
         run: mkdocs gh-deploy --force
