@@ -1,6 +1,8 @@
 ---
 site_name: Planet Mercury
 repo_url: https://github.com/kgaughan/mercury/
+theme:
+  name: material
 
 markdown_extensions:
   admonition: {}
