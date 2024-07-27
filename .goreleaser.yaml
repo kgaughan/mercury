@@ -64,6 +64,7 @@ archives:
 dockers:
   - image_templates:
       - "{{ .Env.REGISTRY }}/{{ .Env.IMAGE }}:{{ .Tag }}"
+      - "{{ .Env.REGISTRY }}/{{ .Env.IMAGE }}:latest"
     skip_push: auto
     use: buildx
     dockerfile: Dockerfile
