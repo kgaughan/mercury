@@ -1,15 +1,17 @@
-SOURCE:=$(wildcard internal/*.go internal/*/*.go cmd/mercury/*.go)
+NAME:=mercury
+
+SOURCE:=$(wildcard internal/*.go internal/*/*.go cmd/*/*.go)
 DOCS:=$(wildcard docs/*.md mkdocs.yml)
 
-build: go.mod mercury
+build: go.mod $(NAME)
 
-tidy: go.mod
+tidy: go.mod fmt
 
 clean:
-	rm -rf mercury dist
+	rm -rf $(NAME) dist site
 
-mercury: $(SOURCE) go.sum
-	CGO_ENABLED=0 go build -tags netgo -trimpath -ldflags '-s -w' -o mercury ./cmd/mercury
+$(NAME): $(SOURCE) go.sum
+	CGO_ENABLED=0 go build -tags netgo -trimpath -ldflags '-s -w' -o $(NAME) ./cmd/$(NAME)
 
 update:
 	go get -u ./...
@@ -22,12 +24,28 @@ go.sum: go.mod
 go.mod: $(SOURCE)
 	go mod tidy
 
-docs: $(DOCS)
-	mkdocs build
+fmt:
+	go fmt ./...
+
+lint:
+	go vet ./...
+
+serve-docs: .venv
+	.venv/bin/mkdocs serve
+
+docs: .venv $(DOCS)
+	.venv/bin/mkdocs build
+
+.venv: requirements.txt
+	uv venv
+	uv pip install -r requirements.txt
+
+requirements.txt: requirements.in
+	uv pip compile $< > $@
 
 tests:
 	go test -cover ./...
 
 .DEFAULT: build
 
-.PHONY: build clean tidy update docs tests
+.PHONY: build clean tidy update fmt lint docs tests serve-docs
