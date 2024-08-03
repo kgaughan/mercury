@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
+	"github.com/kgaughan/mercury/internal/filters"
 	"github.com/kgaughan/mercury/internal/manifest"
 	dflt "github.com/kgaughan/mercury/internal/theme/default"
 	"github.com/kgaughan/mercury/internal/utils"
@@ -14,19 +15,20 @@ import (
 
 // Config describes our configuration.
 type Config struct {
-	Name         string          `toml:"name"`
-	URL          string          `toml:"url"`
-	Owner        string          `toml:"owner"`
-	Email        string          `toml:"email"`
-	FeedID       string          `toml:"feed_id"`
-	Cache        string          `toml:"cache"`
-	Timeout      utils.Duration  `toml:"timeout"`
-	themePath    string          `toml:"theme"`
-	Theme        fs.FS           `toml:"-"`
-	Output       string          `toml:"output"`
-	Feeds        []manifest.Feed `toml:"feed"`
-	ItemsPerPage int             `toml:"items"`
-	MaxPages     int             `toml:"max_pages"`
+	Name         string                    `toml:"name"`
+	URL          string                    `toml:"url"`
+	Owner        string                    `toml:"owner"`
+	Email        string                    `toml:"email"`
+	FeedID       string                    `toml:"feed_id"`
+	Cache        string                    `toml:"cache"`
+	Timeout      utils.Duration            `toml:"timeout"`
+	themePath    string                    `toml:"theme"`
+	Theme        fs.FS                     `toml:"-"`
+	Output       string                    `toml:"output"`
+	Feeds        []manifest.Feed           `toml:"feed"`
+	ItemsPerPage int                       `toml:"items"`
+	MaxPages     int                       `toml:"max_pages"`
+	Filters      map[string]filters.Filter `toml:"filter"`
 }
 
 // Load loads our configuration file.
