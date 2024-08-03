@@ -17,13 +17,12 @@ import (
 
 // TODO if a feed is fetched, it shouldn't need to be loaded.
 
-// cacheEntry represents the metadata of a cached feed.
+// cacheEntry represents an entry in the manifest index for a cached feed.
 type cacheEntry struct {
-	Name         string
-	UUID         string    // Used to identify the cached feed
-	LastModified string    // Used for conditional GET
-	ETag         string    // Also used for conditional GET
-	Expires      time.Time // Date after which we should ignore the cache
+	UUID         string    `json:"uuid"`           // Used to identify the cached feed
+	LastModified string    `json:"lastModified"`   // Used for conditional GET
+	ETag         string    `json:"etag,omitempty"` // Also used for conditional GET
+	Expires      time.Time `json:"expires"`        // Date after which we should ignore the cache
 }
 
 // Fetch retrieves the feed from the given URL, using conditional GET

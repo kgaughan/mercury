@@ -1,6 +1,7 @@
 FROM gcr.io/distroless/static:latest
 
-LABEL org.opencontainers.image.title=Mercury \
+LABEL \
+    org.opencontainers.image.title=Mercury \
     org.opencontainers.image.description="A Planet-style feed aggregator" \
     org.opencontainers.image.vendor="Keith Gaughan" \
     org.opencontainers.image.licenses=MIT \

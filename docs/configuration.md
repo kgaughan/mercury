@@ -29,6 +29,15 @@ Each feed is introduced with `[[feed]]`, and can contain the following fields:
 | name | string | The name of the feed |
 | feed | string | The URL of the feed. Note that this must be the URL of the _feed_ itself and no attempt is made to do feed discovery if all that's provided is the site's homepage |
 
+## Filters
+
+Filters are defined by adding sections to the configuration with sections named `[[feed.filter]]` subsequent to the corresponding `[[feed]]` entry. Filters are defined using [Expr](https://expr-lang.org/), and your filter is expected to take the entries of feed and return a filtered list of those entries.
+
+| Name | Description |
+| ---- | ----------- |
+| when | An expression to determine whether the entry should be kept or skipped. This should evaluate to a boolean. Defaults to `true` |
+| transform | A transformation to apply to each entry in the feed. This is only executed if `when` evaluates to `true`. |
+
 ## Converting an OPML file into Mercury configuration
 
 The `tools/opml2config.py` script can be used to take multiple [OPML](https://en.wikipedia.org/wiki/OPML) files.

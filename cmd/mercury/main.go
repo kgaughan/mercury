@@ -79,7 +79,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fq, feeds, err := populate(manifest, config.Cache)
+	fq, feeds, err := populateFromCache(manifest, config.Cache)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -103,17 +103,17 @@ func main() {
 	}
 }
 
-// populate loads cached feeds from the manifest.
-func populate(manifest *manifest.Manifest, cache string) (*feed.Queue, []*gofeed.Feed, error) {
+// populateFromCache loads cached feeds from the manifest.
+func populateFromCache(manifest *manifest.Manifest, cache string) (*feed.Queue, []*gofeed.Feed, error) {
 	fq := &feed.Queue{}
 	var feeds []*gofeed.Feed
-	for _, item := range *manifest {
+	for url, item := range manifest.Index {
 		if feed, err := item.Load(cache); err != nil {
 			return nil, nil, fmt.Errorf("cannot load feed from cache: %w", err)
 		} else if feed == nil {
-			log.Printf("Could not load cache for %q; skipping", item.Name)
+			log.Printf("Could not load cache for %q; skipping", manifest.Cfg[url].Name)
 		} else {
-			fq.Append(feed)
+			fq.Append(feed, manifest.Cfg[url])
 			feeds = append(feeds, feed)
 		}
 	}
