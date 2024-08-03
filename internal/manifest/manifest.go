@@ -14,7 +14,10 @@ import (
 )
 
 // Manifest maps feed URLs to their cache metadata.
-type Manifest map[string]*cacheEntry
+type Manifest struct {
+	Index map[string]*cacheEntry `json:"manifest"`
+	Cfg   map[string]*Feed       `json:"-"` // We need to be able to pass this to the queue
+}
 
 // fetchJob represents a job to fetch a feed and update its cache item.
 type fetchJob struct {
@@ -24,7 +27,10 @@ type fetchJob struct {
 
 // LoadManifest loads the manifest from a file.
 func LoadManifest(path string) (*Manifest, error) {
-	manifest := &Manifest{}
+	manifest := &Manifest{
+		Index: make(map[string]*cacheEntry, 16), // Rough initial size
+		Cfg:   make(map[string]*Feed, 16),
+	}
 	file, err := os.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -45,26 +51,26 @@ func (m *Manifest) Populate(feeds []Feed) {
 	liveFeedUrls := make(map[string]struct{})
 	for _, feed := range feeds {
 		liveFeedUrls[feed.Feed] = struct{}{}
-		if _, ok := (*m)[feed.Feed]; !ok {
+		if _, ok := m.Index[feed.Feed]; !ok {
 			// New feed: create a new record
-			(*m)[feed.Feed] = &cacheEntry{
-				Name: feed.Name,
+			m.Index[feed.Feed] = &cacheEntry{
 				UUID: uuid.New().String(),
 			}
+			m.Cfg[feed.Feed] = &feed
 		}
 	}
 	// Remove any feeds no longer in the config
-	for url := range *m {
+	for url := range m.Index {
 		if _, ok := liveFeedUrls[url]; !ok {
 			log.Printf("Removing feed %q from manifest", url)
-			delete(*m, url)
+			delete(m.Index, url)
 		}
 	}
 }
 
 // Len returns the number of feeds in the manifest.
 func (m *Manifest) Len() int {
-	return len(*m)
+	return len(m.Index)
 }
 
 // Save writes the manifest to a file.
@@ -82,7 +88,7 @@ func (m *Manifest) Save(path string) error {
 // AsOPML converts the manifest to an OPML document.
 func (m *Manifest) AsOPML() *opml.OPML {
 	opml := opml.New(m.Len())
-	for url, item := range *m {
+	for url, item := range m.Cfg {
 		opml.Append(item.Name, url)
 	}
 	return opml
@@ -93,7 +99,7 @@ func (m *Manifest) Prime(cache string, timeout time.Duration, parallelism, jobQu
 	var wg sync.WaitGroup
 	jobs := make(chan *fetchJob, jobQueueDepth)
 
-	log.Printf("Priming manifest with %d feeds using %d workers, with a queue depth of %d", len(*m), parallelism, jobQueueDepth)
+	log.Printf("Priming manifest with %d feeds using %d workers, with a queue depth of %d", len(m.Index), parallelism, jobQueueDepth)
 	for range parallelism {
 		wg.Add(1)
 		go func() {
@@ -111,7 +117,7 @@ func (m *Manifest) Prime(cache string, timeout time.Duration, parallelism, jobQu
 		}()
 	}
 
-	for feedURL, item := range *m {
+	for feedURL, item := range m.Index {
 		if item != nil {
 			jobs <- &fetchJob{URL: feedURL, Item: item}
 		}
