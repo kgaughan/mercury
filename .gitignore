@@ -3,8 +3,6 @@
 /output/
 .*.sw?
 *~
-/.vscode/
-*.code-workspace
 
 /dist/
 /site/
