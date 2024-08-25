@@ -11,7 +11,7 @@ clean:
 	rm -rf $(NAME) dist site
 
 $(NAME): $(SOURCE) go.sum
-	CGO_ENABLED=0 go build -tags netgo -trimpath -ldflags '-s -w' -o $(NAME) ./cmd/$(NAME)
+	CGO_ENABLED=0 go build -tags netgo,timetzdata -trimpath -ldflags '-s -w' -o $(NAME) ./cmd/$(NAME)
 
 update:
 	go get -u ./...
