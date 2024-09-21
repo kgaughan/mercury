@@ -60,7 +60,7 @@ Here's an example of both being used:
 
 A theme directory must also contain a `theme.toml` file. This contains metadata about the theme (currently just its name, which is given in the `name` field) and optionally a [bill of materials] listing the files to be copied across, each entry in which is introduced with `[[bom]]`. Here's an example file:
 
-```toml
+```toml title="theme.toml"
 name = "Community"
 
 [[bom]]
