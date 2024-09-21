@@ -20,7 +20,7 @@ If you want to use an explicitly named configuration file, you can pass this wit
 
 Here is an example file:
 
-```toml
+```toml title="mercury.toml"
 name = "My Planet!"
 url = "https://example.com/"
 owner = "Jane Doe"
