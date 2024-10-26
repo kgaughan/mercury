@@ -49,7 +49,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	utils.EnsureDir(config.Cache)
+	utils.EnsureCache(config.Cache)
 
 	if !*flags.NoBuild {
 		utils.EnsureDir(config.Output)
