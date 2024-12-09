@@ -20,7 +20,7 @@ func EnsureDir(path string) {
 }
 
 func writeCacheTag(path string) error {
-	return os.WriteFile(path, []byte(cacheTagMarker), 0o600)
+	return os.WriteFile(path, []byte(cacheTagMarker), 0o600) //nolint:wrapcheck
 }
 
 func EnsureCache(path string) {
