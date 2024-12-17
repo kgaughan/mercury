@@ -1,8 +1,8 @@
 module github.com/kgaughan/mercury
 
-go 1.21
+go 1.23
 
-toolchain go1.22.3
+toolchain go1.23.2
 
 require (
 	github.com/BurntSushi/toml v1.4.0
@@ -18,8 +18,8 @@ require (
 require (
 	dario.cat/mergo v1.0.1 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
-	github.com/Masterminds/semver/v3 v3.3.0 // indirect
-	github.com/PuerkitoBio/goquery v1.9.3 // indirect
+	github.com/Masterminds/semver/v3 v3.3.1 // indirect
+	github.com/PuerkitoBio/goquery v1.10.0 // indirect
 	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
