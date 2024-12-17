@@ -8,6 +8,7 @@ import (
 	"runtime"
 
 	"github.com/BurntSushi/toml"
+	"github.com/kgaughan/mercury/internal/filters"
 	"github.com/kgaughan/mercury/internal/manifest"
 	dflt "github.com/kgaughan/mercury/internal/theme/default"
 	"github.com/kgaughan/mercury/internal/utils"
@@ -30,9 +31,9 @@ type Config struct {
 	Feeds         []manifest.Feed           `toml:"feed"`
 	ItemsPerPage  int                       `toml:"items"`
 	MaxPages      int                       `toml:"max_pages"`
-	Filters       map[string]filters.Filter `toml:"filter"`
 	JobQueueDepth int                       `toml:"job_queue_depth"`
 	Parallelism   int                       `toml:"parallelism"`
+	Filters       map[string]filters.Filter `toml:"filter"`
 }
 
 // Load loads our configuration file.
