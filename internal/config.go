@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/BurntSushi/toml"
 	"github.com/kgaughan/mercury/internal/manifest"
@@ -14,19 +15,21 @@ import (
 
 // Config describes our configuration.
 type Config struct {
-	Name         string          `toml:"name"`
-	URL          string          `toml:"url"`
-	Owner        string          `toml:"owner"`
-	Email        string          `toml:"email"`
-	FeedID       string          `toml:"feed_id"`
-	Cache        string          `toml:"cache"`
-	Timeout      utils.Duration  `toml:"timeout"`
-	themePath    string          `toml:"theme"`
-	Theme        fs.FS           `toml:"-"`
-	Output       string          `toml:"output"`
-	Feeds        []manifest.Feed `toml:"feed"`
-	ItemsPerPage int             `toml:"items"`
-	MaxPages     int             `toml:"max_pages"`
+	Name          string          `toml:"name"`
+	URL           string          `toml:"url"`
+	Owner         string          `toml:"owner"`
+	Email         string          `toml:"email"`
+	FeedID        string          `toml:"feed_id"`
+	Cache         string          `toml:"cache"`
+	Timeout       utils.Duration  `toml:"timeout"`
+	themePath     string          `toml:"theme"`
+	Theme         fs.FS           `toml:"-"`
+	Output        string          `toml:"output"`
+	Feeds         []manifest.Feed `toml:"feed"`
+	ItemsPerPage  int             `toml:"items"`
+	MaxPages      int             `toml:"max_pages"`
+	JobQueueDepth int             `toml:"job_queue_depth"`
+	Parallelism   int             `toml:"parallelism"`
 }
 
 // Load loads our configuration file.
@@ -37,6 +40,9 @@ func (c *Config) Load(path string) error {
 	c.Output = "./output"
 	c.ItemsPerPage = 10
 	c.MaxPages = 5
+	// These are both somewhat arbitrary
+	c.JobQueueDepth = 2 * runtime.NumCPU()
+	c.Parallelism = runtime.NumCPU()
 
 	if _, err := toml.DecodeFile(path, c); err != nil {
 		return fmt.Errorf("cannot load configuration: %w", err)
@@ -45,6 +51,14 @@ func (c *Config) Load(path string) error {
 	configDir, err := filepath.Abs(filepath.Dir(path))
 	if err != nil {
 		return fmt.Errorf("cannot normalize configuration path: %w", err)
+	}
+
+	// Enforce some sensible lower bounds on feed fetching parallelism
+	if c.Parallelism < 1 {
+		c.Parallelism = 1
+	}
+	if c.JobQueueDepth < c.Parallelism {
+		c.JobQueueDepth = c.Parallelism
 	}
 
 	c.Cache = filepath.Join(configDir, c.Cache)

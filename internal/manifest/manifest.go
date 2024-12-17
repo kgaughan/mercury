@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"runtime"
 	"sync"
 	"time"
 
@@ -56,13 +55,11 @@ func (m *Manifest) Save(path string) error {
 	return nil
 }
 
-func (m *Manifest) Prime(cache string, timeout time.Duration) {
+func (m *Manifest) Prime(cache string, timeout time.Duration, parallelism, jobQueueDepth int) {
 	var wg sync.WaitGroup
 
-	// The channel depth is kind of arbitrary.
-	jobs := make(chan *fetchJob, 2*runtime.NumCPU())
-
-	for i := 0; i < runtime.NumCPU(); i++ {
+	jobs := make(chan *fetchJob, jobQueueDepth)
+	for i := 0; i < parallelism; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
