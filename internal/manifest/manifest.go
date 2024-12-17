@@ -57,8 +57,8 @@ func (m *Manifest) Save(path string) error {
 
 func (m *Manifest) Prime(cache string, timeout time.Duration, parallelism, jobQueueDepth int) {
 	var wg sync.WaitGroup
-
 	jobs := make(chan *fetchJob, jobQueueDepth)
+
 	for i := 0; i < parallelism; i++ {
 		wg.Add(1)
 		go func() {
@@ -77,6 +77,7 @@ func (m *Manifest) Prime(cache string, timeout time.Duration, parallelism, jobQu
 			Item: item,
 		}
 	}
+
 	close(jobs)
 	wg.Wait()
 }
