@@ -13,6 +13,8 @@ import (
 	"github.com/kgaughan/mercury/internal/utils"
 )
 
+const cpuLimit = 32 // Cap on the number of CPUs/cores to use
+
 // Config describes our configuration.
 type Config struct {
 	Name          string          `toml:"name"`
@@ -40,9 +42,8 @@ func (c *Config) Load(path string) error {
 	c.Output = "./output"
 	c.ItemsPerPage = 10
 	c.MaxPages = 5
-	// These are both somewhat arbitrary
-	c.JobQueueDepth = 2 * runtime.NumCPU()
-	c.Parallelism = runtime.NumCPU()
+	c.JobQueueDepth = 0
+	c.Parallelism = 0
 
 	if _, err := toml.DecodeFile(path, c); err != nil {
 		return fmt.Errorf("cannot load configuration: %w", err)
@@ -54,12 +55,8 @@ func (c *Config) Load(path string) error {
 	}
 
 	// Enforce some sensible lower bounds on feed fetching parallelism
-	if c.Parallelism < 1 {
-		c.Parallelism = 1
-	}
-	if c.JobQueueDepth < c.Parallelism {
-		c.JobQueueDepth = c.Parallelism
-	}
+	c.Parallelism = min(max(1, c.Parallelism), cpuLimit, runtime.NumCPU())
+	c.JobQueueDepth = max(2*c.Parallelism, c.JobQueueDepth)
 
 	c.Cache = filepath.Join(configDir, c.Cache)
 	if c.themePath == "" {
