@@ -67,7 +67,7 @@ func main() {
 	// Populate the manifest with the contents of the config file
 	manifest.Populate(config.Feeds)
 	if !*flags.NoFetch {
-		manifest.Prime(config.Cache, config.Timeout.Duration)
+		manifest.Prime(config.Cache, config.Timeout.Duration, config.Parallelism, config.JobQueueDepth)
 	}
 	if err := manifest.Save(manifestPath); err != nil {
 		log.Fatal(err)
