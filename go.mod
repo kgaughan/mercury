@@ -1,6 +1,6 @@
 module github.com/kgaughan/mercury
 
-go 1.23
+go 1.23.0
 
 toolchain go1.23.2
 
@@ -12,7 +12,7 @@ require (
 	github.com/mmcdole/gofeed v1.3.0
 	github.com/pquerna/cachecontrol v0.2.0
 	github.com/spf13/pflag v1.0.6
-	golang.org/x/net v0.35.0
+	golang.org/x/net v0.37.0
 )
 
 require (
@@ -32,6 +32,6 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/spf13/cast v1.7.0 // indirect
-	golang.org/x/crypto v0.33.0 // indirect
-	golang.org/x/text v0.22.0 // indirect
+	golang.org/x/crypto v0.36.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 )
