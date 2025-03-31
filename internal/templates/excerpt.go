@@ -12,12 +12,12 @@ import (
 
 const ellipsis = '\u2026'
 
-func excerpt(text string, max int) string {
+func excerpt(text string, maxlen int) string {
 	var b strings.Builder
 
 	t := html.NewTokenizer(strings.NewReader(text))
 
-	remaining := max
+	remaining := maxlen
 	tagStack := make([]string, 0, 16) // This should be plenty to avoid reallocation
 
 Loop:

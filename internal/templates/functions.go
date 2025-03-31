@@ -23,8 +23,8 @@ func configureFunctions() *template.Template {
 		"sanitize": func(text template.HTML) template.HTML {
 			return template.HTML(p.Sanitize(string(text))) //nolint:gosec
 		},
-		"excerpt": func(max int, text template.HTML) template.HTML {
-			return template.HTML(excerpt(string(text), max)) //nolint:gosec
+		"excerpt": func(maxlen int, text template.HTML) template.HTML {
+			return template.HTML(excerpt(string(text), maxlen)) //nolint:gosec
 		},
 	}).Funcs(sprig.FuncMap())
 }

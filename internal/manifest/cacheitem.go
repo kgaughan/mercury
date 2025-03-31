@@ -84,11 +84,8 @@ func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) erro
 			return fmt.Errorf("can't parse %s: %w", feedURL, err)
 		} else if file, err := json.Marshal(feed); err != nil {
 			return fmt.Errorf("can't marshal %s: %w", feedURL, err)
-		} else {
-			// Save to the cache
-			if err := os.WriteFile(cacheFile, file, 0o600); err != nil {
-				return fmt.Errorf("can't write to cache: %w", err)
-			}
+		} else if err := os.WriteFile(cacheFile, file, 0o600); err != nil {
+			return fmt.Errorf("can't write to cache: %w", err)
 		}
 
 	default:

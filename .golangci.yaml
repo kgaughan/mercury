@@ -24,7 +24,7 @@ linters:
     - nonamedreturns
     - revive
     - staticcheck
-    - tenv
+    - usetesting
     - typecheck
     - unconvert
     - unused
