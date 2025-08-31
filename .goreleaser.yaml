@@ -27,7 +27,7 @@ builds:
       - netgo
       - timetzdata
 
-brews:
+homebrew_casks:
   - name: planet-mercury
     ids:
       - archives
@@ -41,7 +41,13 @@ brews:
       email: k@stereochro.me
     description: "A Planet-style feed aggregator"
     license: "MIT"
-    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
+    commit_msg_template: "Brew cask update for {{ .ProjectName }} version {{ .Tag }}"
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/mercury"]
+          end
 
 archives:
   - formats:

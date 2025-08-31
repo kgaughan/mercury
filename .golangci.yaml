@@ -1,35 +1,45 @@
----
+version: "2"
 linters:
-  disable-all: true
+  default: none
   enable:
-    # fast, autofix
-    - dupword
-    - godot
-    - gofumpt
-    - goimports
-    - whitespace
-
-    # fast, nofix
     - dupl
-    - gci
-    - ineffassign
-
-    # slow, nofix
+    - dupword
     - err113
     - errcheck
     - errname
     - errorlint
-    - gosimple
+    - godot
+    - gosec
     - govet
+    - ineffassign
     - nonamedreturns
     - revive
     - staticcheck
-    - usetesting
-    - typecheck
+    - tparallel
     - unconvert
     - unused
+    - usetesting
+    - whitespace
     - wrapcheck
-
-    # Undecided
-    - tparallel
-    - gosec
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - gofumpt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
