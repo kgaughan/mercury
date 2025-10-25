@@ -52,6 +52,7 @@ func (m *Manifest) Len() int {
 	return len(*m)
 }
 
+// Save writes the manifest to a file.
 func (m *Manifest) Save(path string) error {
 	file, err := json.Marshal(m)
 	if err != nil {

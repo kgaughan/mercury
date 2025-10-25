@@ -94,7 +94,11 @@ func (e Entry) Published() *time.Time {
 
 // Updated returns the update date of the entry.
 func (e Entry) Updated() *time.Time {
-	return e.entry.UpdatedParsed
+	if e.entry.UpdatedParsed != nil {
+		return e.entry.UpdatedParsed
+	}
+	// Fallback
+	return e.entry.PublishedParsed
 }
 
 // Categories returns the entry's categories.
