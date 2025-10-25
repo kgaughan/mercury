@@ -80,7 +80,7 @@ func (feed *Feed) Save(filename string) error {
 	return os.WriteFile(filename, data, 0o600) //nolint:wrapcheck
 }
 
-// Umarshal parses an Atom feed from XML data.
+// Unmarshal parses an Atom feed from XML data.
 func Unmarshal(data []byte) (*Feed, error) {
 	feed := &Feed{}
 	if err := xml.Unmarshal(data, feed); err != nil {
