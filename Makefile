@@ -45,7 +45,7 @@ docs: .venv $(DOCS)
 	.venv/bin/mkdocs build
 
 .venv: requirements.txt
-	test -r .venv || uv venv
+	test -f .venv/bin/activate || uv venv
 	uv pip install -r requirements.txt
 
 %.txt: %.in
