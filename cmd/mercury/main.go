@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"html/template"
 	"log"
@@ -13,7 +14,6 @@ import (
 	"github.com/kgaughan/mercury/internal/feed"
 	"github.com/kgaughan/mercury/internal/flags"
 	"github.com/kgaughan/mercury/internal/manifest"
-	"github.com/kgaughan/mercury/internal/opml"
 	"github.com/kgaughan/mercury/internal/templates"
 	"github.com/kgaughan/mercury/internal/theme"
 	"github.com/kgaughan/mercury/internal/utils"
@@ -21,6 +21,8 @@ import (
 	"github.com/mmcdole/gofeed"
 	flag "github.com/spf13/pflag"
 )
+
+var errNoEntries = errors.New("no entries to write to feed")
 
 func main() {
 	var config internal.Config
@@ -88,12 +90,13 @@ func main() {
 			log.Fatal(err)
 		}
 
-		if err := writeOPML(manifest, path.Join(config.Output, "opml.xml")); err != nil {
+		if err := manifest.AsOPML().Save(path.Join(config.Output, "opml.xml")); err != nil {
 			log.Fatal(err)
 		}
 	}
 }
 
+// populate loads cached feeds from the manifest.
 func populate(manifest *manifest.Manifest, cache string) (*feed.Queue, []*gofeed.Feed, error) {
 	fq := &feed.Queue{}
 	var feeds []*gofeed.Feed
@@ -110,11 +113,12 @@ func populate(manifest *manifest.Manifest, cache string) (*feed.Queue, []*gofeed
 	return fq, feeds, nil
 }
 
+// writePages generates paginated HTML pages from the feed entries.
 func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Config, tmpl *template.Template) error {
 	now := time.Now()
 
 	nPages := len(entries) / config.ItemsPerPage
-	for iPage := 0; iPage < nPages; iPage++ {
+	for iPage := range nPages {
 		offset := iPage * config.ItemsPerPage
 		var pageName string
 		if iPage == 0 {
@@ -139,6 +143,8 @@ func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Con
 			nextPage = fmt.Sprintf("index%d.html", iPage+1)
 		}
 
+		end := min(offset+config.ItemsPerPage, len(entries))
+
 		vars := struct {
 			Generator string
 			Name      string
@@ -158,7 +164,7 @@ func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Con
 			Owner:     config.Owner,
 			Email:     config.Email,
 			PageNo:    iPage + 1,
-			Items:     entries[offset : offset+config.ItemsPerPage],
+			Items:     entries[offset:end],
 			Generated: now,
 			Feeds:     feeds,
 			PrevPage:  prevPage,
@@ -171,7 +177,11 @@ func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Con
 	return nil
 }
 
+// writeFeed generates an Atom feed from the entries.
 func writeFeed(entries []*feed.Entry, config internal.Config) error {
+	if len(entries) == 0 {
+		return errNoEntries
+	}
 	feed := atom.Feed{
 		Title:   config.Name,
 		ID:      config.FeedID,
@@ -211,19 +221,8 @@ func writeFeed(entries []*feed.Entry, config internal.Config) error {
 		feed.Entries = append(feed.Entries, atomEntry)
 	}
 
-	if err := utils.MarshalToFile(path.Join(config.Output, "atom.xml"), feed); err != nil {
+	if err := feed.Save(path.Join(config.Output, "atom.xml")); err != nil {
 		return fmt.Errorf("cannot create Atom feed: %w", err)
-	}
-	return nil
-}
-
-func writeOPML(manifest *manifest.Manifest, path string) error {
-	opml := opml.New(manifest.Len())
-	for url, item := range *manifest {
-		opml.Append(item.Name, url)
-	}
-	if err := utils.MarshalToFile(path, opml); err != nil {
-		return fmt.Errorf("can't write %s: %w", path, err)
 	}
 	return nil
 }

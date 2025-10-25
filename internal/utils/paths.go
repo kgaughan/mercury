@@ -15,7 +15,7 @@ func EnsureDir(path string) {
 			log.Fatal(err)
 		}
 	} else if !fileInfo.IsDir() {
-		log.Fatalf("%s must be a directory\n", path)
+		log.Fatalf("%q must be a directory\n", path)
 	}
 }
 

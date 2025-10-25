@@ -1,6 +1,7 @@
 package manifest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -9,6 +10,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/kgaughan/mercury/internal/opml"
 )
 
 type Manifest map[string]*cacheItem
@@ -20,10 +22,16 @@ type fetchJob struct {
 
 func LoadManifest(path string) (*Manifest, error) {
 	manifest := &Manifest{}
-	if file, err := os.ReadFile(path); err == nil {
-		if err := json.Unmarshal(file, manifest); err != nil {
-			return nil, fmt.Errorf("cannot load manifest: %w", err)
+	file, err := os.ReadFile(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			// No manifest yet: return empty one
+			return manifest, nil
 		}
+		return nil, fmt.Errorf("cannot read manifest: %w", err)
+	}
+	if err := json.Unmarshal(file, manifest); err != nil {
+		return nil, fmt.Errorf("cannot unmarshal manifest: %w", err)
 	}
 	return manifest, nil
 }
@@ -55,16 +63,30 @@ func (m *Manifest) Save(path string) error {
 	return nil
 }
 
+// AsOPML converts the manifest to an OPML document.
+func (m *Manifest) AsOPML() *opml.OPML {
+	opml := opml.New(m.Len())
+	for url, item := range *m {
+		opml.Append(item.Name, url)
+	}
+	return opml
+}
+
+// Prime fetches and caches all feeds in the manifest concurrently.
 func (m *Manifest) Prime(cache string, timeout time.Duration, parallelism, jobQueueDepth int) {
 	var wg sync.WaitGroup
 	jobs := make(chan *fetchJob, jobQueueDepth)
 
-	for i := 0; i < parallelism; i++ {
+	for range parallelism {
 		wg.Add(1)
 		go func() {
+			ctx := context.Background()
 			defer wg.Done()
 			for job := range jobs {
-				if err := job.Item.Fetch(job.URL, cache, timeout); err != nil {
+				if job == nil || job.Item == nil {
+					continue
+				}
+				if err := job.Item.Fetch(ctx, job.URL, cache, timeout); err != nil {
 					log.Print(err)
 				}
 			}
@@ -72,9 +94,8 @@ func (m *Manifest) Prime(cache string, timeout time.Duration, parallelism, jobQu
 	}
 
 	for feedURL, item := range *m {
-		jobs <- &fetchJob{
-			URL:  feedURL,
-			Item: item,
+		if item != nil {
+			jobs <- &fetchJob{URL: feedURL, Item: item}
 		}
 	}
 
