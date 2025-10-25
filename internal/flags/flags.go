@@ -3,7 +3,7 @@ package flags
 import (
 	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 
 	flag "github.com/spf13/pflag"
 )
@@ -18,8 +18,9 @@ var (
 
 func init() {
 	flag.Usage = func() {
-		name := path.Base(os.Args[0])
-		fmt.Fprintf(os.Stderr, "%s - Generates an aggregated site from a set of feeds.\n\n", name)
+		name := filepath.Base(os.Args[0])
+		fmt.Fprintf(os.Stderr, "%v - Generates an aggregated site from a set of feeds.\n\n", name)
+		fmt.Fprintf(os.Stderr, "Usage:\n  %v [options]\n\n", name)
 		fmt.Fprintf(os.Stderr, "Flags:\n")
 		flag.PrintDefaults()
 	}

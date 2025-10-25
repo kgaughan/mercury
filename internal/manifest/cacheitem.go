@@ -24,27 +24,29 @@ type cacheItem struct {
 	Expires      time.Time // Date after which we should ignore the cache
 }
 
-func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) error {
-	req, err := http.NewRequest("GET", feedURL, nil)
-	if err != nil {
-		return fmt.Errorf("cannot construct request: %w", err)
-	}
-
+func (ci *cacheItem) Fetch(ctx context.Context, feedURL, cacheDir string, timeout time.Duration) error {
 	cacheFile := filepath.Join(cacheDir, ci.UUID+".json")
 	// Blank headers if the cached feed doesn't exist
 	if _, err := os.Stat(cacheFile); os.IsNotExist(err) {
 		ci.LastModified = ""
 		ci.ETag = ""
 		ci.Expires = time.Time{}
+	} else if err != nil {
+		return fmt.Errorf("cannot stat cache file: %w", err)
 	}
 
 	// Avoid fetching stuff in the cache.
-	if ci.Expires.After(time.Now()) {
-		log.Printf("%s: cache not expired", feedURL)
+	if !ci.Expires.IsZero() && ci.Expires.After(time.Now()) {
+		log.Printf("%v: cache not expired", feedURL)
 		return nil
 	}
 
-	req = req.WithContext(context.Background())
+	ctx, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+	req, err := http.NewRequestWithContext(ctx, "GET", feedURL, nil)
+	if err != nil {
+		return fmt.Errorf("cannot construct request: %w", err)
+	}
 	req.Header.Set("User-Agent", version.UserAgent())
 	if ci.LastModified != "" {
 		req.Header.Set("If-Modified-Since", ci.LastModified)
@@ -62,13 +64,13 @@ func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) erro
 
 	switch resp.StatusCode {
 	case http.StatusNotModified:
-		log.Printf("%s: conditional GET", feedURL)
+		log.Printf("%v: conditional GET", feedURL)
 		return nil
 
 	case http.StatusNotFound:
 	case http.StatusUnauthorized:
 	case http.StatusForbidden:
-		log.Printf("%s: %s, so skipping", feedURL, resp.Status)
+		log.Printf("%v: %v, so skipping", feedURL, resp.Status)
 		return nil
 
 	case http.StatusOK:
@@ -76,21 +78,21 @@ func (ci *cacheItem) Fetch(feedURL, cacheDir string, timeout time.Duration) erro
 		ci.ETag = resp.Header.Get("ETag")
 		ci.LastModified = resp.Header.Get("Last-Modified")
 		if err := utils.ParseCacheControlExpiration(resp.Header.Get("Cache-Control"), &ci.Expires); err != nil {
-			log.Printf("Issue with %s (%v): ignoring Cache-Control", feedURL, err)
+			log.Printf("Issue with %q (%v): ignoring Cache-Control", feedURL, err)
 		}
 
 		parser := gofeed.NewParser()
 		if feed, err := parser.Parse(resp.Body); err != nil {
-			return fmt.Errorf("can't parse %s: %w", feedURL, err)
+			return fmt.Errorf("can't parse %q: %w", feedURL, err)
 		} else if file, err := json.Marshal(feed); err != nil {
-			return fmt.Errorf("can't marshal %s: %w", feedURL, err)
+			return fmt.Errorf("can't marshal %q: %w", feedURL, err)
 		} else if err := os.WriteFile(cacheFile, file, 0o600); err != nil {
 			return fmt.Errorf("can't write to cache: %w", err)
 		}
+		return nil
 
 	default:
-		// Not sure yet: do later...
-		log.Fatal(resp)
+		return fmt.Errorf("unexpected status fetching %q: %v", feedURL, resp.Status)
 	}
 
 	return nil
@@ -104,7 +106,7 @@ func (ci *cacheItem) Load(cacheDir string) (*gofeed.Feed, error) {
 	}
 	feed := &gofeed.Feed{}
 	if err := json.Unmarshal(file, feed); err != nil {
-		return nil, fmt.Errorf("cannot read cached feed: %w", err)
+		return nil, fmt.Errorf("cannot read cached feed %q: %w", cacheFile, err)
 	}
 	return feed, nil
 }

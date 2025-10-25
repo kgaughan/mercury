@@ -103,5 +103,8 @@ func (e Entry) Categories() []string {
 }
 
 func (e Entry) ID() string {
-	return e.entry.GUID
+	if e.entry.GUID != "" {
+		return e.entry.GUID
+	}
+	return e.entry.Link
 }
