@@ -37,7 +37,7 @@ func (c *Config) CopyTo(destDir string) error {
 		}
 		defer src.Close()
 		if err = utils.Copy(src, path.Join(destDir, entry.Path)); err != nil {
-			return fmt.Errorf("Failed to copy %q into %q: %w", entry.Path, destDir, err)
+			return fmt.Errorf("failed to copy %q into %q: %w", entry.Path, destDir, err)
 		}
 	}
 	return nil

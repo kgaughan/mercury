@@ -92,7 +92,7 @@ func (ci *cacheItem) Fetch(ctx context.Context, feedURL, cacheDir string, timeou
 		return nil
 
 	default:
-		return fmt.Errorf("unexpected status fetching %q: %v", feedURL, resp.Status)
+		return fmt.Errorf("unexpected status fetching %q: %v", feedURL, resp.Status) //nolint:err113
 	}
 
 	return nil
