@@ -77,6 +77,7 @@ func (m *Manifest) Prime(cache string, timeout time.Duration, parallelism, jobQu
 	var wg sync.WaitGroup
 	jobs := make(chan *fetchJob, jobQueueDepth)
 
+	log.Printf("Priming manifest with %d feeds using %d workers, with a queue depth of %d", len(*m), parallelism, jobQueueDepth)
 	for range parallelism {
 		wg.Add(1)
 		go func() {
@@ -86,6 +87,7 @@ func (m *Manifest) Prime(cache string, timeout time.Duration, parallelism, jobQu
 				if job == nil || job.Item == nil {
 					continue
 				}
+				log.Print("Fetching ", job.URL)
 				if err := job.Item.Fetch(ctx, job.URL, cache, timeout); err != nil {
 					log.Print(err)
 				}
