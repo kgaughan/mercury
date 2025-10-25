@@ -43,7 +43,7 @@ func (c *Config) Load(path string) error {
 	c.ItemsPerPage = 10
 	c.MaxPages = 5
 	c.JobQueueDepth = 0
-	c.Parallelism = 0
+	c.Parallelism = runtime.NumCPU()
 
 	if _, err := toml.DecodeFile(path, c); err != nil {
 		return fmt.Errorf("cannot load configuration: %w", err)
@@ -55,7 +55,7 @@ func (c *Config) Load(path string) error {
 	}
 
 	// Enforce some sensible lower bounds on feed fetching parallelism
-	c.Parallelism = min(max(1, c.Parallelism), cpuLimit, runtime.NumCPU())
+	c.Parallelism = min(max(1, c.Parallelism), cpuLimit)
 	c.JobQueueDepth = max(2*c.Parallelism, c.JobQueueDepth)
 
 	c.Cache = filepath.Join(configDir, c.Cache)
