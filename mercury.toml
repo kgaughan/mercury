@@ -7,12 +7,12 @@ cache = "./cache"
 timeout = "20s"
 theme = "./theme"
 output = "./output"
-items = 60
-max_pages = 1
+items = 20
+max_pages = 3
 
-[[feed]]
-name = "Abstruse Goose"
-feed = "https://abstrusegoose.com/atomfeed.xml"
+# [[feed]]
+# name = "Abstruse Goose"
+# feed = "https://abstrusegoose.com/atomfeed.xml"
 
 [[feed]]
 name = "Oglaf! -- Comics. Often dirty."
@@ -34,9 +34,9 @@ feed = "https://xkcd.com/atom.xml"
 name = "Portscout Port Updates"
 feed = "https://portscout.freebsd.org/rss/rss.cgi?m=k@stereochro.me"
 
-[[feed]]
-name = "Lambda the Ultimate - Programming Languages Weblog"
-feed = "http://lambda-the-ultimate.org/rss.xml"
+# [[feed]]
+# name = "Lambda the Ultimate - Programming Languages Weblog"
+# feed = "http://lambda-the-ultimate.org/rss.xml"
 
 [[feed]]
 name = "OSNews"
@@ -50,9 +50,9 @@ feed = "https://thestory.ie/feed/"
 name = "Language Log"
 feed = "https://languagelog.ldc.upenn.edu/nll/?feed=atom"
 
-[[feed]]
-name = "McAWilliams Photoblog Ireland"
-feed = "https://www.mcawilliams.com/feed"
+# [[feed]]
+# name = "McAWilliams Photoblog Ireland"
+# feed = "https://www.mcawilliams.com/feed"
 
 [[feed]]
 name = "Music For Programming"
@@ -126,17 +126,17 @@ feed = "https://corte.si/atom.xml"
 name = "Daemonic Dispatches"
 feed = "https://www.daemonology.net/blog/index.rss"
 
-[[feed]]
-name = "Damien Mulley"
-feed = "http://www.mulley.net/feed/"
+# [[feed]]
+# name = "Damien Mulley"
+# feed = "http://www.mulley.net/feed/"
 
 [[feed]]
 name = "Exploring Agile Solutions"
 feed = "https://agilesolutionspace.blogspot.com/feeds/posts/default"
 
-[[feed]]
-name = "Fetchez le Python"
-feed = "https://ziade.org/feeds/all.atom.xml"
+# [[feed]]
+# name = "Fetchez le Python"
+# feed = "https://ziade.org/feeds/all.atom.xml"
 
 [[feed]]
 name = "catonmat.net – less is more"
@@ -234,29 +234,29 @@ feed = "https://programmingisterrible.com/rss"
 name = "raganwald.com"
 feed = "https://raganwald.com/atom.xml"
 
-[[feed]]
-name = "rc3.org"
-feed = "https://rc3.org/feed/"
+# [[feed]]
+# name = "rc3.org"
+# feed = "https://rc3.org/feed/"
 
-[[feed]]
-name = "Recent Articles at 20bits"
-feed = "https://20bits.com/feed/"
+# [[feed]]
+# name = "Recent Articles at 20bits"
+# feed = "https://20bits.com/feed/"
 
 [[feed]]
 name = "Recycled Knowledge"
 feed = "https://recycledknowledge.blogspot.com/feeds/posts/default"
 
-[[feed]]
-name = "Russell Beattie"
-feed = "https://www.russellbeattie.com/notes/rss.xml"
+# [[feed]]
+# name = "Russell Beattie"
+# feed = "https://www.russellbeattie.com/notes/rss.xml"
 
 [[feed]]
 name = "Sam Ruby"
 feed = "https://intertwingly.net/blog/index.atom"
 
-[[feed]]
-name = "Scott Berkun"
-feed = "https://scottberkun.com/feed/"
+# [[feed]]
+# name = "Scott Berkun"
+# feed = "https://scottberkun.com/feed/"
 
 [[feed]]
 name = "Something Odd!"
@@ -302,9 +302,9 @@ feed = "https://python-history.blogspot.com/feeds/posts/default"
 name = "The Universe of Discourse"
 feed = "https://blog.plover.com/index.atom"
 
-[[feed]]
-name = "Unhandled expression"
-feed = "https://unhandledexpression.com/feed/"
+# [[feed]]
+# name = "Unhandled expression"
+# feed = "https://unhandledexpression.com/feed/"
 
 [[feed]]
 name = "Untangled"
