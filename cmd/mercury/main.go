@@ -81,15 +81,18 @@ func main() {
 	}
 
 	if !*flags.NoBuild {
+		log.Printf("Finding most recent %d entries across %d feeds", config.ItemsPerPage*config.MaxPages, len(feeds))
 		entries := fq.Shuffle(config.ItemsPerPage * config.MaxPages)
 		if err := writePages(entries, feeds, config, tmpl); err != nil {
 			log.Fatal(err)
 		}
 
+		log.Print("Writing Atom feed")
 		if err := writeFeed(entries, config); err != nil {
 			log.Fatal(err)
 		}
 
+		log.Print("Writing OPML file")
 		if err := manifest.AsOPML().Save(path.Join(config.Output, "opml.xml")); err != nil {
 			log.Fatal(err)
 		}
