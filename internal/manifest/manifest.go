@@ -13,13 +13,16 @@ import (
 	"github.com/kgaughan/mercury/internal/opml"
 )
 
-type Manifest map[string]*cacheItem
+// Manifest maps feed URLs to their cache metadata.
+type Manifest map[string]*cacheEntry
 
+// fetchJob represents a job to fetch a feed and update its cache item.
 type fetchJob struct {
 	URL  string
-	Item *cacheItem
+	Item *cacheEntry
 }
 
+// LoadManifest loads the manifest from a file.
 func LoadManifest(path string) (*Manifest, error) {
 	manifest := &Manifest{}
 	file, err := os.ReadFile(path)
@@ -36,11 +39,12 @@ func LoadManifest(path string) (*Manifest, error) {
 	return manifest, nil
 }
 
+// Populate adds feeds to the manifest.
 func (m *Manifest) Populate(feeds []Feed) {
 	for _, feed := range feeds {
 		if _, ok := (*m)[feed.Feed]; !ok {
 			// New feed: create a new record
-			(*m)[feed.Feed] = &cacheItem{
+			(*m)[feed.Feed] = &cacheEntry{
 				Name: feed.Name,
 				UUID: uuid.New().String(),
 			}
@@ -48,6 +52,7 @@ func (m *Manifest) Populate(feeds []Feed) {
 	}
 }
 
+// Len returns the number of feeds in the manifest.
 func (m *Manifest) Len() int {
 	return len(*m)
 }

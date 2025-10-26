@@ -9,6 +9,7 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 )
 
+// configureFunctions sets up the template functions available in the templates.
 func configureFunctions() *template.Template {
 	// This is just a starting point so there's a reasonable policy
 	p := bluemonday.UGCPolicy()
@@ -29,6 +30,7 @@ func configureFunctions() *template.Template {
 	}).Funcs(sprig.FuncMap())
 }
 
+// Configure loads and configures templates from the provided filesystem.
 func Configure(themeFS fs.FS) (*template.Template, error) {
 	//nolint:wrapcheck
 	return configureFunctions().ParseFS(themeFS, "*.html")
