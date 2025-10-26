@@ -8,16 +8,16 @@ import (
 
 func TestTruncateText(t *testing.T) {
 	result, n := truncateText("this has multiple words", 10)
-	assert.Equal(t, result, "this has")
-	assert.Equal(t, n, 0)
+	assert.Equal(t, "this has", result)
+	assert.Equal(t, 0, n)
 
 	result, n = truncateText("this has multiple words", 2)
-	assert.Equal(t, result, "th")
-	assert.Equal(t, n, 0)
+	assert.Equal(t, "th", result)
+	assert.Equal(t, 0, n)
 
 	result, n = truncateText("this is short", 20)
-	assert.Equal(t, result, "this is short")
-	assert.Equal(t, n, 7)
+	assert.Equal(t, "this is short", result)
+	assert.Equal(t, 7, n)
 }
 
 func TestExcerpt(t *testing.T) {
