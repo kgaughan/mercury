@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 )
 
-// errNotADir is returned when a path exists but is not a directory.
-var errNotADir = fmt.Errorf("is not a directory")
+// ErrNotADir is returned when a path exists but is not a directory.
+var ErrNotADir = fmt.Errorf("is not a directory")
 
 // cacheTagMarker is the standard marker for cache directories.
 // See: https://bford.info/cachedir/
@@ -23,7 +23,7 @@ func EnsureDir(path string) error {
 	} else if err != nil {
 		return fmt.Errorf("failed to stat %q: %w", path, err)
 	} else if !fileInfo.IsDir() {
-		return fmt.Errorf("%q: %w", path, errNotADir)
+		return fmt.Errorf("%q: %w", path, ErrNotADir)
 	}
 	return nil
 }
