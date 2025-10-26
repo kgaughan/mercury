@@ -8,6 +8,7 @@ import (
 )
 
 // cacheTagMarker is the standard marker for cache directories.
+// See: https://bford.info/cachedir/
 const cacheTagMarker = "Signature: 8a477f597d28d172789f06886806bc55\n"
 
 // EnsureDir ensures that the specified path exists and is a directory.
@@ -29,7 +30,7 @@ func writeCacheTag(path string) error {
 // EnsureCache ensures that the specified path is a valid cache directory.
 func EnsureCache(path string) {
 	EnsureDir(path)
-	cacheTag := filepath.Join(path, "CACHE.TAG")
+	cacheTag := filepath.Join(path, "CACHEDIR.TAG")
 	if _, err := os.Stat(cacheTag); os.IsNotExist(err) {
 		if err = writeCacheTag(cacheTag); err != nil {
 			log.Fatal(err)
