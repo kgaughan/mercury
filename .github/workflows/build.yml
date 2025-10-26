@@ -31,7 +31,6 @@ jobs:
         with:
           go-version-file: go.mod
           check-latest: true
-          cache: true
 
       - if: steps.changes.outputs.src == 'true'
         name: Run tests
