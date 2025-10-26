@@ -16,6 +16,7 @@ type Config struct {
 	BOM  []BOMEntry `toml:"bom"`
 }
 
+// BOMEntry describes a single entry in the theme's bill of materials.
 type BOMEntry struct {
 	Path string `toml:"path"`
 }
@@ -29,6 +30,8 @@ func (c *Config) Load(themeFS fs.FS) error {
 	return nil
 }
 
+// CopyTo copies the theme's bill of materials into the specified destination
+// directory.
 func (c *Config) CopyTo(destDir string) error {
 	for _, entry := range c.BOM {
 		src, err := c.root.Open(entry.Path)

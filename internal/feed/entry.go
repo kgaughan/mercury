@@ -106,6 +106,7 @@ func (e Entry) Categories() []string {
 	return e.entry.Categories
 }
 
+// ID returns a unique identifier for the entry.
 func (e Entry) ID() string {
 	if e.entry.GUID != "" {
 		return e.entry.GUID

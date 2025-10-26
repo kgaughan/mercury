@@ -12,6 +12,8 @@ import (
 
 const ellipsis = '\u2026'
 
+// excerpt generates an excerpt from the provided HTML text, truncating it to
+// the specified maximum length while preserving HTML structure.
 func excerpt(text string, maxlen int) string {
 	var b strings.Builder
 
@@ -64,6 +66,9 @@ Loop:
 	return b.String()
 }
 
+// truncateText truncates the input text to fit within the remaining character
+// limit, ensuring that words are not cut in half. It returns the truncated
+// text and the number of remaining characters after truncation.
 func truncateText(text string, remaining int) (string, int) {
 	lastSpace := -1
 	for n, r := range text {

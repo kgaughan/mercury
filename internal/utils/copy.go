@@ -7,6 +7,8 @@ import (
 	"path"
 )
 
+// Copy copies data from src to a file at destPath, creating any necessary
+// directories along the way.
 func Copy(src io.Reader, destPath string) error {
 	dirPath := path.Dir(destPath)
 	if err := os.MkdirAll(dirPath, 0o755); err != nil {

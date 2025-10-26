@@ -16,7 +16,9 @@ import (
 )
 
 // TODO if a feed is fetched, it shouldn't need to be loaded.
-type cacheItem struct {
+
+// cacheEntry represents the metadata of a cached feed.
+type cacheEntry struct {
 	Name         string
 	UUID         string    // Used to identify the cached feed
 	LastModified string    // Used for conditional GET
@@ -24,7 +26,9 @@ type cacheItem struct {
 	Expires      time.Time // Date after which we should ignore the cache
 }
 
-func (ci *cacheItem) Fetch(ctx context.Context, feedURL, cacheDir string, timeout time.Duration) error {
+// Fetch retrieves the feed from the given URL, using conditional GET
+// headers if available, and updates the cache entry metadata accordingly.
+func (ci *cacheEntry) Fetch(ctx context.Context, feedURL, cacheDir string, timeout time.Duration) error {
 	cacheFile := filepath.Join(cacheDir, ci.UUID+".json")
 	// Blank headers if the cached feed doesn't exist
 	if _, err := os.Stat(cacheFile); os.IsNotExist(err) {
@@ -98,7 +102,8 @@ func (ci *cacheItem) Fetch(ctx context.Context, feedURL, cacheDir string, timeou
 	return nil
 }
 
-func (ci *cacheItem) Load(cacheDir string) (*gofeed.Feed, error) {
+// Load retrieves the cached feed from disk.
+func (ci *cacheEntry) Load(cacheDir string) (*gofeed.Feed, error) {
 	cacheFile := filepath.Join(cacheDir, ci.UUID+".json")
 	file, err := os.ReadFile(cacheFile)
 	if err != nil {
