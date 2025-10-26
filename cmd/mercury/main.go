@@ -51,10 +51,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	utils.EnsureCache(config.Cache)
+	if err := utils.EnsureCache(config.Cache); err != nil {
+		log.Fatal(err)
+	}
 
 	if !*flags.NoBuild {
-		utils.EnsureDir(config.Output)
+		if err := utils.EnsureDir(config.Output); err != nil {
+			log.Fatal(err)
+		}
 		if err := themeConfig.CopyTo(config.Output); err != nil {
 			log.Fatal(err)
 		}
