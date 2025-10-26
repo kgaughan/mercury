@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 )
 
+// errNotADir is returned when a path exists but is not a directory.
 var errNotADir = fmt.Errorf("is not a directory")
 
 // cacheTagMarker is the standard marker for cache directories.
@@ -29,7 +30,10 @@ func EnsureDir(path string) error {
 
 // writeCacheTag writes the cache tag file at the specified path.
 func writeCacheTag(path string) error {
-	return os.WriteFile(path, []byte(cacheTagMarker), 0o600) //nolint:wrapcheck
+	if err := os.WriteFile(path, []byte(cacheTagMarker), 0o600); err != nil {
+		return fmt.Errorf("failed to write cache tag %q: %w", path, err)
+	}
+	return nil
 }
 
 // EnsureCache ensures that the specified path is a valid cache directory.
@@ -41,7 +45,7 @@ func EnsureCache(path string) error {
 	if _, err := os.Stat(cacheTag); os.IsNotExist(err) {
 		// No cache tag; create one
 		if err = writeCacheTag(cacheTag); err != nil {
-			return fmt.Errorf("failed to write cache tag %q: %w", cacheTag, err)
+			return err //nolint:wrapcheck
 		}
 	} else if err != nil {
 		return fmt.Errorf("failed to stat %q: %w", cacheTag, err)
@@ -53,7 +57,7 @@ func EnsureCache(path string) error {
 		}
 		if !bytes.HasPrefix(contents, []byte(cacheTagMarker)) {
 			if err = writeCacheTag(cacheTag); err != nil {
-				return fmt.Errorf("failed to write cache tag %q: %w", cacheTag, err)
+				return err //nolint:wrapcheck
 			}
 		}
 	}
