@@ -58,16 +58,25 @@ func (c *Config) Load(path string) error {
 	c.Parallelism = min(max(1, c.Parallelism), cpuLimit)
 	c.JobQueueDepth = max(2*c.Parallelism, c.JobQueueDepth)
 
-	c.Cache = filepath.Join(configDir, c.Cache)
+	if !filepath.IsAbs(c.Cache) {
+		c.Cache = filepath.Join(configDir, c.Cache)
+	}
 	if c.themePath == "" {
 		c.Theme = dflt.Theme
 	} else {
-		themePath := filepath.Join(configDir, c.themePath)
+		var themePath string
+		if !filepath.IsAbs(c.themePath) {
+			themePath = c.themePath
+		} else {
+			themePath = filepath.Join(configDir, c.themePath)
+		}
 		if _, err := os.Stat(themePath); os.IsNotExist(err) {
 			return fmt.Errorf("theme %q not found: %w", themePath, err)
 		}
 		c.Theme = os.DirFS(themePath)
 	}
-	c.Output = filepath.Join(configDir, c.Output)
+	if !filepath.IsAbs(c.Output) {
+		c.Output = filepath.Join(configDir, c.Output)
+	}
 	return nil
 }
