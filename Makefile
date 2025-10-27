@@ -18,7 +18,7 @@ tidy: go.mod fmt ## Tidy go.mod and format the code
 
 .PHONY: clean
 clean: ## Clean build artifacts
-	rm -rf $(NAME) dist site
+	rm -rf $(NAME) dist site .venv coverage.out coverage.html output cache
 
 $(NAME): $(SOURCE) go.sum
 	CGO_ENABLED=0 go build -v -tags netgo,timetzdata -trimpath -ldflags '-s -w' -o $(NAME) ./cmd/$(NAME)
@@ -53,7 +53,7 @@ docs: .venv $(DOCS) ## Build the documentation site
 	uv run mkdocs build
 
 .venv: requirements.txt
-	test -f .venv/bin/activate || uv venv
+	uv venv
 	uv pip install -r requirements.txt
 
 %.txt: %.in
@@ -61,4 +61,14 @@ docs: .venv $(DOCS) ## Build the documentation site
 
 .PHONY: tests
 tests: ## Run the tests
-	go test -cover -v ./...
+	go test -cover -coverprofile=coverage.out -v ./...
+
+coverage.out: tests
+
+.PHONY: coverage-html
+coverage-html: coverage.out ## Generate HTML report from coverage data
+	go tool cover -html=coverage.out -o coverage.html
+
+.PHONY: coverage
+coverage: coverage.out ## Show textual coverage report
+	go tool cover -func=coverage.out
