@@ -31,9 +31,9 @@
 			</div>
 		</article>
 		{{end}}
-		<div id="pagination">
+		<nav id="pagination">
 			<span>{{if .PrevPage}}<a href="{{.PrevPage}}">&xlarr; Previous</a>{{end}}</span><span>{{if .NextPage}}<a href="{{.NextPage}}">Next &xrarr;</a>{{end}}</span>
-		</div>
+		</nav>
 		<footer>
 			<h1>Feeds</h1>
 			<ul>
@@ -42,6 +42,6 @@
 			{{end}}
 			</ul>
 		</footer>
-		<address>Generated: {{.Generated | isodate}}</address>
+		<address>Generated: <time>{{.Generated | isodate}}</time><address>
 	</body>
 </html>

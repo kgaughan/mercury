@@ -4,5 +4,7 @@
 .*.sw?
 *~
 
+/coverage.{out,html}
+
 /dist/
 /site/
