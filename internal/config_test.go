@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"runtime"
 	"strings"
 	"testing"
@@ -71,14 +72,13 @@ func TestLoadFeeds(t *testing.T) {
 
 func TestExternalTheme(t *testing.T) {
 	// I need a directory that's guaranteed to exist for this test
-	src := `
-	theme = "/tmp"
-	`
+	tmp := t.TempDir()
+	src := fmt.Sprintf(`theme = "%s"`, tmp)
 	cfg := &Config{}
 	reader := strings.NewReader(src)
 	if err := cfg.LoadFromReader(reader, "/cfg/mercury.toml"); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	assert.NotEqual(t, dflt.Theme, cfg.Theme)
-	assert.Equal(t, "/tmp", cfg.ThemePath)
+	assert.Equal(t, tmp, cfg.ThemePath)
 }

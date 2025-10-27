@@ -68,7 +68,3 @@ coverage.out: tests
 .PHONY: coverage-html
 coverage-html: coverage.out ## Generate HTML report from coverage data
 	go tool cover -html=coverage.out -o coverage.html
-
-.PHONY: coverage
-coverage: coverage.out ## Show textual coverage report
-	go tool cover -func=coverage.out
