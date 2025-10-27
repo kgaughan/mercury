@@ -16,6 +16,8 @@ The top-level configuration fields are:
 | items | number | The number of items to include per page | 10 |
 | max_pages | number | The maximum number of pages to generate | 5 |
 
+Note that the `theme`, `output`, and `cache` paths are assumed to be relative to the directory in which the configuration file is found, not the current working directory. You can specify absolute paths in these fields, however.
+
 A _duration_ is a sequence of numbers followed by a unit, with 's' being 'second', 'm' being 'minute', and 'h' being 'hour'. Thus '5m30' would mean five minutes and thirty seconds.
 
 The feed ID is a URI identifying the feed. I would recommend using a [tag URI](https://en.wikipedia.org/wiki/Tag_URI_scheme), or a [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) [URN](https://en.wikipedia.org/wiki/Uniform_Resource_Name). In the latter case, use a UUID generator such as `uuidgen` to generate a UUID, prefix it with `urn:uuid:`, and use the result as the value of `feed_id`.
