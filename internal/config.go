@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -24,7 +25,7 @@ type Config struct {
 	FeedID        string          `toml:"feed_id"`
 	Cache         string          `toml:"cache"`
 	Timeout       utils.Duration  `toml:"timeout"`
-	themePath     string          `toml:"theme"`
+	ThemePath     string          `toml:"theme"`
 	Theme         fs.FS           `toml:"-"`
 	Output        string          `toml:"output"`
 	Feeds         []manifest.Feed `toml:"feed"`
@@ -34,18 +35,27 @@ type Config struct {
 	Parallelism   int             `toml:"parallelism"`
 }
 
-// Load loads our configuration file.
 func (c *Config) Load(path string) error {
+	file, err := os.Open(path)
+	if err != nil {
+		return fmt.Errorf("cannot open configuration %q: %w", path, err)
+	}
+	defer file.Close()
+	return c.LoadFromReader(file, path)
+}
+
+// Load loads our configuration file.
+func (c *Config) LoadFromReader(r io.Reader, path string) error {
 	c.Name = "Planet"
 	c.Cache = "./cache"
-	c.themePath = ""
+	c.ThemePath = ""
 	c.Output = "./output"
 	c.ItemsPerPage = 10
 	c.MaxPages = 5
 	c.JobQueueDepth = 0
 	c.Parallelism = runtime.NumCPU()
 
-	if _, err := toml.DecodeFile(path, c); err != nil {
+	if _, err := toml.NewDecoder(r).Decode(c); err != nil {
 		return fmt.Errorf("cannot load configuration: %w", err)
 	}
 
@@ -61,14 +71,14 @@ func (c *Config) Load(path string) error {
 	if !filepath.IsAbs(c.Cache) {
 		c.Cache = filepath.Join(configDir, c.Cache)
 	}
-	if c.themePath == "" {
+	if c.ThemePath == "" {
 		c.Theme = dflt.Theme
 	} else {
 		var themePath string
-		if !filepath.IsAbs(c.themePath) {
-			themePath = c.themePath
+		if filepath.IsAbs(c.ThemePath) {
+			themePath = c.ThemePath
 		} else {
-			themePath = filepath.Join(configDir, c.themePath)
+			themePath = filepath.Join(configDir, c.ThemePath)
 		}
 		if _, err := os.Stat(themePath); os.IsNotExist(err) {
 			return fmt.Errorf("theme %q not found: %w", themePath, err)
