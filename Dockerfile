@@ -8,6 +8,9 @@ LABEL org.opencontainers.image.url=https://github.com/kgaughan/mercury
 LABEL org.opencontainers.image.source=https://github.com/kgaughan/mercury
 LABEL org.opencontainers.image.documentation=https://kgaughan.github.io/mercury/
 
-COPY mercury .
-USER nobody
+COPY mercury /
+
+VOLUME ["/data", "/config"]
+
 ENTRYPOINT ["/mercury"]
+CMD ["--config", "/config/mercury.toml"]
