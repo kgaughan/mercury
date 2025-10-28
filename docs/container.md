@@ -33,8 +33,8 @@ Note the use of `-u "$(id -u):$(id -G | cut -f1 -d' ')`: the image is based off 
 ```console
 $ mkdir -p volumes/data volumes/config
 $ cp mercury.toml volumes/config
-$ docker run --rm --user "$(id -u):$(id -G | cut -f1 -d' ')" \
-    ---volume ./volumes/data:/data --volume ./volumes/config:/config \
+$ docker run --rm --user "$(id -u):$(id -g)" \
+    --volume ./volumes/data:/data --volume ./volumes/config:/config \
     ghcr.io/kgaughan/mercury:latest
 Unable to find image 'ghcr.io/kgaughan/mercury:latest' locally
 latest: Pulling from kgaughan/mercury
