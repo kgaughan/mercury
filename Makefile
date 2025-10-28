@@ -4,7 +4,7 @@ SOURCE:=$(wildcard internal/*.go internal/*/*.go cmd/*/*.go)
 DOCS:=$(wildcard docs/*.md mkdocs.yml)
 
 .PHONY: help
-help:  ## Show this help message
+help: ## Show this help message
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Targets:"
@@ -42,7 +42,7 @@ fmt: ## Format the code
 .PHONY: lint
 lint: ## Lint the code
 	go vet ./...
-	golangci-lint run  ./...
+	golangci-lint run ./...
 
 .PHONY: serve-docs
 serve-docs: .venv ## Serve the documentation locally
@@ -68,3 +68,11 @@ coverage.out: tests
 .PHONY: coverage-html
 coverage-html: coverage.out ## Generate HTML report from coverage data
 	go tool cover -html=coverage.out -o coverage.html
+
+.PHONY: test-release
+test-release: ## Run `goreleaser release` without publishing anything
+	goreleaser release --auto-snapshot --clean --skip docker --skip publish
+
+.PHONY: docker-local-build
+docker-local-build: build ## Create a local build of the docker image
+	docker build -t ghcr.io/kgaughan/mercury:latest .
