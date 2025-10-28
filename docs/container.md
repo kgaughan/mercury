@@ -28,7 +28,7 @@ feed = "https://talideon.com/inklings/feed"
 ```
 
 Here's a quick demonstration of how to use the configuration file and mount volumes within the container.
-Note the use of `-u "$(id -u):$(id -G | cut -f1 -d' ')`: the image is based off of a Distroless image that defaults to the root user, so this is necessary to run the _mercury_ binary as your user, otherwise it'll have issues accessing `/data` within the container.
+Note the use of `-u "$(id -u):$(id -g)`: the image is based off of a Distroless image that defaults to the root user, so this is necessary to run the _mercury_ binary as your user, otherwise it'll have issues accessing `/data` within the container.
 
 ```console
 $ mkdir -p volumes/data volumes/config
