@@ -28,3 +28,33 @@ Each feed is introduced with `[[feed]]`, and can contain the following fields:
 | ---- | ---- | ----------- |
 | name | string | The name of the feed |
 | feed | string | The URL of the feed. Note that this must be the URL of the _feed_ itself and no attempt is made to do feed discovery if all that's provided is the site's homepage |
+
+## Converting an OPML file into Mercury configuration
+
+The `tools/opml2config.py` script can be used to take multiple [OPML](https://en.wikipedia.org/wiki/OPML) files.
+Taking `blogs.opml` as an example:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<opml>
+  <head>
+    <title>My Subscriptions</title>
+  </head>
+  <body>
+    <outline text="Feeds">
+      <outline type="rss" text="Keith Gaughan" xmlUrl="https://keith.gaughan.ie/feeds/all.xml"/>
+      <outline type="rss" text="Inklings" xmlUrl="https://talideon.com/inklings/feed"/>
+    </outline>
+  </body>
+</opml>
+```
+You can process it into Mercury configuration like so:
+```console
+$ tools/opml2config.py blogs.opml
+[[feed]]
+name = "Keith Gaughan"
+feed = "https://keith.gaughan.ie/feeds/all.xml"
+
+[[feed]]
+name = "Inklings"
+feed = "https://talideon.com/inklings/feed"
+```

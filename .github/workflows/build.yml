@@ -39,4 +39,4 @@ jobs:
 
       - if: steps.changes.outputs.src == 'true'
         name: Build
-        run: make
+        run: make build
