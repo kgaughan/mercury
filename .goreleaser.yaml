@@ -69,6 +69,7 @@ archives:
     files:
       - LICENSE
       - README.md
+      - tools/opml2config.py
 
 dockers:
   - image_templates:
