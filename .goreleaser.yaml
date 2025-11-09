@@ -1,13 +1,17 @@
 ---
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
 version: 2
 
 before:
   hooks:
-    - go mod tidy
     - go mod download
+    - go mod tidy
 
 builds:
-  - env:
+  - id: mercury
+    binary: mercury
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
@@ -71,17 +75,38 @@ archives:
       - README.md
       - tools/opml2config.py
 
-dockers:
-  - image_templates:
-      - "{{ .Env.REGISTRY }}/{{ .Env.IMAGE }}:{{ .Tag }}"
-      - "{{ .Env.REGISTRY }}/{{ .Env.IMAGE }}:latest"
-    skip_push: auto
-    use: buildx
-    dockerfile: Dockerfile
+kos:
+  - build: mercury
+    base_image: gcr.io/distroless/static:nonroot
+    annotations:
+      org.opencontainers.image.title: Mercury
+      org.opencontainers.image.description: "A Planet-style feed aggregator"
+      org.opencontainers.image.vendor: "Keith Gaughan"
+      org.opencontainers.image.licenses: MIT
+      org.opencontainers.image.url: https://github.com/kgaughan/mercury
+      org.opencontainers.image.source: https://github.com/kgaughan/mercury
+      org.opencontainers.image.documentation: https://kgaughan.github.io/mercury/
+      org.opencontainers.image.version: "{{ .Tag }}"
+      org.opencontainers.image.revision: "{{ .Commit }}"
+      org.opencontainers.image.created: "{{ .Date }}"
+    platforms:
+      - linux/amd64
+      - linux/arm64
+    repositories:
+      - ghcr.io/kgaughan
+    tags:
+      - "{{ if not .Prerelease }}latest{{ end }}"
+      - "{{.Tag}}"
+    creation_time: "{{.CommitTimestamp}}"
+    sbom: spdx
+    bare: true
+    base_import_paths: true
+    preserve_import_paths: false
+    disable: "{{ .IsSnapshot }}"
 
 checksum:
   algorithm: sha256
-  name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
+  name_template: "{{ .ProjectName }}_{{ .Version }}_SHA256SUMS"
 
 snapshot:
   version_template: "{{ incpatch .Version }}-next"
@@ -92,6 +117,3 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
-
-# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
-# vim: set ts=2 sw=2 tw=0 fo=cnqoj

@@ -2,15 +2,19 @@
 name: Lint
 
 on:
-  - push
-  - pull_request
+  push:
+    branches-ignore:
+      - master
+    tags-ignore:
+      - "*"
+  pull_request: {}
 
 permissions:
   contents: read
   pull-requests: read
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
