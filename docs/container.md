@@ -1,7 +1,8 @@
 # Deploying as a container
 
 There's a container image published at `ghcr.io/kgaughan/mercury`.
-It expects a volume mounted at `/data` and one at `/config` for your data and configuration respectively.
+
+In the following, we'll assume that you're mounting your configuration at `/config` and a data volume at `/data`.
 
 Here's an example configuration file you can use to try things out.
 Save this as `mercury.toml`:
@@ -28,14 +29,15 @@ feed = "https://talideon.com/inklings/feed"
 ```
 
 Here's a quick demonstration of how to use the configuration file and mount volumes within the container.
-Note the use of `-u "$(id -u):$(id -g)`: the image is based off of a Distroless image that defaults to the root user, so this is necessary to run the _mercury_ binary as your user, otherwise it'll have issues accessing `/data` within the container.
+Note the use of `-u "$(id -u):$(id -g)`: the image is based off of a Distroless image that defaults to the `nonroot` user, so this is necessary to run the _mercury_ binary as your user, otherwise it'll have issues accessing `/data` within the container.
+You will need to provide the path to your configuration within the container with the `--config` flag.
 
 ```console
 $ mkdir -p volumes/data volumes/config
 $ cp mercury.toml volumes/config
 $ docker run --rm --user "$(id -u):$(id -g)" \
     --volume ./volumes/data:/data --volume ./volumes/config:/config \
-    ghcr.io/kgaughan/mercury:latest
+    ghcr.io/kgaughan/mercury:latest --config /config/mercury.toml
 Unable to find image 'ghcr.io/kgaughan/mercury:latest' locally
 latest: Pulling from kgaughan/mercury
 259db2ee6b87: Pull complete
