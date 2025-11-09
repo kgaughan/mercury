@@ -21,7 +21,7 @@ clean: ## Clean build artifacts
 	rm -rf $(NAME) dist site .venv coverage.out coverage.html output cache
 
 $(NAME): $(SOURCE) go.sum
-	CGO_ENABLED=0 go build -v -tags netgo,timetzdata -trimpath -ldflags '-s -w' -o $(NAME) ./cmd/$(NAME)
+	CGO_ENABLED=0 go build -v -tags netgo,timetzdata -trimpath -ldflags '-s -w' -o $@ ./cmd/$@
 
 .PHONY: update
 update: ## Update dependencies
@@ -71,8 +71,4 @@ coverage-html: coverage.out ## Generate HTML report from coverage data
 
 .PHONY: test-release
 test-release: ## Run `goreleaser release` without publishing anything
-	goreleaser release --auto-snapshot --clean --skip docker --skip publish
-
-.PHONY: docker-local-build
-docker-local-build: build ## Create a local build of the docker image
-	docker build -t ghcr.io/kgaughan/mercury:latest .
+	goreleaser release --auto-snapshot --clean --skip publish
