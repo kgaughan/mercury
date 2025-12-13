@@ -20,6 +20,9 @@ type Feed struct {
 	Entries     []*Entry           `xml:"entry"`
 }
 
+// AccessRestriction represents access restrictions for a feed.
+//
+// Please see https://www.feedforall.com/access-namespace.html for details.
 type AccessRestriction struct {
 	XMLName      xml.Name `xml:"http://www.bloglines.com/about/specs/fac-1.0 restriction"`
 	Relationship string   `xml:"relationship,attr,omitempty"`
