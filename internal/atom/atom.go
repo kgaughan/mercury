@@ -9,13 +9,23 @@ import (
 
 // Feed represents an Atom feed.
 type Feed struct {
-	XMLName xml.Name `xml:"http://www.w3.org/2005/Atom feed"`
-	Title   string   `xml:"title"`
-	ID      string   `xml:"id"`
-	Links   []Link   `xml:"link"`
-	Updated TimeStr  `xml:"updated"`
-	Author  *Person  `xml:"author,omitempty"`
-	Entries []*Entry `xml:"entry"`
+	XMLName     xml.Name           `xml:"http://www.w3.org/2005/Atom feed"`
+	Index       string             `xml:"urn:atom-extension:indexing index,attr,omitempty"`
+	Title       string             `xml:"title"`
+	ID          string             `xml:"id"`
+	Links       []Link             `xml:"link"`
+	Updated     TimeStr            `xml:"updated"`
+	Author      *Person            `xml:"author,omitempty"`
+	Restriction *AccessRestriction `xml:",omitempty"`
+	Entries     []*Entry           `xml:"entry"`
+}
+
+// AccessRestriction represents access restrictions for a feed.
+//
+// Please see https://www.feedforall.com/access-namespace.html for details.
+type AccessRestriction struct {
+	XMLName      xml.Name `xml:"http://www.bloglines.com/about/specs/fac-1.0 restriction"`
+	Relationship string   `xml:"relationship,attr,omitempty"`
 }
 
 // Entry represents a single entry in an Atom feed.
