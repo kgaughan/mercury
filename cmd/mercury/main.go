@@ -197,6 +197,8 @@ func writeFeed(entries []*feed.Entry, config internal.Config) error {
 			Rel:  "self",
 			Href: config.URL + "feed.atom",
 		}},
+		Index:       "no",
+		Restriction: &atom.AccessRestriction{Relationship: "deny"},
 	}
 
 	for _, entry := range entries {
