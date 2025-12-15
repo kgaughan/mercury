@@ -4,9 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
+	"io/fs"
 	"log"
 	"os"
 	"path"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/kgaughan/mercury/internal"
@@ -72,6 +75,11 @@ func main() {
 
 	// Populate the manifest with the contents of the config file
 	manifest.Populate(config.Feeds)
+	if *flags.CleanCache {
+		if err := cleanCache(config.Cache, manifest); err != nil {
+			log.Fatal(err)
+		}
+	}
 	if !*flags.NoFetch {
 		manifest.Prime(config.Cache, config.Timeout.Duration, config.Parallelism, config.JobQueueDepth)
 	}
@@ -101,6 +109,29 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+}
+
+func cleanCache(cachePath string, manifest *manifest.Manifest) error {
+	cacheRoot := os.DirFS(cachePath)
+	matches, err := fs.Glob(cacheRoot, "*-*-*-*.json")
+	if err != nil {
+		return fmt.Errorf("cannot list cache entries: %w", err)
+	}
+	onDisc := make(map[string]string, len(matches))
+	for _, match := range matches {
+		uuid := strings.TrimSuffix(match, ".json")
+		onDisc[uuid] = match
+	}
+	for _, entry := range manifest.Index {
+		delete(onDisc, entry.UUID)
+	}
+	for _, entry := range onDisc {
+		if err := os.Remove(filepath.Join(cachePath, entry)); err != nil {
+			return fmt.Errorf("cannot remove cache entry %q: %w", entry, err)
+		}
+		log.Printf("removed %q from cache", entry)
+	}
+	return nil
 }
 
 // populateFromCache loads cached feeds from the manifest.
