@@ -2,6 +2,7 @@ package feed
 
 import (
 	"container/heap"
+	"log"
 	"time"
 
 	"github.com/kgaughan/mercury/internal/manifest"
@@ -142,7 +143,21 @@ func (fq *Queue) Top() any {
 			if it.hasMore() {
 				entry := it.getCurrentEntry()
 				it.idx++
-				return NewEntry(it.feed, entry)
+				for _, filter := range it.feedMeta.Filters {
+					updated, err := filter.Run(entry)
+					if err != nil {
+						log.Printf("filter error on feed %q: %v", it.feedMeta.Name, err)
+						continue
+					}
+					entry = updated
+					// The filter decided to drop this entry.
+					if entry == nil {
+						break
+					}
+				}
+				if entry != nil {
+					return NewEntry(it.feed, entry)
+				}
 			}
 			// treat as exhausted and fallthrough to re-heapify
 		}

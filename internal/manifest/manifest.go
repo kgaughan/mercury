@@ -56,8 +56,8 @@ func (m *Manifest) Populate(feeds []Feed) {
 			m.Index[feed.Feed] = &cacheEntry{
 				UUID: uuid.New().String(),
 			}
-			m.Cfg[feed.Feed] = &feed
 		}
+		m.Cfg[feed.Feed] = &feed
 	}
 	// Remove any feeds no longer in the config
 	for url := range m.Index {
