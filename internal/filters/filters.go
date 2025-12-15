@@ -8,6 +8,12 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
+type Env struct {
+	Entry *gofeed.Item `expr:"entry"`
+}
+
+var envShape = expr.Env(Env{})
+
 type Filter struct {
 	When              string `toml:"when"`
 	compiledWhen      *vm.Program
@@ -22,11 +28,11 @@ func (f *Filter) Compile() error {
 	if f.When == "" {
 		f.When = "true"
 	}
-	if f.compiledWhen, err = expr.Compile(f.When, expr.AsBool()); err != nil {
+	if f.compiledWhen, err = expr.Compile(f.When, expr.AsBool(), envShape); err != nil {
 		return fmt.Errorf("cannot compile filter when expression %q: %w", f.When, err)
 	}
 	if f.Transform != "" {
-		if f.compiledTransform, err = expr.Compile(f.Transform); err != nil {
+		if f.compiledTransform, err = expr.Compile(f.Transform, envShape); err != nil {
 			return fmt.Errorf("cannot compile filter transform expression %q: %w", f.Transform, err)
 		}
 	}
@@ -37,10 +43,8 @@ func (f *Filter) Compile() error {
 // or nil if the entry should be excluded. An error is returned if the filter
 // could not be applied.
 func (f *Filter) Run(entry *gofeed.Item) (*gofeed.Item, error) {
-	env := map[string]any{
-		"entry": entry,
-	}
-	keep, err := expr.Run(f.compiledWhen, expr.Env(env))
+	env := &Env{Entry: entry}
+	keep, err := expr.Run(f.compiledWhen, env)
 	if err != nil {
 		return nil, fmt.Errorf("cannot execute filter %q: %w", f.When, err)
 	}
@@ -50,7 +54,7 @@ func (f *Filter) Run(entry *gofeed.Item) (*gofeed.Item, error) {
 	if f.compiledTransform == nil {
 		return entry, nil
 	}
-	result, err := expr.Run(f.compiledTransform, expr.Env(env))
+	result, err := expr.Run(f.compiledTransform, env)
 	if err != nil {
 		return nil, fmt.Errorf("cannot execute filter transform %q: %w", f.Transform, err)
 	}
