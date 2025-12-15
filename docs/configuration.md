@@ -36,7 +36,9 @@ Filters are defined by adding sections to the configuration with sections named 
 | Name | Description |
 | ---- | ----------- |
 | when | An expression to determine whether the entry should be kept or skipped. This should evaluate to a boolean. Defaults to `true` |
+<!--
 | transform | A transformation to apply to each entry in the feed. This is only executed if `when` evaluates to `true`. |
+-->
 
 ## Converting an OPML file into Mercury configuration
 
