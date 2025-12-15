@@ -14,6 +14,7 @@ var (
 	NoFetch      = flag.BoolP("no-fetch", "F", false, "don't fetch, just use what's in the cache")
 	NoBuild      = flag.BoolP("no-build", "B", false, "don't build anything")
 	ShowHelp     = flag.BoolP("help", "h", false, "show help")
+	CleanCache   = flag.BoolP("clean-cache", "C", false, "clean any obsolete entries from the cache")
 )
 
 func init() {

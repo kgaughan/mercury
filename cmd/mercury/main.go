@@ -4,9 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"html/template"
+	"io/fs"
 	"log"
 	"os"
 	"path"
+	"strings"
 	"time"
 
 	"github.com/kgaughan/mercury/internal"
@@ -72,6 +74,9 @@ func main() {
 
 	// Populate the manifest with the contents of the config file
 	manifest.Populate(config.Feeds)
+	if *flags.CleanCache {
+		cleanCache(config.Cache, manifest)
+	}
 	if !*flags.NoFetch {
 		manifest.Prime(config.Cache, config.Timeout.Duration, config.Parallelism, config.JobQueueDepth)
 	}
@@ -100,6 +105,26 @@ func main() {
 		if err := manifest.AsOPML().Save(path.Join(config.Output, "opml.xml")); err != nil {
 			log.Fatal(err)
 		}
+	}
+}
+
+func cleanCache(cachePath string, manifest *manifest.Manifest) {
+	cacheRoot := os.DirFS(cachePath)
+	matches, err := fs.Glob(cacheRoot, "*-*-*-*.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	onDisc := make(map[string]string, len(matches))
+	for _, match := range matches {
+		uuid := strings.TrimSuffix(match, ".json")
+		onDisc[uuid] = match
+	}
+	for _, entry := range manifest.Index {
+		delete(onDisc, entry.UUID)
+	}
+	for _, entry := range onDisc {
+		log.Printf("removing %q from cache", entry)
+		os.Remove(path.Join(cachePath, entry))
 	}
 }
 
