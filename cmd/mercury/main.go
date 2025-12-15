@@ -99,9 +99,11 @@ func main() {
 			log.Fatal(err)
 		}
 
-		log.Print("Writing Atom feed")
-		if err := writeFeed(entries, config); err != nil {
-			log.Fatal(err)
+		if config.GenerateFeed {
+			log.Print("Writing Atom feed")
+			if err := writeFeed(entries, config); err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		log.Print("Writing OPML file")
@@ -184,29 +186,31 @@ func writePages(entries []*feed.Entry, feeds []*gofeed.Feed, config internal.Con
 		end := min(offset+config.ItemsPerPage, len(entries))
 
 		vars := struct {
-			Generator string
-			Name      string
-			URL       template.URL
-			Owner     string
-			Email     string
-			PageNo    int
-			Items     []*feed.Entry
-			Generated time.Time
-			Feeds     []*gofeed.Feed
-			PrevPage  string
-			NextPage  string
+			Generator    string
+			Name         string
+			URL          template.URL
+			Owner        string
+			Email        string
+			PageNo       int
+			Items        []*feed.Entry
+			Generated    time.Time
+			Feeds        []*gofeed.Feed
+			PrevPage     string
+			NextPage     string
+			GenerateFeed bool
 		}{
-			Generator: version.Generator(),
-			Name:      config.Name,
-			URL:       template.URL(config.URL), //nolint:gosec
-			Owner:     config.Owner,
-			Email:     config.Email,
-			PageNo:    iPage + 1,
-			Items:     entries[offset:end],
-			Generated: now,
-			Feeds:     feeds,
-			PrevPage:  prevPage,
-			NextPage:  nextPage,
+			Generator:    version.Generator(),
+			Name:         config.Name,
+			URL:          template.URL(config.URL), //nolint:gosec
+			Owner:        config.Owner,
+			Email:        config.Email,
+			PageNo:       iPage + 1,
+			Items:        entries[offset:end],
+			Generated:    now,
+			Feeds:        feeds,
+			PrevPage:     prevPage,
+			NextPage:     nextPage,
+			GenerateFeed: config.GenerateFeed,
 		}
 		if err := tmpl.ExecuteTemplate(f, "index.html", vars); err != nil {
 			return fmt.Errorf("cannot render template: %w", err)

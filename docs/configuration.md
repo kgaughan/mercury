@@ -10,6 +10,7 @@ The top-level configuration fields are:
 | email | string | Your email | "" |
 | feed_id | string | Unique ID to use for the Atom feed | "" |
 | cache | string | The path, relative to _mercury.toml_ of the feed cache | "./cache" |
+| generate_feed | boolean | Should a feed be generated? | true |
 | timeout | duration | How long to wait when fetching a feed | - |
 | theme | string | The path, relative to _mercury.toml_ of the theme to use | _use default theme_ |
 | output | string | The path, relative to _mercury.toml_ to which _mercury_ should write the files it generates | "./output" |

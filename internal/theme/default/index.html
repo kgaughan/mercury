@@ -5,7 +5,9 @@
 		<title>{{.Name}}</title>
 		<meta name="generator" content="{{.Generator}}">
 		<link rel="stylesheet" href="static/style.css" type="text/css">
+		{{ if .GenerateFeed -}}
 		<link rel="alternate" href="atom.xml" type="application/atom+xml" title="Atom feed">
+		{{ end -}}
 		<link rel="outline" href="opml.xml" type="text/x-opml" title="OPML">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="robots" content="noindex,nofollow">
