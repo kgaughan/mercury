@@ -31,7 +31,7 @@ Each feed is introduced with `[[feed]]`, and can contain the following fields:
 
 ## Filters
 
-Filters are defined by adding sections to the configuration with sections named `[[feed.filter]]` subsequent to the corresponding `[[feed]]` entry. Filters are defined using [Expr](https://expr-lang.org/docs/language-definition), and your filter is expected to take a feed entry return true if the entry should be kept or false if not.
+Filters are defined by adding configuration sections named `[[feed.filter]]` subsequent to the corresponding `[[feed]]` entry. Filters are defined using [Expr](https://expr-lang.org/docs/language-definition), and your filter is expected to take a feed entry and return true if the entry should be kept, or false if not.
 
 | Name | Description |
 | ---- | ----------- |
