@@ -17,3 +17,7 @@ feed = "https://keith.gaughan.ie/feeds/all.xml"
 [[feed]]
 name = "Inklings"
 feed = "https://talideon.com/inklings/feed"
+
+# Only allow through entries with a title that contains the letter 'e'
+[[feed.filter]]
+when = "entry.Title contains 'e'"

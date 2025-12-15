@@ -2,15 +2,18 @@ package feed
 
 import (
 	"container/heap"
+	"log"
 	"time"
 
+	"github.com/kgaughan/mercury/internal/manifest"
 	"github.com/mmcdole/gofeed"
 )
 
 // queueItem pairs a feed with the index of the entry to be processed next.
 type queueItem struct {
-	feed *gofeed.Feed
-	idx  int
+	feedMeta *manifest.Feed
+	feed     *gofeed.Feed
+	idx      int
 }
 
 // hasMore returns true when this queue item has unprocessed entries.
@@ -140,7 +143,21 @@ func (fq *Queue) Top() any {
 			if it.hasMore() {
 				entry := it.getCurrentEntry()
 				it.idx++
-				return NewEntry(it.feed, entry)
+				for _, filter := range it.feedMeta.Filters {
+					updated, err := filter.Run(entry)
+					if err != nil {
+						log.Printf("filter error on feed %q: %v", it.feedMeta.Name, err)
+						continue
+					}
+					entry = updated
+					// The filter decided to drop this entry.
+					if entry == nil {
+						break
+					}
+				}
+				if entry != nil {
+					return NewEntry(it.feed, entry)
+				}
 			}
 			// treat as exhausted and fallthrough to re-heapify
 		}
@@ -154,8 +171,8 @@ func (fq *Queue) Top() any {
 }
 
 // Append adds a new feed to the queue.
-func (fq *Queue) Append(feed *gofeed.Feed) {
-	fq.items = append(fq.items, queueItem{feed: feed, idx: 0})
+func (fq *Queue) Append(feed *gofeed.Feed, feedMeta *manifest.Feed) {
+	fq.items = append(fq.items, queueItem{feed: feed, feedMeta: feedMeta, idx: 0})
 }
 
 func (fq *Queue) Shuffle(nEntries int) []*Entry {
