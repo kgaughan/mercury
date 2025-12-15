@@ -31,7 +31,7 @@ Each feed is introduced with `[[feed]]`, and can contain the following fields:
 
 ## Filters
 
-Filters are defined by adding sections to the configuration with sections named `[[feed.filter]]` subsequent to the corresponding `[[feed]]` entry. Filters are defined using [Expr](https://expr-lang.org/), and your filter is expected to take the entries of feed and return a filtered list of those entries.
+Filters are defined by adding sections to the configuration with sections named `[[feed.filter]]` subsequent to the corresponding `[[feed]]` entry. Filters are defined using [Expr](https://expr-lang.org/docs/language-definition), and your filter is expected to take a feed entry return true if the entry should be kept or false if not.
 
 | Name | Description |
 | ---- | ----------- |
@@ -39,6 +39,15 @@ Filters are defined by adding sections to the configuration with sections named 
 <!--
 | transform | A transformation to apply to each entry in the feed. This is only executed if `when` evaluates to `true`. |
 -->
+
+The entry is available in your filter's environment in the variable `entry`.  See the [gofeed documentation on the Item type](https://pkg.go.dev/github.com/mmcdole/gofeed#Item) for details on the fields you can expect.
+
+Here's an example filter that only allows through an entry if its `Title` field contains the letter 'e':
+
+```toml
+[[feed.filter]]
+when = "entry.Title contains 'e'"
+```
 
 ## Converting an OPML file into Mercury configuration
 
