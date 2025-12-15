@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -124,7 +125,7 @@ func cleanCache(cachePath string, manifest *manifest.Manifest) {
 	}
 	for _, entry := range onDisc {
 		log.Printf("removing %q from cache", entry)
-		os.Remove(path.Join(cachePath, entry))
+		os.Remove(filepath.Join(cachePath, entry))
 	}
 }
 
