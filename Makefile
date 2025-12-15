@@ -3,6 +3,8 @@ NAME:=mercury
 SOURCE:=$(wildcard internal/*.go internal/*/*.go cmd/*/*.go)
 DOCS:=$(wildcard docs/*.md mkdocs.yml)
 
+.DEFAULT_GOAL:=build
+
 .PHONY: help
 help: ## Show this help message
 	@echo "Usage: make [target]"
@@ -53,7 +55,7 @@ docs: .venv $(DOCS) ## Build the documentation site
 	uv run mkdocs build
 
 .venv: requirements.txt
-	uv venv
+	uv venv --clear
 	uv pip install -r requirements.txt
 
 %.txt: %.in

@@ -19,7 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          persist-credentials: false
+          # to allow us to push to the repo later
+          persist-credentials: true
 
       - name: Install Python
         uses: actions/setup-python@v6
