@@ -18,21 +18,21 @@ const cpuLimit = 32 // Cap on the number of CPUs/cores to use
 
 // Config describes our configuration.
 type Config struct {
-	Name          string          `toml:"name"`
-	URL           string          `toml:"url"`
-	Owner         string          `toml:"owner"`
-	Email         string          `toml:"email"`
-	FeedID        string          `toml:"feed_id"`
-	Cache         string          `toml:"cache"`
-	Timeout       utils.Duration  `toml:"timeout"`
-	ThemePath     string          `toml:"theme"`
-	Theme         fs.FS           `toml:"-"`
-	Output        string          `toml:"output"`
-	Feeds         []manifest.Feed `toml:"feed"`
-	ItemsPerPage  int             `toml:"items"`
-	MaxPages      int             `toml:"max_pages"`
-	JobQueueDepth int             `toml:"job_queue_depth"`
-	Parallelism   int             `toml:"parallelism"`
+	Name          string           `toml:"name"`
+	URL           string           `toml:"url"`
+	Owner         string           `toml:"owner"`
+	Email         string           `toml:"email"`
+	FeedID        string           `toml:"feed_id"`
+	Cache         string           `toml:"cache"`
+	Timeout       utils.Duration   `toml:"timeout"`
+	ThemePath     string           `toml:"theme"`
+	Theme         fs.FS            `toml:"-"`
+	Output        string           `toml:"output"`
+	Feeds         []*manifest.Feed `toml:"feed"`
+	ItemsPerPage  int              `toml:"items"`
+	MaxPages      int              `toml:"max_pages"`
+	JobQueueDepth int              `toml:"job_queue_depth"`
+	Parallelism   int              `toml:"parallelism"`
 }
 
 // Load loads our configuration file.

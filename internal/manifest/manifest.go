@@ -46,7 +46,7 @@ func LoadManifest(path string) (*Manifest, error) {
 }
 
 // Populate adds feeds to the manifest.
-func (m *Manifest) Populate(feeds []Feed) {
+func (m *Manifest) Populate(feeds []*Feed) {
 	// The value is a dummy: we're just using the map as a set
 	liveFeedUrls := make(map[string]struct{})
 	for _, feed := range feeds {
@@ -57,7 +57,7 @@ func (m *Manifest) Populate(feeds []Feed) {
 				UUID: uuid.New().String(),
 			}
 		}
-		m.Cfg[feed.Feed] = &feed
+		m.Cfg[feed.Feed] = feed
 	}
 	// Remove any feeds no longer in the config
 	for url := range m.Index {
