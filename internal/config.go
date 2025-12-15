@@ -24,6 +24,7 @@ type Config struct {
 	Email         string           `toml:"email"`
 	FeedID        string           `toml:"feed_id"`
 	Cache         string           `toml:"cache"`
+	GenerateFeed  bool             `toml:"generate_feed"`
 	Timeout       utils.Duration   `toml:"timeout"`
 	ThemePath     string           `toml:"theme"`
 	Theme         fs.FS            `toml:"-"`
@@ -49,6 +50,7 @@ func (c *Config) Load(path string) error {
 func (c *Config) LoadFromReader(r io.Reader, path string) error {
 	c.Name = "Planet"
 	c.Cache = "./cache"
+	c.GenerateFeed = true
 	c.ThemePath = ""
 	c.Output = "./output"
 	c.ItemsPerPage = 10
