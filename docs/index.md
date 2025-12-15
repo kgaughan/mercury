@@ -62,6 +62,7 @@ $ ./mercury --help
 mercury - Generates an aggregated site from a set of feeds.
 
 Flags:
+  -C, --clean-cache     clean any obsolete entries from the cache
   -c, --config string   path to configuration (default "./mercury.toml")
   -h, --help            show help
   -B, --no-build        don't build anything
@@ -70,3 +71,5 @@ Flags:
 ```
 
 Usually, the default behaviour is what you want: mercury will try to intelligently fetch any feeds and regenerate the site. Use `--no-build` if you just want to prime the cache but don't want to generate the site. Use `--no-fetch` if you want to regenerate the site without fetching any feeds. This can be useful if you're testing out a new theme.
+
+If you want to free up some disc space, supply `--clean-cache`, which will remove any cached feeds that no longer appear in the configuration. If you want to do this without also updating any feeds or rebuilding the site, you should supply the `--no-fetch` and `--no-build` flags at the same time.
