@@ -2,12 +2,15 @@ package internal
 
 import (
 	"fmt"
+	"io/fs"
 	"runtime"
 	"strings"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/kgaughan/mercury/internal/manifest"
 	dflt "github.com/kgaughan/mercury/internal/theme/default"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestLoadDefaults(t *testing.T) {
@@ -16,15 +19,24 @@ func TestLoadDefaults(t *testing.T) {
 	if err := cfg.LoadFromReader(reader, "/cfg/mercury.toml"); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	assert.Equal(t, "Planet", cfg.Name)
-	assert.Equal(t, "/cfg/cache", cfg.Cache)
-	assert.Equal(t, "/cfg/output", cfg.Output)
-	assert.Equal(t, 10, cfg.ItemsPerPage)
-	assert.Equal(t, 5, cfg.MaxPages)
-	assert.Equal(t, cfg.Parallelism*2, cfg.JobQueueDepth)
-	assert.Equal(t, runtime.NumCPU(), cfg.Parallelism)
-	assert.Len(t, cfg.Feeds, 0)
-	assert.Equal(t, dflt.Theme, cfg.Theme)
+	if cfg.Theme != dflt.Theme {
+		t.Error("got something other than the expected default theme")
+	}
+	expected := &Config{
+		Name:          "Planet",
+		Cache:         "/cfg/cache",
+		Output:        "/cfg/output",
+		ItemsPerPage:  10,
+		MaxPages:      5,
+		GenerateFeed:  true,
+		JobQueueDepth: runtime.NumCPU() * 2,
+		Parallelism:   runtime.NumCPU(),
+		Feeds:         nil,
+		ThemePath:     "",
+	}
+	if diff := cmp.Diff(expected, cfg, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
+		t.Errorf("mismatch (-want +got):\n%v", diff)
+	}
 }
 
 func TestLoadAbsolutePaths(t *testing.T) {
@@ -37,8 +49,21 @@ func TestLoadAbsolutePaths(t *testing.T) {
 	if err := cfg.LoadFromReader(reader, "/cfg/mercury.toml"); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	assert.Equal(t, "/data/cache", cfg.Cache)
-	assert.Equal(t, "/data/output", cfg.Output)
+	expected := &Config{
+		Name:          "Planet",
+		Cache:         "/data/cache",
+		Output:        "/data/output",
+		ItemsPerPage:  10,
+		MaxPages:      5,
+		GenerateFeed:  true,
+		JobQueueDepth: runtime.NumCPU() * 2,
+		Parallelism:   runtime.NumCPU(),
+		Feeds:         nil,
+		ThemePath:     "",
+	}
+	if diff := cmp.Diff(expected, cfg, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
+		t.Errorf("mismatch (-want +got):\n%v", diff)
+	}
 }
 
 func TestClampCPU(t *testing.T) {
@@ -50,7 +75,21 @@ func TestClampCPU(t *testing.T) {
 	if err := cfg.LoadFromReader(reader, "/cfg/mercury.toml"); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	assert.Equal(t, cpuLimit, cfg.Parallelism)
+	expected := &Config{
+		Name:          "Planet",
+		Cache:         "/cfg/cache",
+		Output:        "/cfg/output",
+		ItemsPerPage:  10,
+		MaxPages:      5,
+		GenerateFeed:  true,
+		JobQueueDepth: cpuLimit * 2,
+		Parallelism:   cpuLimit,
+		Feeds:         nil,
+		ThemePath:     "",
+	}
+	if diff := cmp.Diff(expected, cfg, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
+		t.Errorf("mismatch (-want +got):\n%v", diff)
+	}
 }
 
 func TestLoadFeeds(t *testing.T) {
@@ -65,9 +104,24 @@ func TestLoadFeeds(t *testing.T) {
 	if err := cfg.LoadFromReader(reader, "/cfg/mercury.toml"); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	assert.Len(t, cfg.Feeds, 2)
-	assert.Equal(t, "https://example.com/feed1.xml", cfg.Feeds[0].Feed)
-	assert.Equal(t, "https://example.com/feed2.xml", cfg.Feeds[1].Feed)
+	expected := &Config{
+		Name:          "Planet",
+		Cache:         "/cfg/cache",
+		Output:        "/cfg/output",
+		ItemsPerPage:  10,
+		MaxPages:      5,
+		GenerateFeed:  true,
+		JobQueueDepth: runtime.NumCPU() * 2,
+		Parallelism:   runtime.NumCPU(),
+		Feeds: []*manifest.Feed{
+			{Name: "", Feed: "https://example.com/feed1.xml", Filters: nil},
+			{Name: "", Feed: "https://example.com/feed2.xml", Filters: nil},
+		},
+		ThemePath: "",
+	}
+	if diff := cmp.Diff(expected, cfg, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
+		t.Errorf("mismatch (-want +got):\n%v", diff)
+	}
 }
 
 func TestExternalTheme(t *testing.T) {
@@ -79,6 +133,23 @@ func TestExternalTheme(t *testing.T) {
 	if err := cfg.LoadFromReader(reader, "/cfg/mercury.toml"); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	assert.NotEqual(t, dflt.Theme, cfg.Theme)
-	assert.Equal(t, tmp, cfg.ThemePath)
+	if cfg.Theme == dflt.Theme {
+		t.Error("expected a theme other than the default theme")
+	}
+	expected := &Config{
+		Name:          "Planet",
+		Cache:         "/cfg/cache",
+		Output:        "/cfg/output",
+		ItemsPerPage:  10,
+		MaxPages:      5,
+		GenerateFeed:  true,
+		JobQueueDepth: runtime.NumCPU() * 2,
+		Parallelism:   runtime.NumCPU(),
+		Feeds:         nil,
+		Theme:         nil,
+		ThemePath:     tmp,
+	}
+	if diff := cmp.Diff(expected, cfg, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
+		t.Errorf("mismatch (-want +got):\n%v", diff)
+	}
 }
