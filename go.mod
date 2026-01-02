@@ -34,7 +34,6 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
-	github.com/stretchr/testify v1.11.1 // indirect
 	golang.org/x/crypto v0.46.0 // indirect
 	golang.org/x/text v0.32.0 // indirect
 )
