@@ -29,12 +29,12 @@ func TestLoadDefaults(t *testing.T) {
 		ItemsPerPage:  10,
 		MaxPages:      5,
 		GenerateFeed:  true,
-		JobQueueDepth: cfg.Parallelism * 2,
+		JobQueueDepth: runtime.NumCPU() * 2,
 		Parallelism:   runtime.NumCPU(),
 		Feeds:         nil,
 		ThemePath:     "",
 	}
-	if diff := cmp.Diff(cfg, expected, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
+	if diff := cmp.Diff(expected, cfg, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
 		t.Errorf("mismatch (-want +got):\n%v", diff)
 	}
 }
@@ -56,12 +56,12 @@ func TestLoadAbsolutePaths(t *testing.T) {
 		ItemsPerPage:  10,
 		MaxPages:      5,
 		GenerateFeed:  true,
-		JobQueueDepth: cfg.Parallelism * 2,
+		JobQueueDepth: runtime.NumCPU() * 2,
 		Parallelism:   runtime.NumCPU(),
 		Feeds:         nil,
 		ThemePath:     "",
 	}
-	if diff := cmp.Diff(cfg, expected, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
+	if diff := cmp.Diff(expected, cfg, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
 		t.Errorf("mismatch (-want +got):\n%v", diff)
 	}
 }
@@ -82,12 +82,12 @@ func TestClampCPU(t *testing.T) {
 		ItemsPerPage:  10,
 		MaxPages:      5,
 		GenerateFeed:  true,
-		JobQueueDepth: cfg.Parallelism * 2,
+		JobQueueDepth: cpuLimit * 2,
 		Parallelism:   cpuLimit,
 		Feeds:         nil,
 		ThemePath:     "",
 	}
-	if diff := cmp.Diff(cfg, expected, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
+	if diff := cmp.Diff(expected, cfg, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
 		t.Errorf("mismatch (-want +got):\n%v", diff)
 	}
 }
@@ -111,7 +111,7 @@ func TestLoadFeeds(t *testing.T) {
 		ItemsPerPage:  10,
 		MaxPages:      5,
 		GenerateFeed:  true,
-		JobQueueDepth: cfg.Parallelism * 2,
+		JobQueueDepth: runtime.NumCPU() * 2,
 		Parallelism:   runtime.NumCPU(),
 		Feeds: []*manifest.Feed{
 			{Name: "", Feed: "https://example.com/feed1.xml", Filters: nil},
@@ -119,7 +119,7 @@ func TestLoadFeeds(t *testing.T) {
 		},
 		ThemePath: "",
 	}
-	if diff := cmp.Diff(cfg, expected, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
+	if diff := cmp.Diff(expected, cfg, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
 		t.Errorf("mismatch (-want +got):\n%v", diff)
 	}
 }
@@ -143,13 +143,13 @@ func TestExternalTheme(t *testing.T) {
 		ItemsPerPage:  10,
 		MaxPages:      5,
 		GenerateFeed:  true,
-		JobQueueDepth: cfg.Parallelism * 2,
+		JobQueueDepth: runtime.NumCPU() * 2,
 		Parallelism:   runtime.NumCPU(),
 		Feeds:         nil,
 		Theme:         nil,
 		ThemePath:     tmp,
 	}
-	if diff := cmp.Diff(cfg, expected, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
+	if diff := cmp.Diff(expected, cfg, cmpopts.IgnoreInterfaces(struct{ fs.FS }{})); diff != "" {
 		t.Errorf("mismatch (-want +got):\n%v", diff)
 	}
 }
