@@ -1,8 +1,6 @@
 module github.com/kgaughan/mercury
 
-go 1.24.0
-
-toolchain go1.24.1
+go 1.25.0
 
 require (
 	github.com/BurntSushi/toml v1.6.0
@@ -14,7 +12,7 @@ require (
 	github.com/mmcdole/gofeed v1.3.0
 	github.com/pquerna/cachecontrol v0.2.0
 	github.com/spf13/pflag v1.0.10
-	golang.org/x/net v0.50.0
+	golang.org/x/net v0.51.0
 )
 
 require (
