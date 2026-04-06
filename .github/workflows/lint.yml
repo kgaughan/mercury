@@ -39,8 +39,8 @@ jobs:
 
       - if: steps.changes.outputs.src == 'true'
         name: Lint
-        uses: golangci/golangci-lint-action@v8
+        uses: golangci/golangci-lint-action@v9.2.0
         with:
-          version: v2.3.0
+          version: v2.11.3
           args: --issues-exit-code=0
           only-new-issues: true
