@@ -1,0 +1,150 @@
+:root {
+  --theme-bg: #1C2833;
+  --theme-fg: #AAB7B8;
+  --theme-nav-bg: #2E4053;
+  --theme-accent: #496684;
+  --theme-highlight: #F4F6F6;
+}
+
+body {
+  background: var(--theme-bg);
+  color: var(--theme-fg);
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  font-weight: 400;
+}
+
+strong {
+  font-weight: 700;
+}
+
+h1, h2, h3 {
+  font-weight: 800;
+}
+
+table {
+  border-collapse: collapse;
+}
+table th {
+  background: var(--theme-nav-bg);
+}
+table tr {
+  border-bottom: 1px solid var(--theme-nav-bg);
+}
+table tr:nth-child(even) {
+  background: rgba(255,255,255,0.025);
+}
+table th, table td {
+  vertical-align: top;
+  padding: 0.25rem 0.5rem;
+}
+
+nav a {
+  color: var(--theme-fg);
+  text-decoration: none;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav#toc {
+  flex: 1 auto;
+  /* having both of these is a hack, but I'm not sure what else to do */
+  min-width: 16rem;
+  width: 16rem;
+  overflow-y: auto;
+  background: var(--theme-nav-bg);
+  padding: 1rem;
+  border-right: 1px solid var(--theme-accent);
+}
+nav#toc ul {
+  list-style: none outside;
+  margin: 0;
+  padding: 0;
+}
+nav#toc li {
+  margin: 0;
+  padding: 0;
+}
+nav#toc ul ul li {
+  padding-left: 1rem;
+}
+nav#toc > ul > li > a {
+  font-weight: 800;
+}
+nav#toc > ul > li {
+  margin: 0 0 1rem 0;
+}
+
+#content {
+  flex: 1 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+main {
+  margin: 0 auto;
+  max-width: 55rem;
+  width: stretch;
+  padding: 1rem;
+  flex: 1 100%;
+}
+main a {
+  color: var(--theme-highlight);
+}
+
+pre {
+  overflow-x: auto;
+}
+
+.nav-outer {
+  border-top: 1px solid var(--theme-accent);
+  flex: 1 auto;
+  background: var(--theme-nav-bg);
+}
+
+nav#sitenav {
+  margin: 0 auto;
+  max-width: 55rem;
+  display: flex;
+  flex-direction: row;
+}
+nav#sitenav > * {
+  flex: 1 100%;
+  max-width: 28rem;
+  padding: 1rem;
+}
+
+.nav-prev::before, .nav-next::before {
+  font-weight: 800;
+  text-transform: lowercase;
+  font-variant: small-caps;
+  display: block;
+}
+.nav-prev {
+  text-align: left;
+}
+.nav-prev::before {
+  content: "Previous";
+}
+.nav-next {
+  text-align: right;
+}
+.nav-next::before {
+  content: "Next";
+}
+
+code {
+  white-space: pre-wrap;
+}
+
+$if(highlighting-css)$
+/* CSS for syntax highlighting */
+$highlighting-css$
+$endif$

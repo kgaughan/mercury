@@ -1,7 +1,6 @@
 NAME:=mercury
 
 SOURCE:=$(wildcard internal/*.go internal/*/*.go cmd/*/*.go)
-DOCS:=$(wildcard docs/*.md mkdocs.yml)
 
 .DEFAULT_GOAL:=build
 
@@ -20,7 +19,7 @@ tidy: go.mod fmt ## Tidy go.mod and format the code
 
 .PHONY: clean
 clean: ## Clean build artifacts
-	rm -rf $(NAME) dist site .venv coverage.out coverage.html output cache
+	rm -rf $(NAME) dist site coverage.out coverage.html output cache
 
 $(NAME): $(SOURCE) go.sum
 	CGO_ENABLED=0 go build -v -tags netgo,timetzdata -trimpath -ldflags '-s -w' -o $@ ./cmd/$@
@@ -47,19 +46,22 @@ lint: ## Lint the code
 	golangci-lint run ./...
 
 .PHONY: serve-docs
-serve-docs: .venv ## Serve the documentation locally
-	uv run mkdocs serve
+serve-docs: docs ## Serve the documentation locally
+	python3 -m http.server -d site
 
 .PHONY: docs
-docs: .venv $(DOCS) ## Build the documentation site
-	uv run mkdocs build
-
-.venv: requirements.txt
-	uv venv --clear
-	uv pip install -r requirements.txt
-
-%.txt: %.in
-	uv pip compile $< -o $@
+docs:  ## Build the documentation site
+	rm -rf site
+	pandoc docs/index.md \
+		--standalone \
+		--from markdown \
+		--to chunkedhtml \
+		--variable toc \
+		--toc-depth 2 \
+		--chunk-template "%i.html" \
+		--template docs/template.html \
+		--highlight-style docs/solarizeddark.theme \
+		--output "site"
 
 .PHONY: tests
 tests: ## Run the tests
