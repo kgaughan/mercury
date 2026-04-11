@@ -41,7 +41,7 @@ jobs:
             --chunk-template "%i.html"
             --template template.html
             --highlight-style solarizeddark.theme
-            --output "site"
+            --output "../site"
 
       - run: find site -type f
 
