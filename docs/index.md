@@ -4,7 +4,7 @@ author: Keith Gaughan
 date: 2026-04-11
 lang: en
 abstract: |
-  _Mercury_ is intended a replacement for Sam Ruby's [Planet Venus](https://github.com/rubys/venus/).
+  _Mercury_ is intended as a replacement for Sam Ruby's [Planet Venus](https://github.com/rubys/venus/).
 
   A _planet_ is a kind of feed aggregator. It takes a list of newsfeeds (Atom, RSS, &c.), splices them together, and spits a set of HTML pages and/or a feed.
 ---
@@ -171,7 +171,7 @@ Save this as `mercury.toml`:
 ```toml
 name = "My Planet!"
 url = "http://localhost/"
-feed_id = "uri:urn:032a6e90-899c-4d27-aa94-b99e2c1c343f"
+feed_id = "urn:uuid:032a6e90-899c-4d27-aa94-b99e2c1c343f"
 owner = "Jane Doe"
 email = "jane@example.com"
 cache = "/data/cache"
@@ -230,7 +230,7 @@ If you now list the contents of `volumes/data/output`, you'll see the newly-gene
 
 # Themes
 
-A theme is a directory that contains the template files and assets needed to generate the site. Currently, there is only one template `index.html`. _Mercury_ uses Go's [html/template][] library, which is built upon [text/template][]. You should read the documentation for the latter to get a feel for the templating language and read the former for any HTML-specific behavioural differences differences.
+A theme is a directory that contains the template files and assets needed to generate the site. Currently, there is only one template `index.html`. _Mercury_ uses Go's [html/template][] library, which is built upon [text/template][]. You should read the documentation for the latter to get a feel for the templating language and read the former for any HTML-specific behavioural differences.
 
 [html/template]: https://golang.org/pkg/html/template/
 [text/template]: https://golang.org/pkg/text/template/
@@ -258,10 +258,10 @@ Each feed item has the following fields:
 | .Title | The title of the item | |
 | .Summary | A summary of the feed item, if available | |
 | .Content | The entire content of the feed item, if available | |
-| .Link | A lnk back to the original post | |
+| .Link | A link back to the original post | |
 | .Author | The author name, if available | |
 | .Published | The publication date/time of the entry | formattable |
-| .Updated | The date/time of when entry was updated | formattable |
+| .Updated | The date/time when the entry was updated | formattable |
 | .Categories | A collection of categories associated with the entry | rangeable |
 
 You can use [text/template][]'s `{{range}}` action to iterate over the values in `.Items`. For instance, to print the title of each entry and its link, you'd do:
@@ -312,7 +312,7 @@ To efficiently splice together multiple feeds by date, Mercury arranges the feed
 
 [heap]: https://en.wikipedia.org/wiki/Heap_(data_structure)
 
-One weakness with the current implementaton is that it doesn't yet deal with feeds that don't sort their items in reverse chronological order. Two options would be to sort feeds as they're pulled down or to heapify the entries similarly to what's done with the feeds themselves. This latter approach is probably the best one to take if there are many feeds with many items. For feeds that are already sorted, the heap property should already hold, so the impact for them would be negligible.
+One weakness with the current implementation is that it doesn't yet deal with feeds that don't sort their items in reverse chronological order. Two options would be to sort feeds as they're pulled down or to heapify the entries similarly to what's done with the feeds themselves. This latter approach is probably the best one to take if there are many feeds with many items. For feeds that are already sorted, the heap property should already hold, so the impact for them would be negligible.
 
 ## Cache directory
 
