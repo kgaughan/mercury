@@ -18,13 +18,13 @@ If you have the Go toolchain already configured, you can `go install` the binary
 go install github.com/kgaughan/mercury/cmd/@latest
 ```
 
-Alternatively, you can [download the latest release](https://github.com/kgaughan/mercury/releases/latest) where there are Linux (ARM64 and x86-64), FreeBSD (ARM64 and x86-64), MacOS (ARM64 and x86-64), and Windows (ARM64 and x86-64) builds, or [pull the latest container image](deploying-as-a-container.html) and use that with:
+Alternatively, you can [download the latest release](https://github.com/kgaughan/mercury/releases/latest) where there are Linux (ARM64 and x86-64), FreeBSD (ARM64 and x86-64), macOS (ARM64 and x86-64), and Windows (ARM64 and x86-64) builds, or [pull the latest container image](deploying-as-a-container.html) and use that with:
 
 ```console
 $ docker pull ghcr.io/kgaughan/mercury:latest
 ```
 
-By default, _mercury_ will look for look for a file called _mercury.toml_ in the current directory. This feed is in [TOML][] format, but the key thing you need to know is that keys and values are separated with an `=`, string values must be quoted, and `[[feed]]` introduces new feed configuration.
+By default, _mercury_ will look for a file called _mercury.toml_ in the current directory. This feed is in [TOML][] format, but the key thing you need to know is that keys and values are separated with an `=`, string values must be quoted, and `[[feed]]` introduces new feed configuration.
 
 If you want to use an explicitly named configuration file, you can pass this with the `--config` flag.
 
