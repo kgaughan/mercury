@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="$lang$"$if(dir)$ dir="$dir$"$endif$>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+$for(author-meta)$
+  <meta name="author" content="$author-meta$">
+$endfor$
+$if(date-meta)$
+  <meta name="dcterms.date" content="$date-meta$">
+$endif$
+$if(keywords)$
+  <meta name="keywords" content="$for(keywords)$$keywords$$sep$, $endfor$">
+$endif$
+$if(description-meta)$
+  <meta name="description" content="$description-meta$">
+$endif$
+  <title>$pagetitle$</title>
+  <link rel="preconnect" href="https://fonts.bunny.net">
+  <link href="https://fonts.bunny.net/css?family=open-sans:400,400i,700,700i,800,800i" type="text/css" rel="stylesheet">
+  <style type="text/css">
+    $styles.css()$
+  </style>
+$for(css)$
+  <link rel="stylesheet" href="$css$">
+$endfor$
+</head>
+<body>
+
+<nav id="toc" role="doc-toc" data-pagefind-ignore>
+  $table-of-contents$
+</nav>
+
+<div id="content">
+<main>
+$if(top)$
+  $-- only print title block if this is NOT the top page --$
+$else$
+  $if(title)$<h1>$title$</h1>$endif$
+  $if(abstract)$$abstract$$endif$
+$endif$
+
+$body$
+</main>
+
+<div class="nav-outer">
+<nav id="sitenav">
+  $if(previous.url)$
+  <div class="nav-prev">
+    <a href="$previous.url$" accesskey="p" rel="previous">$previous.title$</a>
+  </div>
+  $else$
+  <div></div>
+  $endif$
+
+  $if(next.url)$
+  <div class="nav-next">
+    <a href="$next.url$" accesskey="n" rel="next">$next.title$</a>
+  </div>
+  $else$
+  <div></div>
+  $endif$
+</nav>
+</div>
+
+</div>
+
+</body>
+</html>
