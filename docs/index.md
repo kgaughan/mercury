@@ -4,6 +4,7 @@ author: Keith Gaughan
 date: 2026-04-11
 lang: en
 abstract: |
+  ![Mercury](mercury.png){ width=318 height=319 style="float:right" }
   _Mercury_ is intended as a replacement for Sam Ruby's [Planet Venus](https://github.com/rubys/venus/).
 
   A _planet_ is a kind of feed aggregator. It takes a list of newsfeeds (Atom, RSS, &c.), splices them together, and spits a set of HTML pages and/or a feed.
@@ -15,6 +16,12 @@ If you have the Go toolchain already configured, you can `go install` the binary
 
 ```console
 go install github.com/kgaughan/mercury/cmd/@latest
+```
+
+Alternatively, you can [download the latest release](https://github.com/kgaughan/mercury/releases/latest) where there are Linux (ARM64 and x86-64), FreeBSD (ARM64 and x86-64), MacOS (ARM64 and x86-64), and Windows (ARM64 and x86-64) builds, or [pull the latest container image](deploying-as-a-container.html) and use that with:
+
+```console
+$ docker pull ghcr.io/kgaughan/mercury:latest
 ```
 
 By default, _mercury_ will look for look for a file called _mercury.toml_ in the current directory. This feed is in [TOML][] format, but the key thing you need to know is that keys and values are separated with an `=`, string values must be quoted, and `[[feed]]` introduces new feed configuration.
@@ -83,18 +90,18 @@ The top-level configuration fields are:
 
 | Name | Type | Description | Default |
 | ---- | ---- | ----------- | ------- |
-| name | string | The name of your planet | "Planet" |
-| url | string | The base URL of your planet | "" |
-| owner | string | Your name | "" |
-| email | string | Your email | "" |
-| feed_id | string | Unique ID to use for the Atom feed | "" |
-| cache | string | The path, relative to _mercury.toml_ of the feed cache | "./cache" |
-| generate_feed | boolean | Should a feed be generated? | true |
-| timeout | duration | How long to wait when fetching a feed | - |
-| theme | string | The path, relative to _mercury.toml_ of the theme to use | _use default theme_ |
-| output | string | The path, relative to _mercury.toml_ to which _mercury_ should write the files it generates | "./output" |
-| items | number | The number of items to include per page | 10 |
-| max_pages | number | The maximum number of pages to generate | 5 |
+| `name` | string | The name of your planet | `"Planet"` |
+| `url` | string | The base URL of your planet | `""` |
+| `owner` | string | Your name | `""` |
+| `email` | string | Your email | `""` |
+| `feed_id` | string | Unique ID to use for the Atom feed | `""` |
+| `cache` | string | The path, relative to _mercury.toml_ of the feed cache | `"./cache"` |
+| `generate_feed` | boolean | Should a feed be generated? | `true` |
+| `timeout` | duration | How long to wait when fetching a feed | - |
+| `theme` | string | The path, relative to _mercury.toml_ of the theme to use | _use default theme_ |
+| `output` | string | The path, relative to _mercury.toml_ to which _mercury_ should write the files it generates | `"./output"` |
+| `items` | number | The number of items to include per page | `10` |
+| `max_pages` | number | The maximum number of pages to generate | `5` |
 
 Note that the `theme`, `output`, and `cache` paths are assumed to be relative to the directory in which the configuration file is found, not the current working directory. You can specify absolute paths in these fields, however.
 
@@ -106,8 +113,8 @@ Each feed is introduced with `[[feed]]`, and can contain the following fields:
 
 | Name | Type | Description |
 | ---- | ---- | ----------- |
-| name | string | The name of the feed |
-| feed | string | The URL of the feed. Note that this must be the URL of the _feed_ itself and no attempt is made to do feed discovery if all that's provided is the site's homepage |
+| `name` | string | The name of the feed |
+| `feed` | string | The URL of the feed. Note that this must be the URL of the _feed_ itself and no attempt is made to do feed discovery if all that's provided is the site's homepage |
 
 ## Filters
 
@@ -115,7 +122,7 @@ Filters are defined by adding configuration sections named `[[feed.filter]]` sub
 
 | Name | Description |
 | ---- | ----------- |
-| when | An expression to determine whether the entry should be kept or skipped. This should evaluate to a boolean. Defaults to `true` |
+| `when` | An expression to determine whether the entry should be kept or skipped. This should evaluate to a boolean. Defaults to `true` |
 <!--
 | transform | A transformation to apply to each entry in the feed. This is only executed if `when` evaluates to `true`. |
 -->
@@ -133,6 +140,7 @@ when = "entry.Title contains 'e'"
 
 The `tools/opml2config.py` script can be used to take multiple [OPML](https://en.wikipedia.org/wiki/OPML) files.
 Taking `blogs.opml` as an example:
+
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <opml>
@@ -147,7 +155,9 @@ Taking `blogs.opml` as an example:
   </body>
 </opml>
 ```
+
 You can process it into Mercury configuration like so:
+
 ```console
 $ tools/opml2config.py blogs.opml
 [[feed]]
@@ -161,7 +171,11 @@ feed = "https://talideon.com/inklings/feed"
 
 # Deploying as a container
 
-There's a container image published at `ghcr.io/kgaughan/mercury`.
+There's a container image published at `ghcr.io/kgaughan/mercury`. Pull it with:
+
+```console
+$ docker pull ghcr.io/kgaughan/mercury:latest
+```
 
 In the following, we'll assume that you're mounting your configuration at `/config` and a data volume at `/data`.
 
@@ -239,30 +253,30 @@ The template supplied in [the default built-in theme](https://github.com/kgaugha
 
 | Name | Description |
 | ---- | ----------- |
-| .Name | The _name_ field from _config.toml_ |
-| .URL | The _url_ field from _config.toml_ |
-| .Owner | The _owner_ field from _config.toml_ |
-| .Email | The _email_ field from _config.toml_ |
-| .PageNo | The current page number |
-| .Items | A collection of feed items to be rendered |
+| `.Name` | The _name_ field from _config.toml_ |
+| `.URL` | The _url_ field from _config.toml_ |
+| `.Owner` | The _owner_ field from _config.toml_ |
+| `.Email` | The _email_ field from _config.toml_ |
+| `.PageNo` | The current page number |
+| `.Items` | A collection of feed items to be rendered |
 
 Each feed item has the following fields:
 
 | Name | Description | Extras |
 | ---- | ----------- | ------ |
-| .FeedName | The name of the feed this item is from | |
-| .SiteLink | The site homepage for the feed | |
-| .FeedLink | The URL of the feed | |
-| .FeedPublished | The publication date/time of the feed | formattable |
-| .FeedUpdated | The date/time of when the feed was updated | formattable |
-| .Title | The title of the item | |
-| .Summary | A summary of the feed item, if available | |
-| .Content | The entire content of the feed item, if available | |
-| .Link | A link back to the original post | |
-| .Author | The author name, if available | |
-| .Published | The publication date/time of the entry | formattable |
-| .Updated | The date/time when the entry was updated | formattable |
-| .Categories | A collection of categories associated with the entry | rangeable |
+| `.FeedName` | The name of the feed this item is from | |
+| `.SiteLink` | The site homepage for the feed | |
+| `.FeedLink` | The URL of the feed | |
+| `.FeedPublished` | The publication date/time of the feed | formattable |
+| `.FeedUpdated` | The date/time of when the feed was updated | formattable |
+| `.Title` | The title of the item | |
+| `.Summary` | A summary of the feed item, if available | |
+| `.Content` | The entire content of the feed item, if available | |
+| `.Link` | A link back to the original post | |
+| `.Author` | The author name, if available | |
+| `.Published` | The publication date/time of the entry | formattable |
+| `.Updated` | The date/time when the entry was updated | formattable |
+| `.Categories` | A collection of categories associated with the entry | rangeable |
 
 You can use [text/template][]'s `{{range}}` action to iterate over the values in `.Items`. For instance, to print the title of each entry and its link, you'd do:
 
@@ -321,3 +335,9 @@ The cache directory stores the cache manifest in `manifest.json`, and cached cop
 The manifest file consists of a map of feed URLs to metadata, including the UUID used for the cache filename, the last modified date, and the entity tag, both of which are used to make [conditional GET][] requests against the target feed to minimise Mercury's bandwidth impact.
 
 [conditional GET]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests
+
+# Colophon
+
+The project logo is from a [false colour image of Mercury taken by NASA's Mercury Messenger probe](https://www.flickr.com/photos/gsfc/8497942353/).
+
+The site was built using [pandoc](http://pandoc.org/) using a custom theme inspired by that of [mdBook](https://rust-lang.github.io/mdBook/).

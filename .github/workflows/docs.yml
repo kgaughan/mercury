@@ -29,18 +29,19 @@ jobs:
 
       - name: Build with pandoc
         uses: docker://pandoc/core:3.9
+        working-directory: docs
         with:
           args: >-
+            index.md
             --standalone
             --from markdown
             --to chunkedhtml
             --variable toc
             --toc-depth 2
             --chunk-template "%i.html"
-            --template docs/template.html
-            --highlight-style docs/solarizeddark.theme
+            --template template.html
+            --highlight-style solarizeddark.theme
             --output "site"
-            docs/index.md
 
       - run: find site -type f
 

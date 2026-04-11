@@ -52,16 +52,16 @@ serve-docs: docs ## Serve the documentation locally
 .PHONY: docs
 docs:  ## Build the documentation site
 	rm -rf site
-	pandoc docs/index.md \
+	cd docs && pandoc index.md \
 		--standalone \
-		--from markdown \
+		--from markdown+link_attributes \
 		--to chunkedhtml \
 		--variable toc \
 		--toc-depth 2 \
 		--chunk-template "%i.html" \
-		--template docs/template.html \
-		--highlight-style docs/solarizeddark.theme \
-		--output "site"
+		--template template.html \
+		--highlight-style solarizeddark.theme \
+		--output "../site"
 
 .PHONY: tests
 tests: ## Run the tests
