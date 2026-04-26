@@ -3,6 +3,8 @@
 /output/
 .*.sw?
 *~
+/.vscode/
+*.code-workspace
 
 /coverage.*
 
