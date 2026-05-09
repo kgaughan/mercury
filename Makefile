@@ -50,7 +50,7 @@ serve-docs: docs ## Serve the documentation locally
 	python3 -m http.server -d site
 
 .PHONY: docs
-docs:  ## Build the documentation site
+docs: ## Build the documentation site
 	rm -rf site
 	cd docs && pandoc index.md \
 		--standalone \
