@@ -25,8 +25,9 @@ jobs:
 
       - id: govulncheck
         uses: golang/govulncheck-action@v1.1.0
-        output-format: sarif
-        output-file: govulncheck-results.sarif
+        with:
+          output-format: sarif
+          output-file: govulncheck-results.sarif
 
       - name: Upload scan results to GitHub security tab
         uses: github/codeql-action/upload-sarif@v4
