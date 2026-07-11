@@ -1,0 +1,35 @@
+---
+name: Flag vulnerabilities with govulncheck
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
+  schedule:
+    - cron: "0 3 * * 5"  # 3am, every Friday
+  workflow_dispatch:
+
+jobs:
+  vulns:
+    name: Flag vulnerabilities with govulncheck
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write  # To allow sarif file to be uploaded
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - id: govulncheck
+        uses: golang/govulncheck-action@v1.1.0
+        with:
+          output-format: sarif
+          output-file: govulncheck-results.sarif
+
+      - name: Upload scan results to GitHub security tab
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: govulncheck-results.sarif
