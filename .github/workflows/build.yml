@@ -25,6 +25,10 @@ jobs:
         with:
           persist-credentials: false
 
+      - uses: extractions/setup-just@v4
+        with:
+          just-version: 1.40.0
+
       - uses: dorny/paths-filter@v4.0.2
         name: check for changes
         id: changes
@@ -45,8 +49,8 @@ jobs:
 
       - if: steps.changes.outputs.src == 'true'
         name: Run tests
-        run: make tests
+        run: just tests
 
       - if: steps.changes.outputs.src == 'true'
         name: Build
-        run: make build
+        run: just build
