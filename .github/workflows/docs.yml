@@ -31,9 +31,9 @@ jobs:
         with:
           version: 3.1.11.1
 
-      - uses: pandoc/actions/setup@v1
+      - uses: extractions/setup-just@v4
         with:
-          version: 3.1.11.1
+          just-version: 1.40.0
 
       - name: Build with pandoc
         run: just docs
