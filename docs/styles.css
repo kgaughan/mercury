@@ -29,27 +29,29 @@ h1, h2, h3 {
 
 table {
   border-collapse: collapse;
-}
-table th {
-  background: var(--theme-nav-bg);
-}
-table tr {
-  border-bottom: 1px solid var(--theme-nav-bg);
-}
-table tr:nth-child(even) {
-  background: rgba(255,255,255,0.025);
-}
-table th, table td {
-  vertical-align: top;
-  padding: 0.25rem 0.5rem;
+  th {
+    background: var(--theme-nav-bg);
+  }
+  tr {
+    border-bottom: 1px solid var(--theme-nav-bg);
+  }
+  tr:nth-child(even) {
+    background: rgba(255,255,255,0.025);
+  }
+  th, td {
+    vertical-align: top;
+    padding: 0.25rem 0.5rem;
+  }
 }
 
-nav a {
-  color: var(--theme-fg);
-  text-decoration: none;
-}
-nav a:hover {
-  text-decoration: underline;
+nav {
+  a {
+    color: var(--theme-fg);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
 }
 
 nav#toc {
@@ -61,24 +63,24 @@ nav#toc {
   background: var(--theme-nav-bg);
   padding: 1rem;
   border-right: 1px solid var(--theme-accent);
-}
-nav#toc ul {
-  list-style: none outside;
-  margin: 0;
-  padding: 0;
-}
-nav#toc li {
-  margin: 0;
-  padding: 0;
-}
-nav#toc ul ul li {
-  padding-left: 1rem;
-}
-nav#toc > ul > li > a {
-  font-weight: 800;
-}
-nav#toc > ul > li {
-  margin: 0 0 1rem 0;
+  ul {
+    list-style: none outside;
+    margin: 0;
+    padding: 0;
+    ul li {
+      padding-left: 1rem;
+    }
+  }
+  li {
+    margin: 0.5rem 0;
+    padding: 0;
+  }
+  & > ul > li {
+    margin: 0 0 1rem 0;
+    & > a {
+      font-weight: 800;
+    }
+  }
 }
 
 #content {
@@ -94,13 +96,22 @@ main {
   width: stretch;
   padding: 1rem;
   flex: 1 100%;
-}
-main a {
-  color: var(--theme-highlight);
+  a {
+    color: var(--theme-highlight);
+  }
+  li {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
 pre {
+  background: rgba(0, 0, 0, 0.125);
   overflow-x: auto;
+  padding: 0.5rem;
+  & > code {
+    background: none;
+  }
 }
 
 .nav-outer {
@@ -114,11 +125,11 @@ nav#sitenav {
   max-width: 55rem;
   display: flex;
   flex-direction: row;
-}
-nav#sitenav > * {
-  flex: 1 100%;
-  max-width: 28rem;
-  padding: 1rem;
+  & > * {
+    flex: 1 100%;
+    max-width: 28rem;
+    padding: 1rem;
+  }
 }
 
 .nav-prev::before, .nav-next::before {
@@ -141,6 +152,7 @@ nav#sitenav > * {
 }
 
 code {
+  background: rgba(0, 0, 0, 0.125);
   white-space: pre-wrap;
 }
 
