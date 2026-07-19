@@ -35,7 +35,7 @@ jobs:
               - 'go.*'
 
       - if: steps.changes.outputs.src == 'true'
-        uses: actions/setup-go@v6.5.0
+        uses: actions/setup-go@v7.0.0
         with:
           go-version-file: go.mod
           check-latest: true
