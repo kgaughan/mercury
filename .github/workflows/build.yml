@@ -41,7 +41,7 @@ jobs:
 
       - if: steps.changes.outputs.src == 'true'
         name: Set up Go
-        uses: actions/setup-go@v7
+        uses: actions/setup-go@v7.0.0
         with:
           go-version-file: go.mod
           check-latest: true
