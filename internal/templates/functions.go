@@ -5,7 +5,7 @@ import (
 	"io/fs"
 	"time"
 
-	"github.com/Masterminds/sprig/v3"
+	sprig "github.com/go-sprout/sprout/sprigin"
 	"github.com/microcosm-cc/bluemonday"
 )
 

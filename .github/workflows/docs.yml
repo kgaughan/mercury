@@ -24,11 +24,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/configure-pages@v6.0.0
+      - uses: actions/configure-pages@v6
         id: pages
 
       - uses: pandoc/actions/setup@v1
         with:
+          # The version available in Debian Trixie determines this
           version: 3.1.11.1
 
       - uses: extractions/setup-just@v4
@@ -38,7 +39,7 @@ jobs:
       - name: Build with pandoc
         run: just docs
 
-      - uses: actions/upload-pages-artifact@v5.0.0
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: ./site/
 
@@ -52,4 +53,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5.0.0
+        uses: actions/deploy-pages@v5
