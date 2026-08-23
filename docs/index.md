@@ -288,11 +288,12 @@ You can use [text/template][]'s `{{range}}` action to iterate over the values in
 </ul>
 ```
 
-_Mercury_ provides a number of utility filter functions you can use for formatting dates. `isodate` formats the date in [ISO 8601][]/[RFC 3339][] format, which is machine readable and useful for the `<time>` tag's `datetime` attribute. It also includes the [Sprig][] template function library.
+_Mercury_ provides a number of utility filter functions you can use for formatting dates. `isodate` formats the date in [ISO 8601][]/[RFC 3339][] format, which is machine readable and useful for the `<time>` tag's `datetime` attribute. It also includes the [Sprout][] template function library running in [compatibility mode](https://docs.atom.codes/sprout/migration-from-sprig) with [Sprig][].
 
 [ISO 8601]: https://en.wikipedia.org/wiki/ISO_8601
 [RFC 3339]: https://www.ietf.org/rfc/rfc3339.txt
 [Sprig]: https://masterminds.github.io/sprig/
+[Sprout]: https://docs.atom.codes/sprout
 
 Here's an example of both being used:
 
