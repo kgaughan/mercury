@@ -3,15 +3,15 @@ name: Build
 
 on:
   push:
-    branches-ignore:
+    branches:
       - master
       - main
     tags-ignore:
       - "*"
   pull_request:
     branches:
-      - main
       - master
+      - main
 
 permissions:
   contents: read
