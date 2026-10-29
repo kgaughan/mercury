@@ -8,18 +8,46 @@ linters:
     - errcheck
     - errname
     - errorlint
+    - godoclint
     - godot
     - gosec
     - govet
     - ineffassign
+    - nilerr
     - nonamedreturns
     - staticcheck
     - tparallel
     - unconvert
     - unused
+    - usestdlibvars
     - usetesting
     - whitespace
     - wrapcheck
+  disable:
+    - cyclop
+    - depguard
+    - exhaustruct
+    - exhaustruct
+    - exhaustruct_v5
+    - forbidigo
+    - funcorder
+    - funlen
+    - gochecknoglobals
+    - gochecknoinits
+    - goconst
+    - godox
+    - gomodguard
+    - gomodguard_v2
+    - lll
+    - mnd
+    - nilnil
+    - nlreturn
+    - noinlineerr
+    - nolintlint
+    - testpackage
+    - varnamelen
+    - wsl
+    - wsl_v5
   exclusions:
     generated: lax
     presets:

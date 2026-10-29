@@ -2,13 +2,14 @@ package utils
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 )
 
 // ErrNotADir is returned when a path exists but is not a directory.
-var ErrNotADir = fmt.Errorf("is not a directory")
+var ErrNotADir = errors.New("is not a directory")
 
 // cacheTagMarker is the standard marker for cache directories.
 // See: https://bford.info/cachedir/

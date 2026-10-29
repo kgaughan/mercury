@@ -30,7 +30,7 @@ type Outline struct {
 	XMLURL string `xml:"xmlUrl,attr,omitempty"`
 }
 
-// NewOPML creates a new, empty OPML document.
+// New creates a new, empty OPML document.
 func New(size int) *OPML {
 	return &OPML{
 		Version:  "2.0",

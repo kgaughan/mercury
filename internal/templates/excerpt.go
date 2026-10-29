@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"log"
+	"slices"
 	"strings"
 	"unicode"
 
@@ -57,9 +58,9 @@ Loop:
 		}
 	}
 
-	for i := len(tagStack) - 1; i >= 0; i-- {
+	for _, t := range slices.Backward(tagStack) {
 		b.WriteString("</")
-		b.WriteString(tagStack[i])
+		b.WriteString(t)
 		b.WriteByte('>')
 	}
 
