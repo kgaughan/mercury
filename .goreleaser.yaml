@@ -48,7 +48,7 @@ homebrew_casks:
     commit_msg_template: "Brew cask update for {{ .ProjectName }} version {{ .Tag }}"
     hooks:
       post:
-        install_steps:
+        install_steps: |
           on_macos do
             run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{ .StagedPath }}/mercury"]
           end
