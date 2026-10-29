@@ -12,7 +12,7 @@ require (
 	github.com/mmcdole/gofeed v1.5.0
 	github.com/pquerna/cachecontrol v0.2.0
 	github.com/spf13/pflag v1.0.10
-	golang.org/x/net v0.61.0
+	golang.org/x/net v0.62.0
 )
 
 require (
