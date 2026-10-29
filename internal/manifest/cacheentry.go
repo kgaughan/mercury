@@ -46,7 +46,7 @@ func (ci *cacheEntry) Fetch(ctx context.Context, feedURL, cacheDir string, timeo
 
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
-	req, err := http.NewRequestWithContext(ctx, "GET", feedURL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, feedURL, nil)
 	if err != nil {
 		return fmt.Errorf("cannot construct request: %w", err)
 	}
@@ -106,7 +106,7 @@ func (ci *cacheEntry) Load(cacheDir string) (*gofeed.Feed, error) {
 	cacheFile := filepath.Join(cacheDir, ci.UUID+".json")
 	file, err := os.ReadFile(cacheFile)
 	if err != nil {
-		return nil, nil
+		return nil, nil //nolint:nilerr
 	}
 	feed := &gofeed.Feed{}
 	if err := json.Unmarshal(file, feed); err != nil {
